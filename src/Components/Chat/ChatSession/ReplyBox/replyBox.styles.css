@@ -1,0 +1,10 @@
+.replybox-container{
+        display: flex; 
+        margin: 2% 2% 2% 2%; 
+        justify-content: space-between; 
+}
+.replybox-typing{
+}
+.reply-confirm-button{
+        margin: 0 0 0 2% ; 
+}

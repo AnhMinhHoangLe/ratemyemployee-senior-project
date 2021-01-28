@@ -1,0 +1,19 @@
+.ChatSession-container{
+        display: flex;
+        flex-direction: column;
+}
+.titleChat-component{
+        min-height: 10vh;
+        border: 1px solid black; 
+}
+.chatview-component{
+        min-height: 80vh;
+        border: 1px solid black; 
+
+}
+.replybox-component{
+        min-height: 10vh;
+        border: 1px solid black; 
+
+
+}
