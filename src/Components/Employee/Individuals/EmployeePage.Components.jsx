@@ -14,7 +14,7 @@ const EmployeePage = ({employee}) =>
                         <div>
                                 {
                                         employee.map(({id, ...otherProps}) => ( 
-                                                <EmployeePreview   key={id}  {...otherProps} />
+                                                <EmployeePreview   key={id} id={id} {...otherProps} />
                                                 )
                                         )
                                 }

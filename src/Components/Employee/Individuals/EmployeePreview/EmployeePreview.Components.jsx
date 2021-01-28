@@ -1,9 +1,9 @@
 import React from 'react';
 import "./EmployeePreview.Styles.css"
-const PreviewCollection = ({ group, employee_list }) =>{
+const PreviewCollection = ({ id, employee_list }) =>{
         return(
                 <div>
-                        <h1>Group {group} </h1>
+                        <h1>Group {id} </h1>
                         <div>
                                 {
                                          employee_list
