@@ -10,13 +10,8 @@ import { setCurrentUser } from './Redux/User/user.action';
 import HomePage from "./Components/HomePage/HomePage"
 import ChatUI from "./Components/Chat/ChatUI.components"
 import Header from "./Components/Header/Header.Components"
-import EmployeeGroupPage from "./Components/Employee/Group/EmployeeGroupPage"
 import EmployeePage from "./Components/Employee/Individuals/EmployeePage.Components"
-const HatsPage = () => (
-  <div>
-    <h1>Hello</h1>
-  </div>
-)
+
 class App extends Component {
   unsubscribeFromAuth = null
   // clone and get the data from current user
@@ -51,8 +46,8 @@ class App extends Component {
               <Header />
               <Route exact path="/home" component={HomePage} />
               <Route exact path="/chat" component={ChatUI} />
-              <Route exact path="/groups" component={EmployeePage} />
-              <Route exact path="/plan" component={EmployeeGroupPage} />
+              <Route path="/groups" component={EmployeePage} /> {/* if you want to make nested route, dont add exact to the route */}
+              <Route exact path="/plan" component={HomePage} />
 
             </>
           ) : (

@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux';
 import userReducer from './User/user.reducer';
-import directoryReducer from "./DirectoryEmployee/directory.reducer"
+import employeeReducer from "./Employee/employee.reducer"
+import employeeInfoReducer from "./Individuals/Individuals.reducer"
 const rootReducer = combineReducers({
         user: userReducer,
-        employee: directoryReducer,
-
+        employee: employeeReducer,
+        employeeInfo: employeeInfoReducer,
 });
 
 export default rootReducer;

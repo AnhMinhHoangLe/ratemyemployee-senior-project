@@ -1,8 +1,9 @@
 import React from 'react';
 import "./EmployeePreview.Styles.css"
-const PreviewCollection = ({ id, employee_list }) =>{
+import {withRouter} from "react-router";
+const PreviewCollection = ({ id, employee_list, match, history }) =>{
         return(
-                <div>
+                <div onClick={() => {history.push(`${match.url}/${id}` )} }>
                         <h1>Group {id} </h1>
                         <div>
                                 {
@@ -18,4 +19,4 @@ const PreviewCollection = ({ id, employee_list }) =>{
                 </div>
         )
 }
-export default PreviewCollection
+export default withRouter(PreviewCollection)

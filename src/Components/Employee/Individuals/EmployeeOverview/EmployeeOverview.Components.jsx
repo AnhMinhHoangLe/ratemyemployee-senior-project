@@ -1,36 +1,33 @@
 import React, {Component} from 'react';
+import "./EmployeeOverview.Styles.css"
 import { connect } from 'react-redux';
-import DATA_EMPLOYEE from "../../DATA_EMPLOYEE"
-
-// import {selectEmployeeGroup} from "../../../Redux/Employee/employee.selectors"
-// import {createStructuredSelector} from "reselect"
-// import EmployeePreview from './EmployeePreview/EmployeePreview.Components'
+// import DATA_EMPLOYEE from "../../DATA_EMPLOYEE"
+import EmployeePreview from "../EmployeePreview/EmployeePreview.Components"
+import {createStructuredSelector} from "reselect"
+import {selectEmployeeForPreview} from "../../../../Redux/Employee/employee.selectors"
+import "./EmployeeOverview.Styles.css"
 // import employeeCollections from "../../../Redux/Employee/employee.actions"
-class  EmployeeOverview extends Component{
-        constructor(){
-                super()
-                this.state = {
-                        employee : DATA_EMPLOYEE
-                }
-        }
-        render() {
-                const {employee} = this.state
+const  EmployeeOverview = ({employee}) =>{
                 return(
                                 <div>
                                         {
-                                                employee.map(({id}) =>
-                                                        <div>{id}</div>
-                                                 )
-                                        }
+                                        employee.map(({id, ...otherProps}) => ( 
+                                                <EmployeePreview   key={id} id={id} {...otherProps} />
+                                                )
+                                        )
+                                }
                                 </div>
-                        )
+                        )  
         }
 
-                
-        }
+// const mapStateToProps = ({employee}) =>({
+//                 employee: employee
+// })
+const mapStateToProps = createStructuredSelector(
+{
+        employee: selectEmployeeForPreview
+}
+)
 
-// const mapStateToProps = (state) => ({
-//   employee : employee
-// });
 
-export default EmployeeOverview
+export default connect(mapStateToProps)(EmployeeOverview)

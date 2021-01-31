@@ -1,5 +1,5 @@
-const DATA_EMPLOYEE = [
-        {
+const DATA_GROUP = {
+        1: {
                 id: 1,
                 employee_list: [
                         {
@@ -14,7 +14,6 @@ const DATA_EMPLOYEE = [
                         },
                         {
                                 id: '600e4b87fc13ae24a7000001',
-                                group: '1',
                                 first_name: 'Gavra',
                                 last_name: 'Brabin',
                                 email: 'gbrabin1@europa.eu',
@@ -36,12 +35,11 @@ const DATA_EMPLOYEE = [
                         }
                 ]
         },
-        {
+        2: {
                 id: 2,
                 employee_list: [
                         {
                                 id: '600e4b87fc13ae24a7000003',
-                                group: '2',
                                 first_name: 'Branden',
                                 last_name: 'Whalebelly',
                                 email: 'bwhalebelly3@is.gd',
@@ -52,7 +50,6 @@ const DATA_EMPLOYEE = [
                         },
                         {
                                 id: '600e4b87fc13ae24a7000004',
-                                group: '2',
                                 first_name: 'Federica',
                                 last_name: 'Greir',
                                 email: 'fgreir4@bizjournals.com',
@@ -63,7 +60,6 @@ const DATA_EMPLOYEE = [
                         },
                         {
                                 id: '600e4b87fc13ae24a7000005',
-                                group: '2',
                                 first_name: 'Sunny',
                                 last_name: 'Annesley',
                                 email: 'sannesley5@addthis.com',
@@ -74,12 +70,11 @@ const DATA_EMPLOYEE = [
                         }
                 ]
         },
-        {
+        3: {
                 id: 3,
                 employee_list: [
                         {
                                 id: '600e4b87fc13ae24a7000006',
-                                group: '3',
                                 first_name: 'Jenda',
                                 last_name: 'Scoggin',
                                 email: 'jscoggin6@tripod.com',
@@ -90,7 +85,6 @@ const DATA_EMPLOYEE = [
                         },
                         {
                                 id: '600e4b87fc13ae24a7000007',
-                                group: '3',
                                 first_name: 'Blair',
                                 last_name: 'Chiene',
                                 email: 'bchiene7@vimeo.com',
@@ -101,7 +95,6 @@ const DATA_EMPLOYEE = [
                         },
                         {
                                 id: '600e4b87fc13ae24a7000008',
-                                group: '3',
                                 first_name: 'Gayelord',
                                 last_name: 'Buye',
                                 email: 'gbuye8@indiegogo.com',
@@ -112,5 +105,5 @@ const DATA_EMPLOYEE = [
                         }]
 
         }
-]
-export default DATA_EMPLOYEE
+}
+export default DATA_GROUP

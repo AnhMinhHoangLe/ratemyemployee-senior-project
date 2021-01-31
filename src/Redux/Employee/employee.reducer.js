@@ -1,13 +1,11 @@
-import EmployeeActionTypes from "./employee.types"
-import DATA_EMPLOYEE from "./DATA_EMPLOYEE"
+import DATA_GROUP from "./DATA_GROUP";
 const INITIAL_STATE = {
-        employee: DATA_EMPLOYEE
+        employee: DATA_GROUP
 }
 
 const employeeReducer = (state = INITIAL_STATE, action) => {
         switch (action.type) {
-                default:
-                        return state;
+                default: return state
         }
 }
-export default employeeReducer;
+export default employeeReducer
