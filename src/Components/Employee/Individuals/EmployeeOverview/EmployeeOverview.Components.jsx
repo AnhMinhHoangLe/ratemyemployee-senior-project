@@ -11,10 +11,15 @@ const  EmployeeOverview = ({employee}) =>{
                 return(
                                 <div>
                                         {
-                                        employee.map(({id, ...otherProps}) => ( 
+                                        // employee.map(({id, ...otherProps}) => ( 
+                                        //         <EmployeePreview   key={id} id={id} {...otherProps} />
+                                        //         )
+                                        // )
+                                       employee.map(({id, ...otherProps}) => ( 
                                                 <EmployeePreview   key={id} id={id} {...otherProps} />
                                                 )
                                         )
+
                                 }
                                 </div>
                         )  

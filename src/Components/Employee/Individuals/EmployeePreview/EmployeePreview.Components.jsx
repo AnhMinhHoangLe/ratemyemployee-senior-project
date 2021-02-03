@@ -7,11 +7,16 @@ const PreviewCollection = ({ id, employee_list, match, history }) =>{
                         <h1>Group {id} </h1>
                         <div>
                                 {
-                                         employee_list
+                                        //  Object.keys(employee_list).map((key) =>( 
+                                        //         <div key={employee_list[key].id}>
+                                        //                 {employee_list[key].displayName}
+                                        //         </div>
+                                        // ))
+                                        employee_list
                                          .filter((item, idx) => idx < 4)
-                                         .map(({id, first_name, last_name, email, avatar}) =>(
+                                         .map(({id, displayName, email, avatar}) =>(
                                                 <div key={id}>
-                                                        {first_name} {last_name} 
+                                                        {displayName} 
                                                 </div>
                                         ))
                                 }

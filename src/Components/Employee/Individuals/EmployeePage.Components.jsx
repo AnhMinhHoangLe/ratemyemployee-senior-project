@@ -22,8 +22,7 @@ const EmployeePage = ({employee, match}) =>
                                 <Route exact  component={EmployeeOverview}  path={`${match.path}`} />   {/* Find the path in App.js */}
                                 <Route exact component={EmployeeInGroup}   path={`${match.path}/:employeeId`} />   {/* Find the path in App.js. should print out console.log(match.params.employeeId) to know deeply the result */}
                                 <Route  component={EmployeeInfo}   path={`${match.path}/:employeeId/:employeeInfoID`} />   {/* Find the path in App.js. should print out console.log(match.params.employeeId) to know deeply the result */}
-
-
+                                
                         </div>
                 )
         }

@@ -1,7 +1,7 @@
 import React from 'react';
 import "./EmployeeInGroup.Styles.css"
 import {connect} from "react-redux"
-import {selectEmployeeIngroup} from "../../../../Redux/Employee/employee.selectors"
+import {selectEmployeeIngroup, selectEmployeeForPreview} from "../../../../Redux/Employee/employee.selectors"
 import {withRouter} from "react-router"
 const EmployeeInGroup = ({match, history, employee}) =>{
         // console.log(employee)
@@ -10,13 +10,11 @@ const EmployeeInGroup = ({match, history, employee}) =>{
         return(
                 <div >
                         <h1 >Group {id} </h1>
-                        {
-                                employee_list.map(({id, first_name, last_name} )=> (
-                                        <div key={id} onClick={() => {history.push(`${match.url}/${id}` )} }>{first_name} {last_name} </div>
-                                ))
-                        }
-
-
+                                {
+                                employee_list.map(({id, displayName} )=> (
+                                        <div key={id} onClick={() => {history.push(`${match.url}/${id}` )} }>{displayName} </div>
+                                 ))
+                                }
                 </div>
         )
 }

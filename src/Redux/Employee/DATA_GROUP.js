@@ -4,8 +4,7 @@ const DATA_GROUP = {
                 employee_list: [
                         {
                                 id: '600e4b87fc13ae24a7000000',
-                                first_name: 'Filippo',
-                                last_name: 'D\'orsay',
+                                displayName: 'Filippo D\'orsay',
                                 email: 'fdorsay0@blinklist.com',
                                 gender: 'Female',
                                 address: '63 Melby Terrace',
@@ -14,8 +13,7 @@ const DATA_GROUP = {
                         },
                         {
                                 id: '600e4b87fc13ae24a7000001',
-                                first_name: 'Gavra',
-                                last_name: 'Brabin',
+                                displayName: 'Gavra Brabin',
                                 email: 'gbrabin1@europa.eu',
                                 gender: 'Female',
                                 address: '0533 Golf Plaza',
@@ -25,8 +23,7 @@ const DATA_GROUP = {
                         {
                                 id: '600e4b87fc13ae24a7000002',
                                 group: '1',
-                                first_name: 'Cordell',
-                                last_name: 'Haynes',
+                                displayName: 'Cordell Haynes',
                                 email: 'chaynes2@booking.com',
                                 gender: 'Male',
                                 address: '75233 Anniversary Parkway',
@@ -40,8 +37,7 @@ const DATA_GROUP = {
                 employee_list: [
                         {
                                 id: '600e4b87fc13ae24a7000003',
-                                first_name: 'Branden',
-                                last_name: 'Whalebelly',
+                                displayName: 'Branden Whalebelly',
                                 email: 'bwhalebelly3@is.gd',
                                 gender: 'Male',
                                 address: '94845 Farragut Trail',
@@ -50,8 +46,7 @@ const DATA_GROUP = {
                         },
                         {
                                 id: '600e4b87fc13ae24a7000004',
-                                first_name: 'Federica',
-                                last_name: 'Greir',
+                                displayName: 'Federica Greir',
                                 email: 'fgreir4@bizjournals.com',
                                 gender: 'Female',
                                 address: '25 Eliot Lane',
@@ -60,8 +55,7 @@ const DATA_GROUP = {
                         },
                         {
                                 id: '600e4b87fc13ae24a7000005',
-                                first_name: 'Sunny',
-                                last_name: 'Annesley',
+                                displayName: 'Sunny Annesley',
                                 email: 'sannesley5@addthis.com',
                                 gender: 'Male',
                                 address: '21 Hudson Alley',
@@ -75,8 +69,7 @@ const DATA_GROUP = {
                 employee_list: [
                         {
                                 id: '600e4b87fc13ae24a7000006',
-                                first_name: 'Jenda',
-                                last_name: 'Scoggin',
+                                displayName: 'Jenda Scoggin',
                                 email: 'jscoggin6@tripod.com',
                                 gender: 'Male',
                                 address: '45 Tennessee Alley',
@@ -85,8 +78,7 @@ const DATA_GROUP = {
                         },
                         {
                                 id: '600e4b87fc13ae24a7000007',
-                                first_name: 'Blair',
-                                last_name: 'Chiene',
+                                displayName: 'Blair Chiene',
                                 email: 'bchiene7@vimeo.com',
                                 gender: 'Female',
                                 address: '72 Pleasure Terrace',
@@ -95,8 +87,7 @@ const DATA_GROUP = {
                         },
                         {
                                 id: '600e4b87fc13ae24a7000008',
-                                first_name: 'Gayelord',
-                                last_name: 'Buye',
+                                displayName: 'Gayelord Buye',
                                 email: 'gbuye8@indiegogo.com',
                                 gender: 'Male',
                                 address: '86554 Buhler Road',
