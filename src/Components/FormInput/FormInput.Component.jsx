@@ -5,7 +5,6 @@ const FormInput = ({label, handleChange, ...otherProps}) =>{
                 <div>
                         <label>{label}</label>
                         <input onChange={handleChange} {...otherProps} />
-
                 </div>
         )
 }

@@ -1,26 +1,21 @@
 import React from 'react';
 import "./EmployeeInfo.Styles.css"
-// import {showEmployeeInfo} from "../../../../Redux/Individuals/individuals.selectors"
+import EmployeeInfoForm from "../../EmployeeInfoForm/EmployeeInfoForm.Components"
+import {selectToShowEmployeeInfo} from "../../../../Redux/Individuals/individuals.selectors"
 import {selectEmployeeIngroup} from "../../../../Redux/Employee/employee.selectors"
-import {createStructuredSelector} from "reselect"
 import {connect} from "react-redux"
-const EmployeeInfo =  ({employeeInfo, match}) => {
-        const {employee_list, id} = employeeInfo
-
+const EmployeeInfo =  ({individuals, employee,  match}) => {
+        const {displayName, email, gender, address, avatar, phone_number } = individuals
+        const {employee_list} = employee
+        const {rate, position} =   employee_list.find(key => key.id === match.params.employeeInfoID)  
         return(
                 <div>
                         {
-                                employee_list.filter(key => key.id === match.params.employeeInfoID)
-                                        .map(({id, displayName, email, gender, address, avatar, phone_number} )=> (
-                                                        <div key={id} >
-                                                                <h1>{displayName}</h1>
-                                                                <p>Email: {email}</p>
-                                                                <p>Gender: {gender}</p>
-                                                                <p>Address: {address}</p>
-                                                                <img src={avatar} />
-                                                                <p>Phone Number: {phone_number}</p>
+                                                        <div>
+                                                                <EmployeeInfoForm displayName = {displayName}  email={email} gender={gender}  address={address} avatar={avatar} phone_number={phone_number}/>
+                                                                <p>Rate: {rate} </p>
+                                                                <p>Position: {position}</p> 
                                                         </div>
-                                                ))
                         }
                 </div>
         )
@@ -28,7 +23,9 @@ const EmployeeInfo =  ({employeeInfo, match}) => {
 
 const mapStateToProps = (state, ownProps) => (
         {
-              employeeInfo: selectEmployeeIngroup(ownProps.match.params.employeeId)(state)
+               individuals: selectToShowEmployeeInfo(ownProps.match.params.employeeInfoID)(state), 
+                employee: selectEmployeeIngroup(ownProps.match.params.employeeId)(state)
+
         //       employeeInfoID
         }
 )
