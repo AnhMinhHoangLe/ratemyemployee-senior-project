@@ -1,27 +1,32 @@
 import React from 'react';
 import "./EmployeeInfo.Styles.css"
-import {showEmployeeInfo} from "../../../../Redux/Individuals/individuals.selectors"
-import {createStructuredSelector} from "reselect"
+import EmployeeInfoForm from "../../../EmployeeInfoForm/EmployeeInfoForm.Components"
+import {selectToShowEmployeeInfo} from "../../../../Redux/Individuals/individuals.selectors"
+import {selectEmployeeIngroup} from "../../../../Redux/Employee/employee.selectors"
 import {connect} from "react-redux"
-const EmployeeInfo =  ({employeeInfo}) => {
-        const {group,first_name, last_name, email, gender, address, avatar, phone_number} = employeeInfo
-
+const EmployeeInfo =  ({individuals, employee,  match}) => {
+        const {displayName, email, gender, address, avatar, phone_number } = individuals
+        const {employee_list} = employee
+        const {rate, position} =   employee_list.find(key => key.id === match.params.employeeInfoID)  
         return(
                 <div>
-                        <h1>{first_name} {last_name}</h1>
-                        <p>Group: {group}</p>
-                        <p>Email: {email}</p>
-                        <p>Gender: {gender}</p>
-                        <p>Address: {address}</p>
-                        <img src={avatar} />
-                        <p>Phone Number: {phone_number}</p>
+                        {
+                                                        <div>
+                                                                <EmployeeInfoForm displayName = {displayName}  email={email} gender={gender}  address={address} avatar={avatar} phone_number={phone_number}/>
+                                                                <p>Rate: {rate} </p>
+                                                                <p>Position: {position}</p> 
+                                                        </div>
+                        }
                 </div>
         )
 }
 
-const mapStateToProps = (state, ownProps) =>(
+const mapStateToProps = (state, ownProps) => (
         {
-              employeeInfo: showEmployeeInfo(ownProps.match.params.employeeInfoID)(state)
+               individuals: selectToShowEmployeeInfo(ownProps.match.params.employeeInfoID)(state), 
+                employee: selectEmployeeIngroup(ownProps.match.params.employeeId)(state)
+
+        //       employeeInfoID
         }
 )
 export default connect(mapStateToProps)(EmployeeInfo) 

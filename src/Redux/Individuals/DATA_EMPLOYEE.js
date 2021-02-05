@@ -1,8 +1,7 @@
 const DATA_EMPLOYEE = {
         "600e4b87fc13ae24a7000000": {
-                group: '1',
-                first_name: 'Filippo',
-                last_name: 'D\'orsay',
+                id: '600e4b87fc13ae24a7000000',
+                displayName: 'Filippo D\'orsay',
                 email: 'fdorsay0@blinklist.com',
                 gender: 'Female',
                 address: '63 Melby Terrace',
@@ -10,9 +9,8 @@ const DATA_EMPLOYEE = {
                 phone_number: '236-601-7212'
         },
         "600e4b87fc13ae24a7000001": {
-                group: '1',
-                first_name: 'Gavra',
-                last_name: 'Brabin',
+                id: '600e4b87fc13ae24a7000001',
+                displayName: 'Gavra Brabin',
                 email: 'gbrabin1@europa.eu',
                 gender: 'Female',
                 address: '0533 Golf Plaza',
@@ -20,9 +18,8 @@ const DATA_EMPLOYEE = {
                 phone_number: '120-951-1797'
         },
         "600e4b87fc13ae24a7000002": {
-                group: '1',
-                first_name: 'Cordell',
-                last_name: 'Haynes',
+                id: '600e4b87fc13ae24a7000002', 
+                displayName: 'Cordell Haynes',
                 email: 'chaynes2@booking.com',
                 gender: 'Male',
                 address: '75233 Anniversary Parkway',
@@ -30,9 +27,8 @@ const DATA_EMPLOYEE = {
                 phone_number: '793-775-2335'
         },
         "600e4b87fc13ae24a7000003": {
-                group: '2',
-                first_name: 'Branden',
-                last_name: 'Whalebelly',
+                id: '600e4b87fc13ae24a7000003',
+                displayName: 'Branden Whalebelly',
                 email: 'bwhalebelly3@is.gd',
                 gender: 'Male',
                 address: '94845 Farragut Trail',
@@ -40,9 +36,8 @@ const DATA_EMPLOYEE = {
                 phone_number: '124-337-7650'
         },
         "600e4b87fc13ae24a7000004": {
-                group: '2',
-                first_name: 'Federica',
-                last_name: 'Greir',
+                id: '600e4b87fc13ae24a7000004',
+                displayName: 'Federica Greir',
                 email: 'fgreir4@bizjournals.com',
                 gender: 'Female',
                 address: '25 Eliot Lane',
@@ -50,9 +45,8 @@ const DATA_EMPLOYEE = {
                 phone_number: '361-795-5015'
         },
         "600e4b87fc13ae24a7000005": {
-                group: '2',
-                first_name: 'Sunny',
-                last_name: 'Annesley',
+                id: '600e4b87fc13ae24a7000005',
+                displayName: 'Sunny Annesley',
                 email: 'sannesley5@addthis.com',
                 gender: 'Female',
                 address: '21 Hudson Alley',
@@ -61,9 +55,8 @@ const DATA_EMPLOYEE = {
         },
 
         "600e4b87fc13ae24a7000006": {
-                group: '3',
-                first_name: 'Jenda',
-                last_name: 'Scoggin',
+                id: '600e4b87fc13ae24a7000006',
+                displayName: 'Jenda Scoggin',
                 email: 'jscoggin6@tripod.com',
                 gender: 'Male',
                 address: '45 Tennessee Alley',
@@ -71,9 +64,8 @@ const DATA_EMPLOYEE = {
                 phone_number: '629-194-6373'
         },
         "600e4b87fc13ae24a7000007": {
-                group: '3',
-                first_name: 'Blair',
-                last_name: 'Chiene',
+                id: '600e4b87fc13ae24a7000007',
+                displayName: 'Blair Chiene',
                 email: 'bchiene7@vimeo.com',
                 gender: 'Female',
                 address: '72 Pleasure Terrace',
@@ -81,9 +73,8 @@ const DATA_EMPLOYEE = {
                 phone_number: '818-937-1773'
         },
         "600e4b87fc13ae24a7000008": {
-                group: '3',
-                first_name: 'Gayelord',
-                last_name: 'Buye',
+                id: '600e4b87fc13ae24a70000028',
+                displayName: 'Gayelord Buye',
                 email: 'gbuye8@indiegogo.com',
                 gender: 'Male',
                 address: '86554 Buhler Road',

@@ -10,6 +10,8 @@ const Header = () =>{
                         <Link  to="/chat" >Messages </Link>
                         <Link  to="/groups" >Groups</Link>
                         <Link  to="/plan" >Plan</Link>
+                        <Link  to="/search" >Search</Link>
+
                 </div>
             
         )
