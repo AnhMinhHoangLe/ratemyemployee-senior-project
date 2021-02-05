@@ -1,5 +1,6 @@
 const DATA_EMPLOYEE = {
         "600e4b87fc13ae24a7000000": {
+                id: '600e4b87fc13ae24a7000000',
                 displayName: 'Filippo D\'orsay',
                 email: 'fdorsay0@blinklist.com',
                 gender: 'Female',
@@ -8,6 +9,7 @@ const DATA_EMPLOYEE = {
                 phone_number: '236-601-7212'
         },
         "600e4b87fc13ae24a7000001": {
+                id: '600e4b87fc13ae24a7000001',
                 displayName: 'Gavra Brabin',
                 email: 'gbrabin1@europa.eu',
                 gender: 'Female',
@@ -16,6 +18,7 @@ const DATA_EMPLOYEE = {
                 phone_number: '120-951-1797'
         },
         "600e4b87fc13ae24a7000002": {
+                id: '600e4b87fc13ae24a7000002', 
                 displayName: 'Cordell Haynes',
                 email: 'chaynes2@booking.com',
                 gender: 'Male',
@@ -24,6 +27,7 @@ const DATA_EMPLOYEE = {
                 phone_number: '793-775-2335'
         },
         "600e4b87fc13ae24a7000003": {
+                id: '600e4b87fc13ae24a7000003',
                 displayName: 'Branden Whalebelly',
                 email: 'bwhalebelly3@is.gd',
                 gender: 'Male',
@@ -32,6 +36,7 @@ const DATA_EMPLOYEE = {
                 phone_number: '124-337-7650'
         },
         "600e4b87fc13ae24a7000004": {
+                id: '600e4b87fc13ae24a7000004',
                 displayName: 'Federica Greir',
                 email: 'fgreir4@bizjournals.com',
                 gender: 'Female',
@@ -40,6 +45,7 @@ const DATA_EMPLOYEE = {
                 phone_number: '361-795-5015'
         },
         "600e4b87fc13ae24a7000005": {
+                id: '600e4b87fc13ae24a7000005',
                 displayName: 'Sunny Annesley',
                 email: 'sannesley5@addthis.com',
                 gender: 'Female',
@@ -49,6 +55,7 @@ const DATA_EMPLOYEE = {
         },
 
         "600e4b87fc13ae24a7000006": {
+                id: '600e4b87fc13ae24a7000006',
                 displayName: 'Jenda Scoggin',
                 email: 'jscoggin6@tripod.com',
                 gender: 'Male',
@@ -57,6 +64,7 @@ const DATA_EMPLOYEE = {
                 phone_number: '629-194-6373'
         },
         "600e4b87fc13ae24a7000007": {
+                id: '600e4b87fc13ae24a7000007',
                 displayName: 'Blair Chiene',
                 email: 'bchiene7@vimeo.com',
                 gender: 'Female',
@@ -65,6 +73,7 @@ const DATA_EMPLOYEE = {
                 phone_number: '818-937-1773'
         },
         "600e4b87fc13ae24a7000008": {
+                id: '600e4b87fc13ae24a70000028',
                 displayName: 'Gayelord Buye',
                 email: 'gbuye8@indiegogo.com',
                 gender: 'Male',

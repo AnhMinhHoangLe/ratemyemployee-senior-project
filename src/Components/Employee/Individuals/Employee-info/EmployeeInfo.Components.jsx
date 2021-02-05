@@ -1,6 +1,6 @@
 import React from 'react';
 import "./EmployeeInfo.Styles.css"
-import EmployeeInfoForm from "../../EmployeeInfoForm/EmployeeInfoForm.Components"
+import EmployeeInfoForm from "../../../EmployeeInfoForm/EmployeeInfoForm.Components"
 import {selectToShowEmployeeInfo} from "../../../../Redux/Individuals/individuals.selectors"
 import {selectEmployeeIngroup} from "../../../../Redux/Employee/employee.selectors"
 import {connect} from "react-redux"

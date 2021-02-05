@@ -16,3 +16,9 @@ export const selectToShowEmployeeInfo = employeeIDTakeFromURLParams => createSel
         [selectEmployeeInfo],
         individuals => individuals[employeeIDTakeFromURLParams]
 )
+
+//for searching
+export const selectToSearch = searchState => createSelector(
+        [selectListEmployee],
+        employeeSearch => employeeSearch.filter((key => key.displayName.includes(searchState)))
+)

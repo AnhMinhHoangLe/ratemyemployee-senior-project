@@ -1,9 +1,8 @@
 import React from 'react';
-import {selectToShowEmployeeInfo} from "../../../../Redux/Individuals/individuals.selectors"
+import {selectToShowEmployeeInfo} from "../../../Redux/Individuals/individuals.selectors"
 import {connect} from "react-redux"
-import EmployeeInfoForm from "../../../EmployeeInfoForm/EmployeeInfoForm.Components"
-
-const IndividualInfoPage = ({match, individuals}) =>{
+import  EmployeeInfoForm from "../../EmployeeInfoForm/EmployeeInfoForm.Components"
+const InfoSearch = ({match, individuals}) =>{
         const {displayName, email, gender, address, avatar, phone_number } = individuals
         return(
                 <div>
@@ -13,7 +12,7 @@ const IndividualInfoPage = ({match, individuals}) =>{
 }
 const mapStateToProps = (state, ownProps) =>(
         {
-                individuals: selectToShowEmployeeInfo(ownProps.match.params.employeeInfoID)(state), 
+                individuals: selectToShowEmployeeInfo(ownProps.match.params.employeeID)(state), 
         }
 )
-export default connect(mapStateToProps)(IndividualInfoPage)
+export default connect(mapStateToProps)(InfoSearch)
