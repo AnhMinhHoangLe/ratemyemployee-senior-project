@@ -22,7 +22,7 @@ import IndividualInfoPage from "./Individual/IndividualInfoPage/IndividualInfoPa
 
 class GroupPage extends React.Component {
     unsubscribeEmployeeFromSnapshot = null;
-    unsubscribeEmployeeFromSnapshot = null;
+    unsubscribeGroupFromSnapshot = null;
 
     componentDidMount() {
         const { currentUser, updateEmployee, updateGroup } = this.props;

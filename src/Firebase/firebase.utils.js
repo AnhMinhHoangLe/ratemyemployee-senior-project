@@ -2,6 +2,8 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 
+import "firebase/storage";
+
 const firebaseConfig = {
     apiKey: "AIzaSyDVArB3fcE0_LnfqnWRMWMDjeWVVDf-vYQ",
     authDomain: "rate-my-employee-d7636.firebaseapp.com",
@@ -59,16 +61,19 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 
 // //To add the data of employee in DATA_EMPLOYEE
 // export const addEmployeeInFile = async (userAuth, userKey, employeeToAdd) => {
+//      // create a link where you want to add new collection ( userAuth is current user, userKey is for the name of collection we want to create, employeeToAdd is the data)
 //     const employeeRef = firestore
 //         .doc(`users/${userAuth.uid}`)
 //         .collection(userKey);
-//     const batch = firestore.batch();
-//     employeeToAdd.forEach((employee) => {
-//         const newDocRef = employeeRef.doc(employee.id);
-//         batch.set(newDocRef, employee);
+//     const batch = firestore.batch(); // declare the batch function is to wait for all data, and added to db once
+//     employeeToAdd.forEach((employee) => { // call each data by forEach
+//         const newDocRef = employeeRef.doc(employee.id);   // call the link and want to name the new link is employee ID
+//         batch.set(newDocRef, employee); // set() is a function to add data to database, but cuz we have batch here, so we will wait to finish load all the data
 //     });
-//     return await batch.commit();
+//     return await batch.commit(); // and after that  commit to database
 // };
+
+// To convert all the data of employee collection
 export const convertDataEmployeeSnapShot = (snapshot) => {
     //For a collection query that snapshot is going to consist of
     //a number of individual documents. We can access them by saying snapshot.docs.
@@ -98,6 +103,7 @@ export const convertDataEmployeeSnapShot = (snapshot) => {
     }, {});
 };
 
+// To convert all the data of group collection
 export const convertDataGroupSnapShot = (snapshot) => {
     const groupRef = snapshot.docs.map((doc) => {
         const { id, employee_list } = doc.data();
@@ -111,6 +117,39 @@ export const convertDataGroupSnapShot = (snapshot) => {
         accumulator[collection.id] = collection;
         return accumulator;
     }, {});
+};
+
+export const createGroup = async (userAuth, userKey, id) => {
+    const groupRef = firestore.doc(`users/${userAuth.id}`).collection(userKey);
+    try {
+        await groupRef.doc().set({
+            id,
+            employee_list: [],
+        });
+    } catch {
+        console.error();
+    }
+    return groupRef;
+};
+export const createEmployee = async (userAuth, userKey, info) => {
+    const employeeRef = firestore
+        .doc(`users/${userAuth.id}`)
+        .collection(userKey);
+    const { displayName, email, address, gender, phone_number } = info;
+    try {
+        const generateID = employeeRef.doc();
+        await generateID.set({
+            displayName,
+            email,
+            address,
+            gender,
+            phone_number,
+            id: generateID.id,
+        });
+    } catch {
+        console.error();
+    }
+    return employeeRef;
 };
 
 export const auth = firebase.auth(); // to short the command
@@ -130,8 +169,4 @@ export const signInWithGoogle = () => {
     auth.signInWithPopup(provider);
 };
 
-// export const createUserProfileDocument = async (userAuth, additionalData) =>{
-//         if(!userAuth) retur null
-// }
-
-export default firebase;
+export { firebase as default };
