@@ -1,29 +1,43 @@
-import React from 'react';
-import "./EmployeePreview.Styles.css"
-import {createStructuredSelector} from "reselect"
-import {withRouter} from "react-router";
-const PreviewCollection = ({ id, employee_list, employeeInfo,  match, history }) =>{
-        return(
-                <div onClick={() => {history.push(`${match.url}/${id}` )} }>
-                        <div>
-                                <h1> GROUP {id} </h1>
-                                <ul>
-                                        {
-                                                //  Object.keys(employee_list).map((key) =>( 
-                                                //         <div key={employee_list[key].id}>
-                                                //                 {employee_list[key].displayName}
-                                                //         </div>
-                                                // ))
-                                                employee_list
-                                                .filter((item, idx) => idx < 4)
-                                                .map(({id}) =>(
-                                                        <li key={id}> {employeeInfo[id].displayName}  </li>
-                                                ))
-                                        }
-                                </ul>
-                        </div>
-                </div>
-        )
-}
+import React from "react";
+import "./EmployeePreview.Styles.scss";
+import { withRouter } from "react-router";
+import { ReactComponent as Target } from "../../../../Assests/Groups/polygon-4.svg";
+import { selectEmployeeForPreview } from "../../../../Redux/Employee/employee.selectors";
+import { selectEmployeeInfo } from "../../../../Redux/Individuals/individuals.selectors";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 
-export default withRouter(PreviewCollection)
+const PreviewCollection = ({
+	id,
+	employee_list,
+	employeeInfo,
+	match,
+	history,
+}) => {
+	return (
+		<div
+			className="shadow-lg p-6 rounded-lg bg-gradient-to-r from-green-400 to-blue-500 w-full"
+			onClick={() => {
+				history.push(`${match.url}/${id}`);
+			}}
+		>
+			<h1 className="font-bold text-2xl"> GROUP {id} </h1>
+			<span className="flex gap-5 justify-between">
+				<ul className="grid grid-cols-2 gap-4">
+					{employee_list
+						.filter((factor, index) => index < 4)
+						.map(({ id }) => (
+							<li key={id}>{employeeInfo[id].displayName}</li>
+						))}
+				</ul>
+				<Target />
+			</span>
+		</div>
+	);
+};
+const mapStateToProps = createStructuredSelector({
+	// employee: selectEmployeeForPreview, // 1: {id: "1", employee_list: Array(1)}
+	employeeInfo: selectEmployeeInfo,
+});
+
+export default withRouter(connect(mapStateToProps)(PreviewCollection));
