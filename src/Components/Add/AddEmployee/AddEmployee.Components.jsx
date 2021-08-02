@@ -1,6 +1,7 @@
 import React from "react";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 import "./AddEmployee.Styles.scss";
-
 import FormInput from "../../FormInput/FormInput.Component";
 import CustomButton from "../../CustomButton/CustomButton.component";
 import {
@@ -8,9 +9,11 @@ import {
 	createEmployee,
 	UploadImageIntoStorage,
 } from "../../../Firebase/firebase.utils";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "../../../Redux/User/user.selectors";
+import { selectTriggerSearchAddEmployee } from "../../../Redux/Option/option.selectors"
+import AddEmployeeBySearch from "./AddEmployeeBySearch/AddEmployeeBySearch.Component";
+import ResultAddEmployeeBySearch from "./ResultOfAddEmployeeBySearch/ResultAddEmployeeBySearch.Component"
+import {triggerSearchAddEmployeeComp} from '../../../Redux/Option/option.actions'
 class AddEmployee extends React.Component {
 	constructor(props) {
 		super(props);
@@ -23,6 +26,7 @@ class AddEmployee extends React.Component {
 			uploadImage: null,
 			// phone_number: "",
 			position: "",
+			searchField:""
 		};
 	}
 	handleChange = (event) => {
@@ -31,34 +35,34 @@ class AddEmployee extends React.Component {
 			[name]: value,
 		});
 	};
-	handleImageUpload = (event) => {
-		if (event.target.files[0]) {
-			this.setState(
-				{
-					uploadImage: event.target.files[0],
-				},
-				() => {
-					UploadImageIntoStorage(this.state.uploadImage);
-					storage
-						.ref("images")
-						.child(this.state.uploadImage.name)
-						.getDownloadURL()
-						.then((downloadURL) => {
-							this.setState({
-								avatar: downloadURL,
-							});
-						});
-				}
-			);
-		}
-	};
+	// handleImageUpload = (event) => {
+	// 	if (event.target.files[0]) {
+	// 		this.setState(
+	// 			{
+	// 				uploadImage: event.target.files[0],
+	// 			},
+	// 			() => {
+	// 				UploadImageIntoStorage(this.state.uploadImage);
+	// 				storage
+	// 					.ref("images")
+	// 					.child(this.state.uploadImage.name)
+	// 					.getDownloadURL()
+	// 					.then((downloadURL) => {
+	// 						this.setState({
+	// 							avatar: downloadURL,
+	// 						});
+	// 					});
+	// 			}
+	// 		);
+	// 	}
+	// };
 	handleSubmit = (event) => {
 		event.preventDefault();
 		const { currentUser } = this.props;
 		const {
 			displayName,
 			email,
-			avatar,
+			// avatar,
 			// address,
 			// gender,
 			// phone_number,
@@ -68,7 +72,7 @@ class AddEmployee extends React.Component {
 			const employee = {
 				displayName,
 				email,
-				avatar,
+				// avatar,
 				// address,
 				// gender,
 				// phone_number,
@@ -78,15 +82,15 @@ class AddEmployee extends React.Component {
 			this.setState({
 				displayName: "",
 				email: "",
-				avatar: "",
-				uploadImage: null,
+				// avatar: "",
+				// uploadImage: null,
 				// address: "",
 				// gender: "",
 				// image: null,
 				// phone_number: "",
 				position: "",
 			});
-			document.getElementById("uploadFile").value = "";
+			// document.getElementById("uploadFile").value = "";
 		} catch (error) {
 			console.error(error);
 		}
@@ -95,14 +99,27 @@ class AddEmployee extends React.Component {
 		this.setState({
 			displayName: "",
 			email: "",
-			avatar: "",
-			uploadImage: null,
+			// avatar: "",
+			// uploadImage: null,
 			// address: "",
 			// gender: "",
 			// phone_number: "",
 			position: "",
 		});
 	};
+	onSearchChange = (e) => {
+		const {dispatch} = this.props
+        if (e.target.value.length !== 0) {
+            dispatch(triggerSearchAddEmployeeComp(true))
+			this.setState({
+				searchField: e.target.value, 
+			});
+        }
+        else {
+            dispatch(triggerSearchAddEmployeeComp(false))
+        }
+	};
+
 	render() {
 		const {
 			displayName,
@@ -111,103 +128,134 @@ class AddEmployee extends React.Component {
 			// gender,
 			// phone_number,
 			position,
+			searchField
 		} = this.state;
-
+		const {selectTriggerSearchAddEmployee} = this.props
 		return (
 			<div className="xl:w-3/12 h-11/12 xl:fixed xl:top-40 xl:right-40 bg-white p-5 shadow-lg rounded-xl text-gray-600">
-				<h1 className="title-add-employee text-3xl text-center t mb-5 mb-10">
-					Add New Employee
-				</h1>
-				<form
-					onSubmit={this.handleSubmit}
-					className=" flex flex-col justify-center  items-center gap-4"
-				>
+				{/* Searching form */}
+				<div>
+					<h1 className="title-add-employee text-3xl text-center t mb-5 mb-10">Add Existing Employee</h1>
+					{/* <AddEmployeeBySearch /> */}
 					<FormInput
-						placeholder="Display Name"
-						name="displayName"
-						required
-						handleChange={this.handleChange}
-						value={displayName}
+						placeholder="Search Name"
+						name="searchName"
 						className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
+						onChange={(e) => { this.onSearchChange(e) }}
 					/>
-					<FormInput
-						placeholder="Email"
-						name="email"
-						type="email"
-						required
-						handleChange={this.handleChange}
-						value={email}
-						className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
-					/>
-					{/*<FormInput
-						placeholder="Address"
-						name="address"
-						handleChange={this.handleChange}
-						required
-						value={address}
-						className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
-					/>
-					<FormInput
-						type="radio"
-						name="gender"
-						value="male"
-						label="male"
-						required
-						handleChange={this.handleChange}
-						className="input-add-employee "
-					/>
-					<FormInput
-						type="radio"
-						name="gender"
-						value="female"
-						label="female"
-						required
-						handleChange={this.handleChange}
-					/>
-					<FormInput
-						type="radio"
-						name="gender"
-						value="binary"
-						label="binary"
-						required
-						handleChange={this.handleChange}
-					/> */}
+				</div>
 
-					<FormInput
-						type="file"
-						name="uploadImage"
-						accept="image/png, image/jpeg"
-						required
-						handleChange={this.handleImageUpload}
-						id="uploadFile"
-					/>
-					{/*<FormInput
-						type="tel"
-						name="phone_number"
-						placeholder="888 888 8888"
-						pattern="[0-9]{3} [0-9]{3} [0-9]{4}"
-						required
-						handleChange={this.handleChange}
-						value={phone_number}
-						className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
-					/>
-					*/}
-					<FormInput
-						placeholder="Employee Position"
-						type="text"
-						name="position"
-						required
-						handleChange={this.handleChange}
-						value={position}
-						className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
-					/>
-					<CustomButton>Submit</CustomButton>
-				</form>
+				<br /><hr /><br />
+				
+				<div>
+					{selectTriggerSearchAddEmployee ? (
+						// Result from searching existing employee
+						<div>
+							<ResultAddEmployeeBySearch search={searchField}/>
+						</div>
+					) : (
+							//Form to input new employee
+						<div>
+								<h1 className="title-add-employee text-3xl text-center t mb-5 mb-10">Add New Employee </h1>
+								<form
+									onSubmit={this.handleSubmit}
+									className=" flex flex-col justify-center  items-center gap-4"
+								>
+										<FormInput
+											placeholder="Display Name"
+											name="displayName"
+											required
+											handleChange={this.handleChange}
+											value={displayName}
+											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
+										/>
+										<FormInput
+											placeholder="Email"
+											name="email"
+											type="email"
+											required
+											handleChange={this.handleChange}
+											value={email}
+											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
+										/>
+										{/* <FormInput
+											placeholder="Address"
+											name="address"
+											handleChange={this.handleChange}
+											required
+											value={address}
+											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
+										/> */}
+										{/* <span className='flex justify-between'>
+											<FormInput
+												type="radio"
+												name="gender"
+												value="male"
+												label="male"
+												required
+												handleChange={this.handleChange}
+												className="input-add-employee "
+											/>
+											<FormInput
+												type="radio"
+												name="gender"
+												value="female"
+												label="female"
+												required
+												handleChange={this.handleChange}
+											/>
+											<FormInput
+												type="radio"
+												name="gender"
+												value="binary"
+												label="binary"
+												required
+												handleChange={this.handleChange}
+											/>
+										</span> */}
+										
+
+										{/* <FormInput
+											type="file"
+											name="uploadImage"
+											accept="image/png, image/jpeg"
+											required
+											handleChange={this.handleImageUpload}
+											id="uploadFile"
+										/> */}
+
+										{/* <FormInput
+											type="tel"
+											name="phone_number"
+											placeholder="888 888 8888"
+											pattern="[0-9]{3} [0-9]{3} [0-9]{4}"
+											required
+											handleChange={this.handleChange}
+											value={phone_number}
+											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
+										/>
+										*/}
+										<FormInput
+											placeholder="Employee Position"
+											type="text"
+											name="position"
+											required
+											handleChange={this.handleChange}
+											value={position}
+											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
+										/>
+										<CustomButton>Submit</CustomButton>
+									</form>
+							</div>
+					)}
+					
+					</div>
 			</div>
 		);
 	}
 }
 const mapStateToProps = createStructuredSelector({
 	currentUser: selectCurrentUser,
+	selectTriggerSearchAddEmployee: selectTriggerSearchAddEmployee, 
 });
 export default connect(mapStateToProps)(AddEmployee);

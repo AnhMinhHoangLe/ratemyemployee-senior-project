@@ -5,74 +5,74 @@ import "firebase/auth";
 import "firebase/storage";
 
 const firebaseConfig = {
-	apiKey: "AIzaSyDVArB3fcE0_LnfqnWRMWMDjeWVVDf-vYQ",
-	authDomain: "rate-my-employee-d7636.firebaseapp.com",
-	projectId: "rate-my-employee-d7636",
-	storageBucket: "rate-my-employee-d7636.appspot.com",
-	messagingSenderId: "146488335212",
-	appId: "1:146488335212:web:20e269ca915cb90b3d3149",
-	measurementId: "G-KX4PF92L3L",
+  apiKey: "AIzaSyDVArB3fcE0_LnfqnWRMWMDjeWVVDf-vYQ",
+  authDomain: "rate-my-employee-d7636.firebaseapp.com",
+  projectId: "rate-my-employee-d7636",
+  storageBucket: "rate-my-employee-d7636.appspot.com",
+  messagingSenderId: "146488335212",
+  appId: "1:146488335212:web:20e269ca915cb90b3d3149",
+  measurementId: "G-KX4PF92L3L",
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
-	if (!userAuth) return;
-	// const userRef = firestore.collection("users").doc(userAuth.uid) // get the data of the user by UID
-	const userRef = firestore.doc(`users/${userAuth.uid}`); // go to the user profile by UID
-	const snapShot = await userRef.get(); // get the snapshot of the user from console
-	if (!snapShot.exists) {
-		// create user in database if it does not exist
-		const { displayName, email } = userAuth;
-		const createAt = new Date();
-		try {
-			// get the data set ,  Enter new data into the document.
-			await userRef.set({
-				displayName,
-				email,
-				createAt,
-				...additionalData,
-			});
-		} catch (error) {
-			console.log("error creating user", error.message);
-		}
-	}
-	return userRef;
+  if (!userAuth) return;
+  // const userRef = firestore.collection("users").doc(userAuth.uid) // get the data of the user by UID
+  const userRef = firestore.doc(`users/${userAuth.uid}`); // go to the user profile by UID
+  const snapShot = await userRef.get(); // get the snapshot of the user from console
+  if (!snapShot.exists) {
+    // create user in database if it does not exist
+    const { displayName, email } = userAuth;
+    const createAt = new Date();
+    try {
+      // get the data set ,  Enter new data into the document.
+      await userRef.set({
+        displayName,
+        email,
+        createAt,
+        ...additionalData,
+      });
+    } catch (error) {
+      console.log("error creating user", error.message);
+    }
+  }
+  return userRef;
 };
 export const createEmployeeProfileDocument = async (
-	userAuth,
-	additionalData
+  userAuth,
+  additionalData
 ) => {
-	if (!userAuth) return;
-	// const userRef = firestore.collection("users").doc(userAuth.uid) // get the data of the user by UID
-	const userRef = firestore.doc(`employee/${userAuth.uid}`); // go to the user profile by UID
-	const snapShot = await userRef.get(); // get the snapshot of the user from console
-	if (!snapShot.exists) {
-		// create user in database if it does not exist
-		const { displayName, email } = userAuth;
-		const { position, avatar } = additionalData;
-		const createAt = new Date();
-		const address = "";
-		const gender = "";
-		const phone_number = "";
-		try {
-			// get the data set ,  Enter new data into the document.
-			await userRef.set({
-				displayName,
-				position,
-				avatar,
-				email,
-				address,
-				gender,
-				phone_number,
-				createAt,
-				...additionalData,
-			});
-		} catch (error) {
-			console.log("error creating user", error.message);
-		}
-	}
-	return userRef;
+  if (!userAuth) return;
+  // const userRef = firestore.collection("users").doc(userAuth.uid) // get the data of the user by UID
+  const userRef = firestore.doc(`employee/${userAuth.uid}`); // go to the user profile by UID
+  const snapShot = await userRef.get(); // get the snapshot of the user from console
+  if (!snapShot.exists) {
+    // create user in database if it does not exist
+    const { displayName, email } = userAuth;
+    const { position, avatar } = additionalData;
+    const createAt = new Date();
+    const address = "";
+    const gender = "";
+    const phone_number = "";
+    try {
+      // get the data set ,  Enter new data into the document.
+      await userRef.set({
+        displayName,
+        position,
+        avatar,
+        email,
+        address,
+        gender,
+        phone_number,
+        createAt,
+        ...additionalData,
+      });
+    } catch (error) {
+      console.log("error creating user", error.message);
+    }
+  }
+  return userRef;
 };
 
 // //To add the data of group in DATA_GROUP
@@ -141,21 +141,22 @@ export const createEmployeeProfileDocument = async (
  * @returns
  * This function is to create a new group
  */
-export const createGroup = async (userAuth, userKey, id) => {
-	const groupRef = firestore.doc(`users/${userAuth.id}`).collection(userKey);
-	const createAt = new Date();
-	try {
-		const idGroup = groupRef.doc();
-		await groupRef.doc().set({
-			id,
-			employee_list: [],
-			idGroup: idGroup.id,
-			createAt,
-		});
-	} catch {
-		console.error();
-	}
-	return groupRef;
+export const createGroup = async (userAuth, userKey, id, description) => {
+  const groupRef = firestore.doc(`users/${userAuth.id}`).collection(userKey);
+  const createAt = new Date();
+  try {
+    const idGroup = groupRef.doc();
+    await groupRef.doc().set({
+      id,
+      employee_list: [],
+      idGroup: idGroup.id,
+      createAt,
+      description: description, 
+    });
+  } catch {
+    console.error();
+  }
+  return groupRef;
 };
 
 /**
@@ -168,23 +169,23 @@ export const createGroup = async (userAuth, userKey, id) => {
  * This function is to add employee into the group that the user wishes
  */
 export const addEmployeeToGroup = async (
-	userAuth,
-	userKey,
-	groupKey,
-	arrayID
+  userAuth,
+  userKey,
+  groupKey,
+  arrayID
 ) => {
-	const groupIDRef = firestore.doc(
-		`users/${userAuth.id}/${userKey}/${groupKey}`
-	);
+  const groupIDRef = firestore.doc(
+    `users/${userAuth.id}/${userKey}/${groupKey}`
+  );
 
-	arrayID.forEach((id) => {
-		let IDObject = {};
-		IDObject["id"] = id;
-		groupIDRef.update({
-			employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
-		});
-	});
-	return groupIDRef;
+  arrayID.forEach((id) => {
+    let IDObject = {};
+    IDObject["id"] = id;
+    groupIDRef.update({
+      employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
+    });
+  });
+  return groupIDRef;
 };
 /**
  *
@@ -195,33 +196,34 @@ export const addEmployeeToGroup = async (
  * This function is to create new employee
  */
 export const createEmployee = async (userAuth, userKey, info) => {
-	const employeeRef = firestore.doc(`users/${userAuth.id}`).collection(userKey);
-	// const { displayName, email, address, gender, phone_number, position } = info;
-	const { displayName, email, position, avatar } = info;
-	// console.log("image in firebase", avatar);
+  const employeeRef = firestore.doc(`users/${userAuth.id}`).collection(userKey);
+  // const { displayName, email, address, gender, phone_number, position } = info;
+  const { displayName, email, position, avatar } = info;
+  // console.log("image in firebase", avatar);
 
-	try {
-		const generateID = employeeRef.doc();
-		const createAt = new Date();
-		const address = "";
-		const gender = "";
-		const phone_number = Number();
-		// Image: https://stackoverflow.com/questions/61215555/how-to-upload-image-to-firebase-storage-and-upload-url-to-firestore-simultaneous
-		await generateID.set({
-			displayName,
-			email,
-			address,
-			gender,
-			phone_number,
-			position,
-			avatar,
-			id: generateID.id,
-			createAt,
-		});
-	} catch {
-		console.error();
-	}
-	return employeeRef;
+  try {
+    const generateID = employeeRef.doc();
+    const createAt = new Date();
+    const address = "";
+    const gender = "";
+    const avatar = ""
+    const phone_number = Number();
+    // Image: https://stackoverflow.com/questions/61215555/how-to-upload-image-to-firebase-storage-and-upload-url-to-firestore-simultaneous
+    await generateID.set({
+      displayName,
+      email,
+      address,
+      gender,
+      phone_number,
+      position,
+      avatar,
+      id: generateID.id,
+      createAt,
+    });
+  } catch {
+    console.error();
+  }
+  return employeeRef;
 };
 
 /**
@@ -231,33 +233,33 @@ export const createEmployee = async (userAuth, userKey, info) => {
  */
 
 export const UploadImageIntoStorage = async (image) => {
-	const uploadTask = storage.ref(`images/${image.name}`).put(image); // Upload actual file  to the object 'images/image.name'
-	//  Register three observers:
-	//  1. 'state_changed' observer, called any time the state changes
-	//  2. Error observer, called on failure
-	//  3. Completion observer, called on successful completion
-	uploadTask.on(
-		"state_changed",
-		(snapshot) => {
-			// Observe state change events such as progress, pause, and resume
-			// Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-			// var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-			// console.log("Upload is " + progress + "% done");
-			// switch (snapshot.state) {
-			// 	case storage.TaskState.PAUSED: // or 'paused'
-			// 		console.log("Upload is paused");
-			// 		break;
-			// 	case storage.TaskState.RUNNING: // or 'running'
-			// 		console.log("Upload is running");
-			// 		break;
-			// }
-		},
-		(error) => {
-			console.error(error);
-			// Handle unsuccessful uploads
-		}
-	);
-	return uploadTask;
+  const uploadTask = storage.ref(`images/${image.name}`).put(image); // Upload actual file  to the object 'images/image.name'
+  //  Register three observers:
+  //  1. 'state_changed' observer, called any time the state changes
+  //  2. Error observer, called on failure
+  //  3. Completion observer, called on successful completion
+  uploadTask.on(
+    "state_changed",
+    (snapshot) => {
+      // Observe state change events such as progress, pause, and resume
+      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+      // var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      // console.log("Upload is " + progress + "% done");
+      // switch (snapshot.state) {
+      // 	case storage.TaskState.PAUSED: // or 'paused'
+      // 		console.log("Upload is paused");
+      // 		break;
+      // 	case storage.TaskState.RUNNING: // or 'running'
+      // 		console.log("Upload is running");
+      // 		break;
+      // }
+    },
+    (error) => {
+      console.error(error);
+      // Handle unsuccessful uploads
+    }
+  );
+  return uploadTask;
 };
 
 /**
@@ -267,20 +269,47 @@ export const UploadImageIntoStorage = async (image) => {
  * @param {*} ratingData : the rate of the manager rated for employee
  * @returns
  */
-export const ratingStar = async (idEmployee, groupID, ratingData) => {
-	const ratingRef = firestore.doc(`rate/${idEmployee}`);
-	try {
-		let set = {};
-		set["rate"] = ratingData;
-		set["createAt"] = new Date().toLocaleDateString("en-US");
-		ratingRef.update({
-			infoRating: firebase.firestore.FieldValue.arrayUnion(set),
-		});
-	} catch (error) {
-		console.error("Failed to write database", error);
-	}
+export const ratingStar = async (
+  oldData,
+  idEmployee,
+  groupID,
+  avg_rating,
+  newRate
+) => {
+  const ratingRef = firestore.doc(`rate/${idEmployee}/`);
+  let statusRated = false;
+  try {
+    let set = {};
+    set["rate"] = newRate;
+    const dateCurrent = new Date();
+    //to check whether the current month rated or not.
+    if (
+      oldData["group"][groupID]["infoRating"].find(
+        ({ date }) =>
+          new Date(date).getMonth() + 1 === dateCurrent.getMonth() + 1
+      )
+    ) {
+      statusRated = false;
 
-	return ratingRef;
+    } else {
+      set["date"] = dateCurrent.toLocaleDateString("en-US");
+      ratingRef.set(
+        {
+          group: {
+            [groupID]: {
+              avg_rating: avg_rating,
+              infoRating: firebase.firestore.FieldValue.arrayUnion(set),
+            },
+          },
+        },
+        { merge: true }
+      );
+    }
+  } catch (error) {
+    console.error("Failed to write database", error);
+  }
+
+  return statusRated;
 };
 // export const updateRating = async (employeeID, groupKey, ratingData) => {
 // 	const employeeRef = firestore
@@ -297,6 +326,13 @@ export const ratingStar = async (idEmployee, groupID, ratingData) => {
 // }
 // 	return employeeRef;
 // };
+export const createTask = async (groupID) => {
+  const taskRef = firestore
+    .doc(`task/${groupID}`)
+    .onSnapshot(async (snapshot) => {
+      // console.log("add task", snapshot.data());
+    });
+};
 export const auth = firebase.auth(); // to short the command
 export const firestore = firebase.firestore(); // Create a new client
 export const storage = firebase.storage(); // create a storage
@@ -306,12 +342,12 @@ const provider = new firebase.auth.GoogleAuthProvider(); // declare the provider
 //with an object containing the key as specified by the
 // OAuth provider documentation and the corresponding value.
 provider.setCustomParameters({
-	prompt: "select_account",
+  prompt: "select_account",
 }); // to allow all the accounts showing up and choose
 
 //Pop up google form
 export const signInWithGoogle = () => {
-	auth.signInWithPopup(provider);
+  auth.signInWithPopup(provider);
 };
 
 export { firebase as default };

@@ -1,0 +1,16 @@
+.SignInPage-Component {
+  .SignInForm-Section {
+    h1 {
+      color: #1da492;
+      font-size: 48px;
+    }
+  }
+  .switch-register-component {
+    background: url(../../../Assests/SignIn_Register/business-communication.png)
+      no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+}

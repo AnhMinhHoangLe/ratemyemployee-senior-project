@@ -1,3 +1,41 @@
-.title-employee-in-group {
-	color: #31988f;
+.EmployeeInGroup-container {
+  .title-employee-in-group {
+    color: #31988f;
+  }
+  .optionGroupAndTask-container {
+    .card-component {
+      .button {
+        position: absolute;
+        bottom: 565px;
+        display: none;
+        margin-left: 110px;
+      }
+      &:hover {
+        .button {
+          opacity: 0.85;
+          display: flex;
+        }
+      }
+    }
+    .rate-card-component {
+      width: 15%;
+      bottom: 30%;
+      right: 70%;
+    }
+  }
+}
+.overlay-EmployeeInGroup-container {
+  min-height: 100vh;
+  background-color: #c6d0c4;
+  pointer-events: none;
+  .overlay-container {
+    opacity: 0.3;
+  }
+
+  .rate-card-activate-component {
+    pointer-events: auto;
+    border: 2px black solid;
+    transform: translate(-50%, -50%);
+    opacity: 0.9;
+  }
 }
