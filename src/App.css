@@ -1,8 +1,7 @@
-body {
-	font-family: "Open Sans Condensed";
-	background-color: #f1f8f6;
-	color: white;
+* {
+  font-family: "Open Sans Condensed";
+  /* background-color: #f1f8f6; */
 }
 a {
-	text-decoration: none;
+  text-decoration: none;
 }

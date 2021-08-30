@@ -9,34 +9,34 @@ import { selectEmployeeInfo } from "../../../../Redux/Individuals/individuals.se
 // import OptionBetweenGroupAndIndividual from "../../OptionBetweenGroupAndIndividual/OptionBetweenGroupAndIndividual.Component";
 import AddGroup from "../../../Add/AddGroup/AddGroup.Components";
 const EmployeeOverview = ({ employee, employeeInfo }) => {
-	return (
-		<div className="p-5 overview-container">
-			<h1 className="font-bold text-5xl title-overview">Groups</h1>
-			<div className="flex justify-around p-4 ">
-				<div className=" grid grid-cols-1 gap-4">
-					{/* <OptionBetweenGroupAndIndividual /> */}
-					{employee.map(({ id, employee_list, idGroup, ...otherProps }) => (
-						<EmployeePreview
-							key={id}
-							id={id}
-							employee_list={employee_list}
-							employeeInfo={employeeInfo}
-							idGroup={idGroup}
-							{...otherProps}
-						/>
-					))}
-				</div>
-				<div>
-					<AddGroup />
-				</div>
-			</div>
-		</div>
-	);
+  return (
+    <div className="p-5 overview-container">
+      <h1 className="font-bold text-xl ">Groups</h1>
+      <div className="flex justify-around p-4 ">
+        <div className=" grid grid-cols-1 gap-4">
+          {/* <OptionBetweenGroupAndIndividual /> */}
+          {employee.map(({ id, employee_list, idGroup, ...otherProps }) => (
+            <EmployeePreview
+              key={id}
+              id={id}
+              employee_list={employee_list}
+              employeeInfo={employeeInfo}
+              idGroup={idGroup}
+              {...otherProps}
+            />
+          ))}
+        </div>
+        <div>
+          <AddGroup />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const mapStateToProps = createStructuredSelector({
-	employee: selectEmployeeForPreview, // 1: {id: "1", employee_list: Array(1)}
-	employeeInfo: selectEmployeeInfo, // ["600e4b87fc13ae24a7000000", "zvtLCbDtzlUOfNmU9rJa"]
+  employee: selectEmployeeForPreview, // 1: {id: "1", employee_list: Array(1)}
+  employeeInfo: selectEmployeeInfo, // ["600e4b87fc13ae24a7000000", "zvtLCbDtzlUOfNmU9rJa"]
 });
 
 export default connect(mapStateToProps)(EmployeeOverview);

@@ -28,9 +28,9 @@ const Header = () => {
 				</li>
 			</ul>
 			<div class="flex justify-end col-span-2">
-				<Link to="/search">
+				{/* <Link to="/search"> */}
 					<SearchBox />
-				</Link>
+				{/* </Link> */}
 			</div>
 			<div class="flex justify-end gap-4">
 				<Link to="/">

@@ -11,26 +11,31 @@ const PreviewCollection = ({
 	id,
 	employee_list,
 	employeeInfo,
+	description,
 	match,
 	history,
 }) => {
 	return (
 		<div
-			className="shadow-lg p-6 rounded-lg bg-gradient-to-r from-green-400 to-blue-500 w-full"
-			onClick={() => {
-				history.push(`${match.url}/${id}`);
-			}}
+			className="shadow-lg p-6 rounded-lg w-4/5 text-xl cursor-default"
 		>
-			<h1 className="font-bold text-2xl"> GROUP {id} </h1>
+			<h1 className="font-bold text-3xl text-green-600 mb-4"> GROUP {id} </h1>
+			<p className="mb-4"><span className="font-bold">Members: </span><span>{ employee_list.length}</span></p>
+			<p className="mb-4"><span className="font-bold">Description: </span> <span>{description.substr(0, 100)}</span></p>
 			<span className="flex gap-5 justify-between">
-				<ul className="grid grid-cols-2 gap-4">
+				<ul className="grid grid-cols-2 relative">
 					{employee_list
 						.filter((factor, index) => index < 4)
-						.map(({ id }) => (
-							<li key={id}>{employeeInfo[id].displayName}</li>
+						.map(({ id }, index) => (
+							<li className={`h-10 w-10 rounded-full border border-gray-100`}><img width="100" height="100" src={employeeInfo[id].avatar !== "" ? employeeInfo[id].avatar : 'https://firebasestorage.googleapis.com/v0/b/rate-my-employee-d7636.appspot.com/o/images%2Ftree-736885__340.jpg?alt=media&token=4aea820d-9eba-4c4f-b9fd-e85915dd0463'} /></li>
 						))}
 				</ul>
-				<Target />
+				{/* <Target /> */}
+				<p onClick={() => {
+					history.push(`${match.url}/${id}`);
+				}} className="text-green-600 text-right	text-xl cursor-pointer z-0">
+					Go to this group >
+				</p>
 			</span>
 		</div>
 	);

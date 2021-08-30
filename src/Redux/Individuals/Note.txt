@@ -1,0 +1,4 @@
+apply redux thunk to hel the setup asynchronously. 
+- fetchEmployeeGroupStartAsync : sẽ giúp lấy cả 2 data của employee và group theo trình tự emloyee trước và group sau
+- fetchGroupStartAsync: Sẽ giúp lấy data của employee thôi.
+- fetchEmployeeStartAsync: cũng chỉ lấy data của group thôi. Tuy nhiên, khi lấy group cần lấy thêm của employee để thực hiện sự so sánh ID của hai table với mục tiêu là lấy data của employee

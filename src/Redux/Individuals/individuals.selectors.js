@@ -1,7 +1,10 @@
 import { createSelector } from "reselect";
 
 const selectemployeeinfo = (state) => state.individual;
-
+export const arrayIDEmployee = createSelector(
+	[selectemployeeinfo],
+	(individual) => individual.employeeArray // if not .employee, it will print out variable = object, and array (map) bug
+);
 //!NOTE: line need to have the same name of state
 export const selectEmployeeInfo = createSelector(
 	[selectemployeeinfo],

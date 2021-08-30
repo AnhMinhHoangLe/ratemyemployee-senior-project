@@ -1,23 +1,23 @@
 textarea {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .priority {
-    /* remove standard background appearance */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    /* create custom radiobutton appearance */
-    width: 15px;
-    height: 15px;
-    padding: 3px;
-    /* background-color only for content */
-    background-clip: content-box;
-    border: 1px solid green;
-    // background-color: black;
-    border-radius: 50%;
+  /* remove standard background appearance */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* create custom radiobutton appearance */
+  width: 20px;
+  height: 20px;
+  padding: 3px;
+  /* background-color only for content */
+  background-clip: content-box;
+  border: 1px solid green;
+  // background-color: black;
+  border-radius: 50%;
 
-    &:checked {
-        background-color: red;
-    }
+  &:checked {
+    background-color: black;
+  }
 }
