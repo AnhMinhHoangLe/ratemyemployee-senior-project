@@ -6,7 +6,7 @@ import { selectEmployeeIngroup } from "../../../../Redux/Employee/employee.selec
 import { selectEmployeeInfo } from "../../../../Redux/Individuals/individuals.selectors";
 import { Link } from "react-router-dom";
 import { ReactComponent as Target } from "../../../../Assests/EmployeeIngroup/Polygon 6.svg";
-import AddEmployee from "../../../Add/AddEmployee/AddEmployee.Components";
+import AddNewEmployeeInGroupByInput from "../../../Add/AddEmployee/AddNewEmployeeInGroupByInput.Components";
 import { OptionBetweenGroupAndTask } from "../../../../Redux/Option/option.actions";
 import CustomButton from "../../../CustomButton/CustomButton.component";
 import { selectOptionBetweenGroupAndTask } from "../../../../Redux/Option/option.selectors";
@@ -17,6 +17,9 @@ import RateCard from "../../../RateCard/RateCard.Component";
 import { triggerOpenAndCloseRateCard } from "../../../../Redux/Option/option.actions";
 import { selectTriggerOpenAndCloseRateCard } from "../../../../Redux/Option/option.selectors";
 import ErrorComponent from "../../../ErrorComponent/ErrorComponent";
+import AddEmployeeListTemp from "../../../Add/AddEmployee/AddEmployeeListTemp/AddEmployeeListTemp.Components"
+import { selectEmployeeTempList } from "../../../../Redux/SearchToAddEmployee/search.selectors"
+
 const EmployeeInGroup = ({
   employee,
   employeeInfo,
@@ -25,6 +28,7 @@ const EmployeeInGroup = ({
   dispatch,
   optionGroupAndTask,
   triggerButtonOpenAndCloseRateCard,
+  employeeListTemp
 }) => {
   const [avatar, setAvatar] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -82,17 +86,27 @@ const EmployeeInGroup = ({
 
       {optionGroupAndTask ? (
         <div className="optionGroupAndTask-container flex justify-between">
+
           <div>
             {employee_list.length === 0 ? (
-              <ErrorComponent statusError={statusError} />
+              <div className="flex flex-col">
+                <span><ErrorComponent statusError={statusError} /></span>
+                <br/>
+                <span>
+                    <AddEmployeeListTemp employeeListTemp={employeeListTemp} idGroup={idGroup}/>
+                </span>
+              </div>
               ) : (
-              <div>
-                <div
-                  className={`col-start-1 col-span-3 flex gap-5 ${
-                    triggerButtonOpenAndCloseRateCard ? "overlay-container" : ""
-                  }`}
-                >
-                {
+                <div>
+                  <div>
+                    <AddEmployeeListTemp employeeListTemp={employeeListTemp} idGroup={idGroup}/>
+                  </div>
+                  <div
+                    className={`col-start-1 col-span-3 flex gap-5 ${
+                      triggerButtonOpenAndCloseRateCard ? "overlay-container" : ""
+                    }`}
+                  >
+                  {
                     employee_list.map(({ id }, index) => (
                       <div>
                         {!triggerButtonOpenAndCloseRateCard ? (
@@ -100,11 +114,11 @@ const EmployeeInGroup = ({
                               <div key={id} className="shadow-lg rounded-xl p-8 flex flex-col bg-green-500 gap-3 justify-center card-component">
                                   <span onClick={() => {history.push(`${match.url}/${id}`);}}>
                                     <EmployeeCard
-                                      avatar={employeeInfo[id].avatar}
+                                      avatar={employeeInfo[id].avatar }
                                       displayName={employeeInfo[id].displayName}
                                       position={employeeInfo[id].position}
                                     />
-                                    <RatingStar idGroup={idGroup} idEmployee={id} />
+                                <RatingStar idGroup={idGroup} idEmployee={id} />
                                   </span>
                                   <CustomButton
                                         onClick={() =>
@@ -114,15 +128,17 @@ const EmployeeInGroup = ({
                                             id
                                           )
                                         }
-                                        className="button"
+                                        // className="button"
                                         id={id}
                                         key={id}
                                       >
                                         W
                                   </CustomButton>
-                              </div>
+                            </div>
+
                           </div>
-                          ) : (
+                        ) : (
+                            
                           <div className={`absolute rate-card-component ${
                                   triggerButtonOpenAndCloseRateCard
                                     ? "rate-card-activate-component"
@@ -141,14 +157,16 @@ const EmployeeInGroup = ({
                       </div>
                     ))
                   }
-                </div>
+                  </div>
             </div>
             )}
+
+          </div>
+          
+          <div className={`col-start-1 col-span-3 flex gap-5 ${ !triggerButtonOpenAndCloseRateCard ? "overlay-container" : ""}`}>
+            <AddNewEmployeeInGroupByInput idGroup={idGroup}/>
           </div>
 
-          <div className={`col-start-1 col-span-3 flex gap-5 ${ !triggerButtonOpenAndCloseRateCard ? "overlay-container" : ""}`}>
-            <AddEmployee />
-          </div>
         </div>
       ) : (
         <div>
@@ -165,7 +183,7 @@ const mapStateToProps = (state, ownProps) => ({
   employee: selectEmployeeIngroup(ownProps.match.params.groupID)(state),
   optionGroupAndTask: selectOptionBetweenGroupAndTask(state),
   triggerButtonOpenAndCloseRateCard: selectTriggerOpenAndCloseRateCard(state),
-  
+  employeeListTemp : selectEmployeeTempList(state), 
 });
 
 export default connect(mapStateToProps)(withRouter(EmployeeInGroup));

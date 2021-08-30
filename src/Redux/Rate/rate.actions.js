@@ -24,11 +24,20 @@ export const updateRate = (rateMap) => ({
 })
 
 
-// export const fetchingUpdateRate = (rateMap, thingsToChange) => {
-//   return (dispatch) => {
-//     dispatch(updateRate(updateRateFunc(rateMap, thingsToChange)))
-//   }
-// }
+export const fetchingUpdateRate = (arrayIDEmployee) => {
+  return (dispatch) => {
+    const getRateFromEmployeeID = firestore
+            .collection("rate")
+            .where("id", "in", arrayIDEmployee);
+            dispatch(fetchingRateStart());
+    getRateFromEmployeeID.onSnapshot(async (snapshot) => {
+      const dataRate = convertDataRateSnapShot(snapshot);
+      dispatch(fetchingRateSuccess(dataRate));
+    }
+    )
+    // dispatch(updateRate(updateRateFunc(rateMap, thingsToChange)))
+  }
+}
 
 
 //we dont need it, because it will need to the list of employee => go to action of Employee (Individuals)

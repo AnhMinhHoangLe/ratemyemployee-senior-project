@@ -12,7 +12,7 @@ export const TotAvg = (infoRating) => {
 };
 
 // to calculate avg of the employee in a specific group
-export const calculateAvg = (rate, infoRating, avg_rating) => {
+export const calculateAvgRateCalInCurrentGroup = (rate, infoRating, avg_rating) => {
   const new_length = infoRating.length + 1;
   const old_length = infoRating.length;
   const newAvg = avg_rating * (old_length / new_length) + rate / new_length;

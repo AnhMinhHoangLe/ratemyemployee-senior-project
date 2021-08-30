@@ -45,28 +45,21 @@ export const fetchEmployeeSuccess = (employeeArray) => ({
 });
 
 //For group, employee, and rate
-export const fetchEmployeeGroupStartAsync = (currentUserID) => {
-  return (dispatch) => {
-    /**
-     * Employee
-     */
+export const fetchEmployeeGroupStartAsync =  (currentUserID) => {
+  return (dispatch, getState) => {  
     const listEmployeeRef = firestore
-      .doc(`users/${currentUserID}`)
-      .collection("employee");
+    .doc(`users/${currentUserID}`)
+    .collection("employee");
     dispatch(fetchEmployeeArrayStart());
+    
+    // listening for any changes in this collection.
     listEmployeeRef
-      .get()
-      .then(
+      .onSnapshot(
         //listening for any changes in this collection.
         async (snapshot) => {
-          const arrayIDEmployee = convertDataEmployeeArraySnapShot(snapshot);
+          const arrayIDEmployee = await convertDataEmployeeArraySnapShot(snapshot);
           dispatch(fetchEmployeeArraySuccess(arrayIDEmployee));
-          return arrayIDEmployee;
-        }
-      )
-      .then((arrayIDEmployee) => {
-        //get the data of employee table by compare with above ID array list result
-        const employeeRef = firestore
+            const employeeRef = firestore
           .collection("employee")
           .where("id", "in", arrayIDEmployee);
         dispatch(fetchEmployeeStart());
@@ -76,26 +69,22 @@ export const fetchEmployeeGroupStartAsync = (currentUserID) => {
             const dataEmployee = convertDataEmployeeSnapShot(snapshot);
             dispatch(fetchEmployeeSuccess(dataEmployee));
           });
-
-        /**
-         * RATE data just need the id list of employee
-         * */
+        
         const getRateFromEmployeeID = firestore
-          .collection("rate")
-          .where("id", "in", arrayIDEmployee);
-        dispatch(fetchingRateStart());
-        getRateFromEmployeeID.onSnapshot(async (snapshot) => {
-          const dataRate = convertDataRateSnapShot(snapshot);
-          dispatch(fetchingRateSuccess(dataRate));
-        });
-      })
-      .catch((error) => {
-        dispatch(fetchEmployeeFailure(error.message));
-      })
-      .then(() => {
-        /**
-         * Group
-         */
+              .collection("rate")
+              .where("id", "in", arrayIDEmployee);
+            dispatch(fetchingRateStart());
+            getRateFromEmployeeID.onSnapshot(async (snapshot) => {
+              const dataRate = convertDataRateSnapShot(snapshot);
+              dispatch(fetchingRateSuccess(dataRate));
+            }, (err) => {
+              dispatch(fetchEmployeeFailure(err.message));
+            });
+      
+          
+        //   /**
+      //    * Group
+      //    */
         const groupRef = firestore
           .doc(`users/${currentUserID}`)
           .collection("group"); // to make the link for lead to the database
@@ -110,42 +99,80 @@ export const fetchEmployeeGroupStartAsync = (currentUserID) => {
             dispatch(fetchGroupFailure(error.message));
           }
         );
-      });
-  };
-};
-
-//Disptach employee
-export const fetchEmployeeStartAsync = (currentUserID) => {
-  return (dispatch) => {
-    const listEmployeeRef = firestore
-      .doc(`users/${currentUserID}`)
-      .collection("employee");
-    dispatch(fetchEmployeeArrayStart());
-    listEmployeeRef
-      .get()
-      .then(
-        //listening for any changes in this collection.
-        async (snapshot) => {
-          const arrayIDEmployee = convertDataEmployeeArraySnapShot(snapshot);
-          dispatch(fetchEmployeeArraySuccess(arrayIDEmployee));
-          return arrayIDEmployee;
         }
       )
-      .then((data) => {
-        // const { fetchEmployeeArraySuccess } = getState();
-        const employeeRef = firestore
-          .collection("employee")
-          .where("id", "in", data);
-        dispatch(fetchEmployeeStart());
-        employeeRef
-          //use onSnapShot will automatically update the new data if the data got update from db
-          .onSnapshot(async (snapshot) => {
-            const dataEmployee = convertDataEmployeeSnapShot(snapshot);
-            dispatch(fetchEmployeeSuccess(dataEmployee));
-          });
-      })
-      .catch((error) => {
-        dispatch(fetchEmployeeFailure(error.message));
-      });
-  };
-};
+
+
+      //   /**
+      //    * RATE data just need the id list of employee
+      //    * */
+      //   const getRateFromEmployeeID = firestore
+      //     .collection("rate")
+      //     .where("id", "in", arrayIDEmployee);
+      //   dispatch(fetchingRateStart());
+      //   getRateFromEmployeeID.onSnapshot(async (snapshot) => {
+      //     const dataRate = convertDataRateSnapShot(snapshot);
+      //     dispatch(fetchingRateSuccess(dataRate));
+      //   });
+      // })
+      // .catch((error) => {
+      //   dispatch(fetchEmployeeFailure(error.message));
+      // })
+      // .then(() => {
+      //   /**
+      //    * Group
+      //    */
+      //   const groupRef = firestore
+      //     .doc(`users/${currentUserID}`)
+      //     .collection("group"); // to make the link for lead to the database
+      //   dispatch(fetchGroupStart());
+      //   groupRef.onSnapshot(
+      //     //listening for any changes in this collection.
+      //     async (snapshot) => {
+      //       const groupMap = convertDataGroupSnapShot(snapshot);
+      //       dispatch(fetchGroupSuccess(groupMap));
+      //     },
+      //     (error) => {
+      //       dispatch(fetchGroupFailure(error.message));
+      //     }
+      //   );
+      // });
+  }
+}
+  
+
+//Disptach employee
+// export const fetchEmployeeStartAsync = (currentUserID) => {
+//   return (dispatch) => {
+//     const listEmployeeRef = firestore
+//       .doc(`users/${currentUserID}`)
+//       .collection("employee");
+//     dispatch(fetchEmployeeArrayStart());
+//     listEmployeeRef
+//       .get()
+//       .then(
+//         //listening for any changes in this collection.
+//         async (snapshot) => {
+//           const arrayIDEmployee = convertDataEmployeeArraySnapShot(snapshot);
+//           dispatch(fetchEmployeeArraySuccess(arrayIDEmployee));
+//           return arrayIDEmployee;
+//         }
+//       )
+//       .then((data) => {
+//         // const { fetchEmployeeArraySuccess } = getState();
+//         const employeeRef = firestore
+//           .collection("employee")
+//           .where("id", "in", data);
+//         dispatch(fetchEmployeeStart());
+//         employeeRef
+//           //use onSnapShot will automatically update the new data if the data got update from db
+//           .onSnapshot(async (snapshot) => {
+//             const dataEmployee = convertDataEmployeeSnapShot(snapshot);
+//             dispatch(fetchEmployeeSuccess(dataEmployee));
+//           });
+//       })
+//       .catch((error) => {
+//         dispatch(fetchEmployeeFailure(error.message));
+//       });
+//   };
+// };

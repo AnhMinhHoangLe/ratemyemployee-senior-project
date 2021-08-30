@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { selectAvgRateInGroup } from "../../../../Redux/Rate/rate.selectors";
+import { selectInfoRateInGroup } from "../../../../Redux/Rate/rate.selectors";
 const RatingOverallDataEmployeeInGroup = ({ state, idEmployee, idGroup }) => {
   console.log(idEmployee, idGroup);
   const { avg_rating, infoRating } = state.group[idGroup];
@@ -15,6 +15,6 @@ const RatingOverallDataEmployeeInGroup = ({ state, idEmployee, idGroup }) => {
   );
 };
 const mapStateToProps = (state, ownProps) => ({
-  state: selectAvgRateInGroup(ownProps.idEmployee)(state),
+  state: selectInfoRateInGroup(ownProps.idEmployee)(state),
 });
 export default connect(mapStateToProps)(RatingOverallDataEmployeeInGroup);

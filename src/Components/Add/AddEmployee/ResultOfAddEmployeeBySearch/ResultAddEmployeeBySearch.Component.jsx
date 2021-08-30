@@ -1,43 +1,56 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+
 import {
 	selectListEmployee,
 	selectEmployeeInfo,
 } from "../../../../Redux/Individuals/individuals.selectors";
+import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
 import { connect } from "react-redux";
 import { useHistory, withRouter } from "react-router-dom";
 import ErrorComponent from "../../../ErrorComponent/ErrorComponent"
-const ResultAddEmployeeBySearch = ({ search, individuals }) => {
+import CustomButton from "../../../CustomButton/CustomButton.component";
+import {addEmployeeToList, removeEmployeeToList, clearAllEmployeeInList} from "../../../../Redux/SearchToAddEmployee/search.actions"
+const ResultAddEmployeeBySearch = ({ search, individuals, addEmployee }) => {
     const [errorStt, setErrorStt] = useState('There is no result')
+    
     return (
         <div className="from-black">
 			{!search ? (
                 <div></div>
             ) : (
-                    individuals.filter((key) => {
-                        return key.displayName.toUpperCase().includes(search.toUpperCase()) && key.groupActive === false
-                    }).length !== 0  ? (
-                        individuals
-                        .filter((key) => {
-                        return key.displayName.toUpperCase().includes(search.toUpperCase()) && key.groupActive === false
-                        })
                         
-					.map(({ id, displayName, avatar }) => (
-                        <div key={id}>
-							<img  src={avatar ? avatar : 'https://firebasestorage.googleapis.com/v0/b/rate-my-employee-d7636.appspot.com/o/images%2Ftree-736885__340.jpg?alt=media&token=4aea820d-9eba-4c4f-b9fd-e85915dd0463'} />
-                            <p>{displayName}</p>
-                            <input type="checkbox" id={id} name={displayName} />
-						</div>
-					))
+                            individuals.filter((key) => {
+                                return key.displayName.toUpperCase().includes(search.toUpperCase()) && key.groupActive === false
+                            }).length !== 0 ? (
+                            <div>
+                                {
+                                individuals
+                                    .filter((key) => {
+                                        return key.displayName.toUpperCase().includes(search.toUpperCase()) && key.groupActive === false
+                                    })
+                                    .map(({ id, displayName, avatar, position },index) => (
+                                        <div className="flex gap-4 " key={index}>
+                                            <img className="rounded-full h-14 w-14" src={avatar} />
+                                            <p className="self-center">{displayName}</p>
+                                            <CustomButton  className="self-center checkbox" onClick={()=> addEmployee({ id, displayName, avatar, position })}>Adding</CustomButton>
+                                        </div>
+                                    ))
+                            }
+                            </div>  
                     ) : (
                             <ErrorComponent statusError={errorStt}/>
                     )
-                 
-				
 			)}
 		</div>
     )
 }
+
 const mapStateToProps = (state) => ({
-	individuals: selectListEmployee(state),
+    employeeInfo: selectEmployeeInfo(state),
+    individuals: selectListEmployee(state),
+    currentUser: selectCurrentUser(state),
 });
-export default  withRouter(connect(mapStateToProps)(ResultAddEmployeeBySearch))
+const mapDispatchToProps = (dispatch) => ({
+    addEmployee: (employeeListInGroupTemp) => dispatch(addEmployeeToList(employeeListInGroupTemp))
+})
+export default  withRouter(connect(mapStateToProps, mapDispatchToProps)(ResultAddEmployeeBySearch))

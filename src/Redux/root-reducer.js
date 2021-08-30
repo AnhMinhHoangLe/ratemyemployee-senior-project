@@ -5,6 +5,7 @@ import employeeInfoReducer from "./Individuals/Individuals.reducer";
 import optionReducer from "./Option/option.reducer";
 import taskReducer from "./Task/Task.reducers";
 import rateInfoReducer from "./Rate/rate.reducers";
+import employeeListTempReducer from "./SearchToAddEmployee/search.reducers"
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   rateInfo: rateInfoReducer,
   option: optionReducer,
   task: taskReducer,
+  employeeListInGroupTemp: employeeListTempReducer, 
 });
 
 // export default persistReducer(persistConfig,rootReducer);

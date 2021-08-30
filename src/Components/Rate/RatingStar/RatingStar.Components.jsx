@@ -1,23 +1,23 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { connect } from "react-redux";
 import ReactStars from "react-rating-stars-component";
 import { ratingStar } from "../../../Firebase/firebase.utils";
 import {
   selectRateInfo,
-  selectAvgRateInGroup,
+  selectInfoRateInGroup,
 } from "../../../Redux/Rate/rate.selectors";
-import { calculateAvg } from "../../Rate/Rating.Utils";
 import { selectTriggerOpenAndCloseRateCard } from "../../../Redux/Option/option.selectors";
 import { triggerSaveRateCard } from "../../../Redux/Option/option.actions";
 
 const RatingStar = ({
   idGroup,
   idEmployee,
-  state,
+  selectInfoRateInGroup,
   triggerOpenAndCloseRateCard,
   dispatch,
+  selectRateInfo
 }) => {
-  
+
   // need to create a function to calculate avg at specific
   //group by using selectAvgRateInGroup, add data employee to db
   const ratingChanged = (newRating, idEmployee, idGroup) => {
@@ -26,9 +26,9 @@ const RatingStar = ({
     // infoRating(date, rate);
     dispatch(triggerSaveRateCard(newRating));
   };
-
   return (
     <div>
+
       {triggerOpenAndCloseRateCard ? (
         <ReactStars
           count={5}
@@ -42,9 +42,10 @@ const RatingStar = ({
           edit={true}
         />
       ) : (
+          
         <ReactStars
           count={5}
-          value={state.group[idGroup].avg_rating}
+          value={selectRateInfo[idEmployee]['group'][idGroup]['avg_rating']}
           // onChange={(newRating) => ratingChanged(newRating, idEmployee, idGroup)}
           size={24}
           emptyIcon={<i className="far fa-star"></i>}
@@ -57,8 +58,9 @@ const RatingStar = ({
   );
 };
 const mapStateToProps = (state, ownProps) => ({
-  state: selectAvgRateInGroup(ownProps.idEmployee)(state),
+  selectInfoRateInGroup: selectInfoRateInGroup(ownProps.idEmployee)(state),
   triggerOpenAndCloseRateCard: selectTriggerOpenAndCloseRateCard(state),
+  selectRateInfo:selectRateInfo(state)
 });
 
 // 4, 5, 3, 1

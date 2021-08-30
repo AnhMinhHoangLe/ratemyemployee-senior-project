@@ -9,12 +9,13 @@ import { triggerOpenAndCloseRateCard } from "../../Redux/Option/option.actions";
 import { selectTriggerOpenAndCloseRateCard } from "../../Redux/Option/option.selectors";
 import { triggerSaveRateCard } from "../../Redux/Option/option.actions";
 import { selectTriggerSaveRateCard } from "../../Redux/Option/option.selectors";
-import { calculateAvg } from "../Rate/Rating.Utils";
+import { calculateAvgRateCalInCurrentGroup, TotAvg } from "../Rate/Rating.Utils";
 import { ratingStar } from "../../Firebase/firebase.utils";
 import { updateRate } from "../../Redux/Rate/rate.actions"
 import {
   selectRateInfo,
-  selectAvgRateInGroup,
+  // selectInfoRatingOfEmployeeInGroup,
+  selectInfoRateInGroup
 } from "../../Redux/Rate/rate.selectors";
 const RateCard = ({
   avatar,
@@ -25,18 +26,22 @@ const RateCard = ({
   selectTriggerOpenAndCloseRateCard,
   dispatch,
   newRating,
-  avgRateInGroup,
+  selectInfoRateInGroup,
+  // selectInfoRatingOfEmployeeInGroup,
+  // selectAllGroupsInfoEmp
 
 }) => {
   const saveTrigger = () => {
     if (newRating > 0) {
-      const avgRateCal = calculateAvg(
+      const {avg_rating, infoRating} = selectInfoRateInGroup['group'][idGroup]
+      const avgRateCalInCurrentGroup = calculateAvgRateCalInCurrentGroup(
         newRating,
-        avgRateInGroup.group[idGroup].infoRating,
-        avgRateInGroup.group[idGroup].avg_rating
+        infoRating,
+        avg_rating
       );
-      const set = {idEmployee: idEmployee, idGroup: idGroup, newRate: newRating,  avgRateCal: avgRateCal}
-      ratingStar(avgRateInGroup, idEmployee, idGroup, avgRateCal, newRating)
+      // const avgRatingOverallOfEmployee = TotAvg(selectAllGroupsInfoEmp)
+      const set = {idEmployee: idEmployee, idGroup: idGroup, newRate: newRating,  avgRateCal: avgRateCalInCurrentGroup}
+      ratingStar(selectInfoRateInGroup, idEmployee, idGroup, avgRateCalInCurrentGroup, newRating)
       dispatch(updateRate(set))
       newRating = 0
       dispatch(triggerSaveRateCard(newRating));
@@ -47,13 +52,11 @@ const RateCard = ({
 
   };
 
-  // ratingStar(state, idEmployee, idGroup, avgRateCal, newRating);
-
   return (
     <div className="shadow-lg rounded-xl  flex flex-col bg-white gap-3 text-center align-center">
       <div className="self-center	p-3">
         <h1 className="font-bold">{displayName}</h1>
-        <img src={avatar ? avatar : 'https://firebasestorage.googleapis.com/v0/b/rate-my-employee-d7636.appspot.com/o/images%2Ftree-736885__340.jpg?alt=media&token=4aea820d-9eba-4c4f-b9fd-e85915dd0463'}
+        <img width="100" height="100" src={avatar }
  />
       </div>
       <div className="self-center	">
@@ -83,8 +86,9 @@ const RateCard = ({
 const mapStateToProps = (state, ownProps) => ({
   selectTriggerOpenAndCloseRateCard: selectTriggerOpenAndCloseRateCard(state),
   newRating: selectTriggerSaveRateCard(state),
-  avgRateInGroup: selectAvgRateInGroup(ownProps.idEmployee)(state),
-  rateInfo: selectRateInfo(state)
+  selectInfoRateInGroup: selectInfoRateInGroup(ownProps.idEmployee)(state),
+  // selectInfoRatingOfEmployeeInGroup: selectInfoRatingOfEmployeeInGroup(ownProps.idEmployee, ownProps.idGroup)(state), 
+  rateInfo: selectRateInfo(state), 
 });
 //them button (save va cancel). Nut cancel can phai ket hop voi state, set state la false va  setCardActivate, nen de state vao redux
 // if else cai react start, de khi popup card ko thay du lieu cua star

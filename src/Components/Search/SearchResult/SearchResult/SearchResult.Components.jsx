@@ -31,7 +31,9 @@ const SearchResult = ({ search, individuals, match, history, dispatch }) => {
 							}}
 						>
 							<img
-								src={avatar ? avatar : 'https://firebasestorage.googleapis.com/v0/b/rate-my-employee-d7636.appspot.com/o/images%2Ftree-736885__340.jpg?alt=media&token=4aea820d-9eba-4c4f-b9fd-e85915dd0463'}
+								width="100"
+								height="100"
+								src={avatar }
 							/>
 							<p>{displayName}</p>
 						</div>

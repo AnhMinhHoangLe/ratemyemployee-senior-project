@@ -27,7 +27,7 @@ const PreviewCollection = ({
 					{employee_list
 						.filter((factor, index) => index < 4)
 						.map(({ id }, index) => (
-							<li className={`h-10 w-10 rounded-full border border-gray-100`}><img src={employeeInfo[id].avatar}/></li>
+							<li className={`h-10 w-10 rounded-full border border-gray-100`}><img width="100" height="100" src={employeeInfo[id].avatar !== "" ? employeeInfo[id].avatar : 'https://firebasestorage.googleapis.com/v0/b/rate-my-employee-d7636.appspot.com/o/images%2Ftree-736885__340.jpg?alt=media&token=4aea820d-9eba-4c4f-b9fd-e85915dd0463'} /></li>
 						))}
 				</ul>
 				{/* <Target /> */}

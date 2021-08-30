@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
+import { useHistory, withRouter } from "react-router-dom";
 import "./AddEmployee.Styles.scss";
 import FormInput from "../../FormInput/FormInput.Component";
 import CustomButton from "../../CustomButton/CustomButton.component";
@@ -11,10 +12,11 @@ import {
 } from "../../../Firebase/firebase.utils";
 import { selectCurrentUser } from "../../../Redux/User/user.selectors";
 import { selectTriggerSearchAddEmployee } from "../../../Redux/Option/option.selectors"
-import AddEmployeeBySearch from "./AddEmployeeBySearch/AddEmployeeBySearch.Component";
+// import AddEmployeeBySearch from "./AddEmployeeBySearch/AddEmployeeBySearch.Component";
 import ResultAddEmployeeBySearch from "./ResultOfAddEmployeeBySearch/ResultAddEmployeeBySearch.Component"
-import {triggerSearchAddEmployeeComp} from '../../../Redux/Option/option.actions'
-class AddEmployee extends React.Component {
+import { triggerSearchAddEmployeeComp } from '../../../Redux/Option/option.actions'
+// import {fetchEmployeeStartAsync} from "../../../Redux/Individuals/Individuals.actions"
+class AddNewEmployeeInGroupByInput extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -26,7 +28,8 @@ class AddEmployee extends React.Component {
 			uploadImage: null,
 			// phone_number: "",
 			position: "",
-			searchField:""
+			groupActive: true, 
+			searchField: ""
 		};
 	}
 	handleChange = (event) => {
@@ -56,7 +59,7 @@ class AddEmployee extends React.Component {
 	// 		);
 	// 	}
 	// };
-	handleSubmit = (event) => {
+	handleSubmit = async (event) => {
 		event.preventDefault();
 		const { currentUser } = this.props;
 		const {
@@ -65,20 +68,24 @@ class AddEmployee extends React.Component {
 			// avatar,
 			// address,
 			// gender,
-			// phone_number,
+			// phone_numb
+			groupActive, 
 			position,
 		} = this.state;
+		const idGroup = this.props.idGroup
 		try {
-			const employee = {
+			const employee = await {
 				displayName,
 				email,
 				// avatar,
 				// address,
 				// gender,
-				// phone_number,
+				groupActive, 
 				position,
+				idGroup
 			};
-			createEmployee(currentUser, "employee", employee);
+			await createEmployee(currentUser, "employee", employee);
+			// await fetchEmployeeStartAsync(currentUser)
 			this.setState({
 				displayName: "",
 				email: "",
@@ -95,7 +102,7 @@ class AddEmployee extends React.Component {
 			console.error(error);
 		}
 
-		document.getElementById("uploadFile").value = "";
+		// document.getElementById("uploadFile").value = "";
 		this.setState({
 			displayName: "",
 			email: "",
@@ -119,7 +126,6 @@ class AddEmployee extends React.Component {
             dispatch(triggerSearchAddEmployeeComp(false))
         }
 	};
-
 	render() {
 		const {
 			displayName,
@@ -130,13 +136,15 @@ class AddEmployee extends React.Component {
 			position,
 			searchField
 		} = this.state;
-		const {selectTriggerSearchAddEmployee} = this.props
+		const { selectTriggerSearchAddEmployee } = this.props
+
 		return (
 			<div className="xl:w-3/12 h-11/12 xl:fixed xl:top-40 xl:right-40 bg-white p-5 shadow-lg rounded-xl text-gray-600">
 				{/* Searching form */}
 				<div>
 					<h1 className="title-add-employee text-3xl text-center t mb-5 mb-10">Add Existing Employee</h1>
-					{/* <AddEmployeeBySearch /> */}
+					
+					{/* Add Employee By Search */}
 					<FormInput
 						placeholder="Search Name"
 						name="searchName"
@@ -258,4 +266,4 @@ const mapStateToProps = createStructuredSelector({
 	currentUser: selectCurrentUser,
 	selectTriggerSearchAddEmployee: selectTriggerSearchAddEmployee, 
 });
-export default connect(mapStateToProps)(AddEmployee);
+export default withRouter(connect(mapStateToProps)(AddNewEmployeeInGroupByInput));

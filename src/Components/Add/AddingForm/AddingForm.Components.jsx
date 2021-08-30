@@ -53,7 +53,6 @@ class AddingForm extends React.Component {
 							key={index}
 							handleChange={this.handleChange}
 							label={displayName}
-							value={id[index]}
 							type="checkbox"
 							className="checkbox"
 						/>

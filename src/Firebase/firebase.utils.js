@@ -3,7 +3,6 @@ import "firebase/firestore";
 import "firebase/auth";
 
 import "firebase/storage";
-
 const firebaseConfig = {
   apiKey: "AIzaSyDVArB3fcE0_LnfqnWRMWMDjeWVVDf-vYQ",
   authDomain: "rate-my-employee-d7636.firebaseapp.com",
@@ -158,7 +157,9 @@ export const createGroup = async (userAuth, userKey, id, description) => {
   }
   return groupRef;
 };
-
+//////////////////////////////////////////////////////////////////////////////
+/////////////////// FUNCTION FOR GROUP //////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 /**
  *
  * @param {*} userAuth current user logged in
@@ -166,7 +167,7 @@ export const createGroup = async (userAuth, userKey, id, description) => {
  * @param {*} groupKey name of the group
  * @param {*} arrayID IDs in the array list
  * @returns
- * This function is to add employee into the group that the user wishes
+ * This function is to add employee into the group that the user wishes, by search
  */
 export const addEmployeeToGroup = async (
   userAuth,
@@ -175,39 +176,64 @@ export const addEmployeeToGroup = async (
   arrayID
 ) => {
   const groupIDRef = firestore.doc(
-    `users/${userAuth.id}/${userKey}/${groupKey}`
-  );
-
-  arrayID.forEach((id) => {
+    `users/${userAuth.id}`
+  ).collection(userKey);
+  const rateInfo = firestore.collection('rate')
+  
+  const employeeInfo = firestore.collection('employee')
+  const batch = firestore.batch()
+  
+  arrayID.map(async ({ id }) => {
     let IDObject = {};
     IDObject["id"] = id;
-    groupIDRef.update({
+
+    const newGroupIDRef = groupIDRef.doc(groupKey)
+    const newRateInfo = rateInfo.doc(id)
+    const newEmployeeInfo = employeeInfo.doc(id)
+    batch.update(newGroupIDRef, {
       employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
-    });
-  });
-  return groupIDRef;
+    })
+    batch.update(newRateInfo, {
+      group: {
+              [groupKey]: {
+                avg_rating: 0,
+                infoRating: []
+              }
+            }
+    })
+    batch.update(newEmployeeInfo, {
+      groupActive: true
+    })
+   });
+  return await batch.commit();
 };
+
 /**
  *
+ * 
  * @param {*} userAuth: current user logged in
  * @param {*} userKey : name of the current collection
  * @param {*} info: inputted data
  * @returns
- * This function is to create new employee
+ * This function is to create new employee in group
  */
 export const createEmployee = async (userAuth, userKey, info) => {
   const employeeRef = firestore.doc(`users/${userAuth.id}`).collection(userKey);
+  const employeeInfo = firestore.collection('employee')
   // const { displayName, email, address, gender, phone_number, position } = info;
-  const { displayName, email, position, avatar } = info;
+  // const { displayName, email, position, avatar, groupActive } = info;
+    const { displayName, email, position, groupActive, idGroup } = info;
   // console.log("image in firebase", avatar);
 
   try {
-    const generateID = employeeRef.doc();
+    const generateID = employeeInfo.doc();
+    const id = generateID.id
     const createAt = new Date();
     const address = "";
     const gender = "";
-    const avatar = ""
+    const avatar = "https://firebasestorage.googleapis.com/v0/b/rate-my-employee-d7636.appspot.com/o/images%2Ftree-736885__340.jpg?alt=media&token=4aea820d-9eba-4c4f-b9fd-e85915dd0463"
     const phone_number = Number();
+    const groupHistory = []
     // Image: https://stackoverflow.com/questions/61215555/how-to-upload-image-to-firebase-storage-and-upload-url-to-firestore-simultaneous
     await generateID.set({
       displayName,
@@ -216,15 +242,43 @@ export const createEmployee = async (userAuth, userKey, info) => {
       gender,
       phone_number,
       position,
+      groupActive,
+      groupHistory, 
       avatar,
-      id: generateID.id,
+      id, 
       createAt,
     });
+    await employeeRef.doc(id).set({
+      id: id
+    })
+    const rateInfo = firestore.collection('rate')
+    const avg_rating = 0
+    await rateInfo.doc(id).set({
+      id: id, 
+      avg_rating, 
+      group: {
+        [idGroup]: {
+          avg_rating: 0,
+          infoRating: []
+        }
+      },
+    },
+      { merge: true }
+    )
+    const groupIDRef = firestore.doc(
+      `users/${userAuth.id}/group/${idGroup}`
+    );
+  
+      let IDObject = {};
+      IDObject["id"] = id;
+      await groupIDRef.update({
+        employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
+      });
   } catch {
     console.error();
   }
-  return employeeRef;
 };
+
 
 /**
  *
@@ -261,7 +315,9 @@ export const UploadImageIntoStorage = async (image) => {
   );
   return uploadTask;
 };
-
+///////////////////////////////////////////////////////////////////////////////
+///////////////////// FUNCTION FOR RATING /////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 /**
  *
  * @param {*} employeeID : get the ID of employee
@@ -326,6 +382,9 @@ export const ratingStar = async (
 // }
 // 	return employeeRef;
 // };
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 export const createTask = async (groupID) => {
   const taskRef = firestore
     .doc(`task/${groupID}`)

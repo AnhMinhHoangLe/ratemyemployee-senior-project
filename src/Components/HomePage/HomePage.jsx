@@ -9,14 +9,14 @@ import {
 } from "../../Firebase/firebase.snapshot";
 import { selectCurrentUser } from "../../Redux/User/user.selectors";
 // import { updateEmployee } from "../../Redux/Individuals/Individuals.actions";
-import { fetchEmployeeGroupStartAsync } from "../../Redux/Individuals/Individuals.actions";
+// import { fetchEmployeeGroupStartAsync } from "../../Redux/Individuals/Individuals.actions";
 import {} from "../../Redux/Rate/rate.actions";
 import { selectListEmployee } from "../../Redux/Individuals/individuals.selectors";
 
 class HomePage extends Component {
   componentDidMount() {
     const { currentUser, fetchEmployeeGroupStartAsync } = this.props;
-    fetchEmployeeGroupStartAsync(currentUser.id);
+    // fetchEmployeeGroupStartAsync(currentUser.id);
   }
 
   render() {
@@ -30,8 +30,8 @@ class HomePage extends Component {
 
 //!NOTE: tomorrow move the mapDispatchToProps to each section group and individual page and try again to fox bug
 const mapDispatchToProps = (dispatch) => ({
-  fetchEmployeeGroupStartAsync: (currentUserID) =>
-    dispatch(fetchEmployeeGroupStartAsync(currentUserID)),
+  // fetchEmployeeGroupStartAsync: (currentUserID) =>
+  //   dispatch(fetchEmployeeGroupStartAsync(currentUserID)),
 });
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
