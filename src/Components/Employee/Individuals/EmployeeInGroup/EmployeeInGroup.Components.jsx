@@ -6,7 +6,7 @@ import { selectEmployeeIngroup } from "../../../../Redux/Employee/employee.selec
 import { selectEmployeeInfo } from "../../../../Redux/Individuals/individuals.selectors";
 import { Link } from "react-router-dom";
 import { ReactComponent as Target } from "../../../../Assests/EmployeeIngroup/Polygon 6.svg";
-import AddNewEmployeeInGroupByInput from "../../../Add/AddEmployee/AddNewEmployeeInGroupByInput.Components";
+import AddNewEmployeeInGroupByInput from "../../../Add/AddEmployee/AddEmployeeIntoGroup/AddNewEmployeeInGroupByInput.Components";
 import { OptionBetweenGroupAndTask } from "../../../../Redux/Option/option.actions";
 import CustomButton from "../../../CustomButton/CustomButton.component";
 import { selectOptionBetweenGroupAndTask } from "../../../../Redux/Option/option.selectors";
@@ -19,8 +19,10 @@ import { selectTriggerOpenAndCloseRateCard } from "../../../../Redux/Option/opti
 import ErrorComponent from "../../../ErrorComponent/ErrorComponent";
 import AddEmployeeListTemp from "../../../Add/AddEmployee/AddEmployeeListTemp/AddEmployeeListTemp.Components"
 import { selectEmployeeTempList } from "../../../../Redux/SearchToAddEmployee/search.selectors"
-
+import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
+import { deleteEmployeeInGroup } from "../../../../Firebase/firebase.utils"
 const EmployeeInGroup = ({
+  currentUser, 
   employee,
   employeeInfo,
   match,
@@ -41,6 +43,9 @@ const EmployeeInGroup = ({
     setAvatar(avatar);
     setIdEmployee(id);
   };
+  const delEmpInGroup = (idEmployee, idGroup) => {
+    deleteEmployeeInGroup(currentUser, idEmployee, idGroup)
+  }
   return (
     <div
       className={`flex flex-col p-10 EmployeeInGroup-container ${
@@ -133,7 +138,8 @@ const EmployeeInGroup = ({
                                         key={id}
                                       >
                                         W
-                                  </CustomButton>
+                              </CustomButton>
+                              <CustomButton onClick={() => delEmpInGroup(idGroup,id)}>Del Emp</CustomButton>
                             </div>
 
                           </div>
@@ -178,6 +184,8 @@ const EmployeeInGroup = ({
 };
 //ownProps which is the props of the component that we are wrapping
 const mapStateToProps = (state, ownProps) => ({
+  currentUser: selectCurrentUser(state),
+
   employeeInfo: selectEmployeeInfo(state),
   // (state ) is to pass in selectEmployee => SelectEmployeeInGroup
   employee: selectEmployeeIngroup(ownProps.match.params.groupID)(state),

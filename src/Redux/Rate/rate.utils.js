@@ -10,7 +10,7 @@ export const updateRateFunc = (rateMap, thingsToChange) => {
     const dateCurrent = new Date();
     if( rateMap[idEmployee]["group"][idGroup].infoRating.find( ({ date }) =>
         new Date(date).getMonth() + 1 === dateCurrent.getMonth() + 1)) {
-            alert("already rated")
+            alert("Already Rated")
             return rateMap
     }
     newObject["date"] =  dateCurrent.toLocaleDateString("en-US")

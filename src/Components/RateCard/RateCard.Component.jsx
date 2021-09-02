@@ -10,7 +10,7 @@ import { selectTriggerOpenAndCloseRateCard } from "../../Redux/Option/option.sel
 import { triggerSaveRateCard } from "../../Redux/Option/option.actions";
 import { selectTriggerSaveRateCard } from "../../Redux/Option/option.selectors";
 import { calculateAvgRateCalInCurrentGroup, TotAvg } from "../Rate/Rating.Utils";
-import { ratingStar } from "../../Firebase/firebase.utils";
+import { ratingStar, updateOverallAvgOfEmployeeRatingStar } from "../../Firebase/firebase.utils";
 import { updateRate } from "../../Redux/Rate/rate.actions"
 import {
   selectRateInfo,
@@ -31,24 +31,29 @@ const RateCard = ({
   // selectAllGroupsInfoEmp
 
 }) => {
-  const saveTrigger = () => {
+  const saveTrigger =  () => {
     if (newRating > 0) {
       const {avg_rating, infoRating} = selectInfoRateInGroup['group'][idGroup]
-      const avgRateCalInCurrentGroup = calculateAvgRateCalInCurrentGroup(
+      const avgRateCalInCurrentGroup =  calculateAvgRateCalInCurrentGroup(
         newRating,
         infoRating,
         avg_rating
       );
-      // const avgRatingOverallOfEmployee = TotAvg(selectAllGroupsInfoEmp)
-      const set = {idEmployee: idEmployee, idGroup: idGroup, newRate: newRating,  avgRateCal: avgRateCalInCurrentGroup}
       ratingStar(selectInfoRateInGroup, idEmployee, idGroup, avgRateCalInCurrentGroup, newRating)
+
+      const set =  {idEmployee: idEmployee, idGroup: idGroup, newRate: newRating,  avgRateCal: avgRateCalInCurrentGroup}
       dispatch(updateRate(set))
+      
+      const totalOverallAvg = TotAvg(selectInfoRateInGroup)
+      updateOverallAvgOfEmployeeRatingStar(idEmployee, totalOverallAvg)
       newRating = 0
       dispatch(triggerSaveRateCard(newRating));
+      dispatch(triggerOpenAndCloseRateCard(false))
+
         } else {
       alert("Rate Star needs to bigger than 0");
-      dispatch(triggerOpenAndCloseRateCard(false))
     }
+
 
   };
 
