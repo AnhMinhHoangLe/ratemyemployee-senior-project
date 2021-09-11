@@ -145,7 +145,7 @@ export const createGroup = async (userAuth, userKey, id, description) => {
   const createAt = new Date();
   try {
     const idGroup = groupRef.doc();
-    await groupRef.doc().set({
+    await idGroup.set({
       id,
       employee_list: [],
       idGroup: idGroup.id,
@@ -179,33 +179,37 @@ export const addEmployeeToGroup = async (
     `users/${userAuth.id}`
   ).collection(userKey);
   const rateInfo = firestore.collection('rate')
-  
   const employeeInfo = firestore.collection('employee')
+
   const batch = firestore.batch()
   
-  arrayID.map(async ({ id }) => {
+  await arrayID.map(({ id }) => {
     let IDObject = {};
     IDObject["id"] = id;
 
     const newGroupIDRef = groupIDRef.doc(groupKey)
     const newRateInfo = rateInfo.doc(id)
     const newEmployeeInfo = employeeInfo.doc(id)
-    batch.update(newGroupIDRef, {
-      employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
-    })
-    batch.update(newRateInfo, {
+    
+    batch.set(newRateInfo, {
       group: {
               [groupKey]: {
                 avg_rating: 0,
                 infoRating: []
               }
             }
+    }, { merge: true }
+    )
+    
+    batch.update(newGroupIDRef, {
+      employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
     })
+    
     batch.update(newEmployeeInfo, {
       groupActive: true
     })
    });
-  return await batch.commit();
+  return  await batch.commit();
 };
 
 /**
@@ -253,27 +257,39 @@ export const createEmployee = async (userAuth, userKey, info) => {
     })
     const rateInfo = firestore.collection('rate')
     const avg_rating = 0
-    await rateInfo.doc(id).set({
-      id: id, 
-      avg_rating, 
-      group: {
-        [idGroup]: {
-          avg_rating: 0,
-          infoRating: []
+
+    if (idGroup !== undefined) {
+        await rateInfo.doc(id).set({
+          id: id, 
+          avg_rating, 
+          group: {
+            [idGroup]: {
+              avg_rating: 0,
+              infoRating: []
+            }
+          },
         }
-      },
-    },
-      { merge: true }
-    )
-    const groupIDRef = firestore.doc(
-      `users/${userAuth.id}/group/${idGroup}`
-    );
-  
-      let IDObject = {};
-      IDObject["id"] = id;
-      await groupIDRef.update({
-        employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
-      });
+        )
+        const groupIDRef = firestore.doc(
+          `users/${userAuth.id}/group/${idGroup}`
+        );
+      
+          let IDObject = {};
+          IDObject["id"] = id;
+          await groupIDRef.update({
+            employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
+          });
+    }
+    else {
+      await rateInfo.doc(id).set({
+        id: id, 
+        avg_rating, 
+        group: {
+          }
+        },
+      )
+    }
+    
   } catch {
     console.error();
   }
@@ -315,6 +331,30 @@ export const UploadImageIntoStorage = async (image) => {
   );
   return uploadTask;
 };
+/*
+* Delete Employee In Group
+*/
+export const deleteEmployeeInGroup = (userAuth, groupID, employeeID) => {
+  const employeeRefInGroup = firestore.doc(`users/${userAuth.id}`).collection('group');
+  const employeeInfo = firestore.collection('employee')
+  try {
+    const setToDel = { id: employeeID }
+    const idEmployeeInGroupRef = employeeRefInGroup.doc(groupID);
+    idEmployeeInGroupRef.update({
+      employee_list: firebase.firestore.FieldValue.arrayRemove(setToDel)
+    });
+
+    const employeeUpdateActiveGroupStt = employeeInfo.doc(employeeID)
+    employeeUpdateActiveGroupStt.update({
+      groupActive: false
+    })
+  } catch {
+    console.error();
+  }
+
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////// FUNCTION FOR RATING /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -325,11 +365,11 @@ export const UploadImageIntoStorage = async (image) => {
  * @param {*} ratingData : the rate of the manager rated for employee
  * @returns
  */
-export const ratingStar = async (
+export const ratingStar = (
   oldData,
   idEmployee,
   groupID,
-  avg_rating,
+  avgRateCalInCurrentGroup,
   newRate
 ) => {
   const ratingRef = firestore.doc(`rate/${idEmployee}/`);
@@ -338,7 +378,7 @@ export const ratingStar = async (
     let set = {};
     set["rate"] = newRate;
     const dateCurrent = new Date();
-    //to check whether the current month rated or not.
+    // to check whether the current month rated or not.
     if (
       oldData["group"][groupID]["infoRating"].find(
         ({ date }) =>
@@ -353,12 +393,12 @@ export const ratingStar = async (
         {
           group: {
             [groupID]: {
-              avg_rating: avg_rating,
+              avg_rating: avgRateCalInCurrentGroup,
               infoRating: firebase.firestore.FieldValue.arrayUnion(set),
             },
           },
         },
-        { merge: true }
+        {merge: true}
       );
     }
   } catch (error) {
@@ -367,6 +407,21 @@ export const ratingStar = async (
 
   return statusRated;
 };
+
+export const updateOverallAvgOfEmployeeRatingStar =  (
+  idEmployee,
+  overAllAvg
+) => {
+  const ratingRef = firestore.doc(`rate/${idEmployee}/`);
+      ratingRef.update(
+        {
+          avg_rating: overAllAvg
+        }
+      );
+}
+
+  // return statusRated;
+
 // export const updateRating = async (employeeID, groupKey, ratingData) => {
 // 	const employeeRef = firestore
 // 		.doc(`rate/${employeeID}/group`)

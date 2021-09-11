@@ -3,18 +3,18 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { useHistory, withRouter } from "react-router-dom";
 import "./AddEmployee.Styles.scss";
-import FormInput from "../../FormInput/FormInput.Component";
-import CustomButton from "../../CustomButton/CustomButton.component";
+import FormInput from "../../../FormInput/FormInput.Component";
+import CustomButton from "../../../CustomButton/CustomButton.component";
 import {
 	storage,
 	createEmployee,
 	UploadImageIntoStorage,
-} from "../../../Firebase/firebase.utils";
-import { selectCurrentUser } from "../../../Redux/User/user.selectors";
-import { selectTriggerSearchAddEmployee } from "../../../Redux/Option/option.selectors"
+} from "../../../../Firebase/firebase.utils";
+import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
+import { selectTriggerSearchAddEmployee } from "../../../../Redux/Option/option.selectors"
 // import AddEmployeeBySearch from "./AddEmployeeBySearch/AddEmployeeBySearch.Component";
-import ResultAddEmployeeBySearch from "./ResultOfAddEmployeeBySearch/ResultAddEmployeeBySearch.Component"
-import { triggerSearchAddEmployeeComp } from '../../../Redux/Option/option.actions'
+import ResultAddEmployeeBySearch from "../ResultOfAddEmployeeBySearch/ResultAddEmployeeBySearch.Component"
+import { triggerSearchAddEmployeeComp } from '../../../../Redux/Option/option.actions'
 // import {fetchEmployeeStartAsync} from "../../../Redux/Individuals/Individuals.actions"
 class AddNewEmployeeInGroupByInput extends React.Component {
 	constructor(props) {

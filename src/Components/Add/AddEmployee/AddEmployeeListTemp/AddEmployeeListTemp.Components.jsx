@@ -20,16 +20,18 @@ const AddEmployeeListTemp = ({ idGroup, currentUser, employeeListTemp, removeEmp
         )
         clearAllEmployeeInList(employeeListTemp)
     }
+    console.log("employeeListTemp", employeeListTemp, idGroup)
+
     return (
         <div >
             {
                 employeeListTemp.length !== 0 ? 
                     (
                         <div className="flex flex-col justify-center gap-8">
-                            <form onSubmit={handleSubmit}>
+                            
                                 <span className="flex gap-8 justify-center">
                                     {employeeListTemp.map(({ id, displayName, avatar, position }, index) => (
-                                            <div className="shadow-lg rounded-xl p-8 flex flex-col bg-green-500 gap-3 ">
+                                            <div className="shadow-lg rounded-xl p-8 flex flex-col bg-green-500 gap-3 " key={index}>
                                                     <EmployeeCard displayName={displayName} avatar={avatar} position={position} />
                                                     <CustomButton onClick={() => (removeEmployee(employeeListTemp[index]))}>x</CustomButton>
                                             </div>
@@ -38,11 +40,10 @@ const AddEmployeeListTemp = ({ idGroup, currentUser, employeeListTemp, removeEmp
                                 </span>
 
                                 <span className="flex gap-2">
-                                    <CustomButton>Submit</CustomButton>
+                                    <CustomButton onClick={handleSubmit}>Submit</CustomButton>
                                     <CustomButton onClick={() => clearAllEmployeeInList(employeeListTemp)}>Clear</CustomButton>
                                 </span>
 
-                            </form>
 
                             <span>
                                 <br/>

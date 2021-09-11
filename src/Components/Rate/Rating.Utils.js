@@ -4,10 +4,12 @@ export const TotAvg = (infoRating) => {
   Object.keys(infoRating["group"]).map((key) => {
     arr.push(infoRating["group"][key]["avg_rating"]);
   });
+  
   let res = arr.reduce((a, b) => {
     return a + b;
   }, 0);
-  const avg = res / arr.length;
+
+  const avg = res / (arr.length);
   return avg;
 };
 
