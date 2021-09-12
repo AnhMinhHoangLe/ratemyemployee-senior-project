@@ -10,17 +10,17 @@ import CustomButton from '../../../CustomButton/CustomButton.component';
 import { addEmployeeToGroup } from "../../../../Firebase/firebase.utils";
 
 const AddEmployeeListTemp = ({ idGroup, currentUser, employeeListTemp, removeEmployee, clearAllEmployeeInList }) => {
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        addEmployeeToGroup(
+        await addEmployeeToGroup(
             currentUser,
             "group",
             idGroup, 
             employeeListTemp
         )
-        clearAllEmployeeInList(employeeListTemp)
+        await clearAllEmployeeInList(employeeListTemp)
     }
-    console.log("employeeListTemp", employeeListTemp, idGroup)
+    // console.log("employeeListTemp", employeeListTemp, idGroup)
 
     return (
         <div >
@@ -40,7 +40,7 @@ const AddEmployeeListTemp = ({ idGroup, currentUser, employeeListTemp, removeEmp
                                 </span>
 
                                 <span className="flex gap-2">
-                                    <CustomButton onClick={handleSubmit}>Submit</CustomButton>
+                                    <CustomButton onClick={(event) => handleSubmit(event)}>Submit</CustomButton>
                                     <CustomButton onClick={() => clearAllEmployeeInList(employeeListTemp)}>Clear</CustomButton>
                                 </span>
 

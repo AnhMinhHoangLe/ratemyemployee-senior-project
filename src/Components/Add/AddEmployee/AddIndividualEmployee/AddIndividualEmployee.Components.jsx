@@ -11,7 +11,7 @@ import {
 	UploadImageIntoStorage,
 } from "../../../../Firebase/firebase.utils";
 import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
-import { selectTriggerSearchAddEmployee } from "../../../../Redux/Option/option.selectors"
+import { selectEmployeeForPreview } from "../../../../Redux/Employee/employee.selectors";
 
 class AddNewIndividualEmployee extends React.Component {
 	constructor(props) {
@@ -22,8 +22,8 @@ class AddNewIndividualEmployee extends React.Component {
 			avatar: "",
 			uploadImage: null,
 			position: "",
-			groupActive: false, 
-			searchField: ""
+			groupActive: true,
+			currentGroupID: null
 		};
 	}
 	handleChange = (event) => {
@@ -41,6 +41,7 @@ class AddNewIndividualEmployee extends React.Component {
 			email,
 			groupActive, 
 			position,
+			currentGroupID, 
 		} = this.state;
 		try {
 			const employee = await {
@@ -48,12 +49,14 @@ class AddNewIndividualEmployee extends React.Component {
 				email,
 				groupActive, 
 				position,
+				currentGroupID
 			};
 			await createEmployee(currentUser, "employee", employee);
 			this.setState({
 				displayName: "",
 				email: "",
 				position: "",
+				currentGroupID: null
 			});
 		} catch (error) {
 			console.error(error);
@@ -63,15 +66,26 @@ class AddNewIndividualEmployee extends React.Component {
 			displayName: "",
 			email: "",
 			position: "",
+			currentGroupID: null
+
 		});
 	};
+	handleSelect = (event) => {
+		this.setState({
+			currentGroupID: event.target.value
+		})
+	}
+	
 	render() {
 		const {
 			displayName,
 			email,
 			position,
+			currentGroupID
 		} = this.state;
-
+		const {employee
+		} = this.props
+		console.log(employee)
 		return (
 			<div className=" bg-white p-5 shadow-lg rounded-xl text-gray-600">
 								<h1 className="title-add-employee text-3xl text-center t mb-5 mb-10">Add New Employee </h1>
@@ -106,6 +120,19 @@ class AddNewIndividualEmployee extends React.Component {
 											value={position}
 											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
 										/>
+										
+					<select onChange={this.handleSelect} value={currentGroupID}>
+										<option>Select option</option>
+										{
+											employee.length > 0 ? 
+											(
+												employee.map(({ idGroup, id }) => (
+																<option key={id} value={idGroup}>Group {id}</option>
+												))
+											): (<option></option>)
+											
+										}
+										</select>
 										<CustomButton>Submit</CustomButton>
 								</form>
 			</div>
@@ -114,6 +141,9 @@ class AddNewIndividualEmployee extends React.Component {
 }
 const mapStateToProps = createStructuredSelector({
 	currentUser: selectCurrentUser,
+	employee: selectEmployeeForPreview, // 1: {id: "1", employee_list: Array(1)}
+
 });
 export default withRouter(connect(mapStateToProps)(AddNewIndividualEmployee));
+
 

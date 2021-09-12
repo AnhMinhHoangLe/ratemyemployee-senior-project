@@ -114,17 +114,21 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 			position: "",
 		});
 	};
-	onSearchChange = (e) => {
+	
+	onSearchChange = (event) => {
+		event.preventDefault()
 		const {dispatch} = this.props
-        if (e.target.value.length !== 0) {
+        if (event.target.value.length !== 0) {
             dispatch(triggerSearchAddEmployeeComp(true))
 			this.setState({
-				searchField: e.target.value, 
+				searchField: event.target.value, 
 			});
         }
-        else {
-            dispatch(triggerSearchAddEmployeeComp(false))
-        }
+		else {
+			dispatch(triggerSearchAddEmployeeComp(false))
+		}
+        
+        
 	};
 	render() {
 		const {
@@ -149,7 +153,7 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 						placeholder="Search Name"
 						name="searchName"
 						className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
-						onChange={(e) => { this.onSearchChange(e) }}
+						onChange={this.onSearchChange}
 					/>
 				</div>
 
@@ -158,9 +162,9 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 				<div>
 					{selectTriggerSearchAddEmployee ? (
 						// Result from searching existing employee
-						<div>
+						
 							<ResultAddEmployeeBySearch search={searchField}/>
-						</div>
+						
 					) : (
 							//Form to input new employee
 						<div>

@@ -7,10 +7,11 @@ import { selectCurrentUser } from "../../../Redux/User/user.selectors";
 import IndividualList from "./IndividualList/IndividualList";
 import IndividualInfoPage from "./IndividualInfoPage/IndividualInfoPage.Components";
 import { fetchEmployeeGroupStartAsync } from "../../../Redux/Individuals/Individuals.actions";
-const EmployeePage = ({ match, fetchEmployeeGroupStartAsync, currentUser }) => {
-		useEffect(() => {
-			fetchEmployeeGroupStartAsync(currentUser.id);
-		})
+
+const EmployeePage = ({ match, currentUser, fetchEmployeeGroupStartAsync }) => {
+		// useEffect(() => {
+		// 	fetchEmployeeGroupStartAsync(currentUser.id);
+		// })
 		return (
 			<div>
 				<Route exact component={IndividualList} path={`${match.path}`} />
@@ -22,12 +23,11 @@ const EmployeePage = ({ match, fetchEmployeeGroupStartAsync, currentUser }) => {
 			</div>
 		);
 	}
-
 const mapDispatchToProps = (dispatch) => ({
 		fetchEmployeeGroupStartAsync: (currentUserID) =>
 		  dispatch(fetchEmployeeGroupStartAsync(currentUserID)),
-	  });
+});
 const mapStateToProps = createStructuredSelector({
-		currentUser: selectCurrentUser,
+	currentUser: selectCurrentUser,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeePage);

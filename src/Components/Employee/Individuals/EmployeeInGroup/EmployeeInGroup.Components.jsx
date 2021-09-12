@@ -113,9 +113,9 @@ const EmployeeInGroup = ({
                   >
                   {
                     employee_list.map(({ id }, index) => (
-                      <div>
+                      <div  key={index}>
                         {!triggerButtonOpenAndCloseRateCard ? (
-                          <div key={index}>
+                         
                               <div key={id} className="shadow-lg rounded-xl p-8 flex flex-col bg-green-500 gap-3 justify-center card-component">
                                   <span onClick={() => {history.push(`${match.url}/${id}`);}}>
                                     <EmployeeCard
@@ -123,7 +123,8 @@ const EmployeeInGroup = ({
                                       displayName={employeeInfo[id].displayName}
                                       position={employeeInfo[id].position}
                                     />
-                                <RatingStar idGroup={idGroup} idEmployee={id} />
+                                
+                                    <RatingStar idGroup={idGroup} idEmployee={id} />
                                   </span>
                                   <CustomButton
                                         onClick={() =>
@@ -140,8 +141,6 @@ const EmployeeInGroup = ({
                                         W
                               </CustomButton>
                               <CustomButton onClick={() => delEmpInGroup(idGroup,id)}>Del Emp</CustomButton>
-                            </div>
-
                           </div>
                         ) : (
                             

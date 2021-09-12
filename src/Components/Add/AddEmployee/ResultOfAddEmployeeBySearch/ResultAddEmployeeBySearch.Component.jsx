@@ -53,4 +53,4 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     addEmployee: (employeeListInGroupTemp) => dispatch(addEmployeeToList(employeeListInGroupTemp))
 })
-export default  withRouter(connect(mapStateToProps, mapDispatchToProps)(ResultAddEmployeeBySearch))
+export default  connect(mapStateToProps, mapDispatchToProps)(ResultAddEmployeeBySearch)

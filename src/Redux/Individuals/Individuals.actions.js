@@ -57,13 +57,13 @@ export const fetchEmployeeGroupStartAsync =  (currentUserID) => {
       .onSnapshot(
         //listening for any changes in this collection.
         async (snapshot) => {
-          const arrayIDEmployee = await convertDataEmployeeArraySnapShot(snapshot);
+          const arrayIDEmployee =  convertDataEmployeeArraySnapShot(snapshot);
           dispatch(fetchEmployeeArraySuccess(arrayIDEmployee));
-            const employeeRef = firestore
-          .collection("employee")
-          .where("id", "in", arrayIDEmployee);
-        dispatch(fetchEmployeeStart());
-        employeeRef
+
+          const employeeRef = firestore.collection("employee").where("id", "in", arrayIDEmployee);
+          dispatch(fetchEmployeeStart());
+        
+          employeeRef
           //use onSnapShot will automatically update the new data if the data got update from db
           .onSnapshot(async (snapshot) => {
             const dataEmployee = convertDataEmployeeSnapShot(snapshot);
@@ -74,7 +74,7 @@ export const fetchEmployeeGroupStartAsync =  (currentUserID) => {
               .collection("rate")
               .where("id", "in", arrayIDEmployee);
             dispatch(fetchingRateStart());
-            getRateFromEmployeeID.onSnapshot(async (snapshot) => {
+            await getRateFromEmployeeID.onSnapshot(async (snapshot) => {
               const dataRate = convertDataRateSnapShot(snapshot);
               dispatch(fetchingRateSuccess(dataRate));
             }, (err) => {
@@ -89,7 +89,7 @@ export const fetchEmployeeGroupStartAsync =  (currentUserID) => {
           .doc(`users/${currentUserID}`)
           .collection("group"); // to make the link for lead to the database
         dispatch(fetchGroupStart());
-        groupRef.onSnapshot(
+        await groupRef.onSnapshot(
           //listening for any changes in this collection.
           async (snapshot) => {
             const groupMap = convertDataGroupSnapShot(snapshot);

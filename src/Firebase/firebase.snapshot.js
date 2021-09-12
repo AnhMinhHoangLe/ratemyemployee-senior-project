@@ -34,6 +34,7 @@ export const convertDataEmployeeSnapShot = (snapshot) => {
       position,
       groupActive,
       groupHistory,
+      currentGroupID, 
     } = doc.data(); // get the data by data()
     return {
       address,
@@ -46,6 +47,7 @@ export const convertDataEmployeeSnapShot = (snapshot) => {
       phone_number,
       groupActive,
       groupHistory,
+      currentGroupID,
     };
   });
   return employeeRef.reduce((accumulator, collection) => {

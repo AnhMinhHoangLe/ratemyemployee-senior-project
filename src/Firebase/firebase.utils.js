@@ -183,7 +183,7 @@ export const addEmployeeToGroup = async (
 
   const batch = firestore.batch()
   
-  await arrayID.map(({ id }) => {
+  arrayID.map(({ id }) => {
     let IDObject = {};
     IDObject["id"] = id;
 
@@ -206,7 +206,8 @@ export const addEmployeeToGroup = async (
     })
     
     batch.update(newEmployeeInfo, {
-      groupActive: true
+      groupActive: true,
+      currentGroupID: groupKey,
     })
    });
   return  await batch.commit();
@@ -222,79 +223,68 @@ export const addEmployeeToGroup = async (
  * This function is to create new employee in group
  */
 export const createEmployee = async (userAuth, userKey, info) => {
+  const batch = firestore.batch()
   const employeeRef = firestore.doc(`users/${userAuth.id}`).collection(userKey);
-  const employeeInfo = firestore.collection('employee')
-  // const { displayName, email, address, gender, phone_number, position } = info;
-  // const { displayName, email, position, avatar, groupActive } = info;
-    const { displayName, email, position, groupActive, idGroup } = info;
-  // console.log("image in firebase", avatar);
+  const employeeInfo = firestore.collection(userKey)
+  const { displayName, email, position, groupActive, currentGroupID } = info;
 
-  try {
-    const generateID = employeeInfo.doc();
-    const id = generateID.id
-    const createAt = new Date();
-    const address = "";
-    const gender = "";
-    const avatar = "https://firebasestorage.googleapis.com/v0/b/rate-my-employee-d7636.appspot.com/o/images%2Ftree-736885__340.jpg?alt=media&token=4aea820d-9eba-4c4f-b9fd-e85915dd0463"
-    const phone_number = Number();
-    const groupHistory = []
+  const generateID = employeeInfo.doc();
+  const id = generateID.id
+  const createAt = new Date();
+  const address = "";
+  const gender = "";
+  const avatar = "https://firebasestorage.googleapis.com/v0/b/rate-my-employee-d7636.appspot.com/o/images%2Ftree-736885__340.jpg?alt=media&token=4aea820d-9eba-4c4f-b9fd-e85915dd0463"
+  const phone_number = Number();
+  const groupHistory = []
     // Image: https://stackoverflow.com/questions/61215555/how-to-upload-image-to-firebase-storage-and-upload-url-to-firestore-simultaneous
-    await generateID.set({
-      displayName,
-      email,
-      address,
-      gender,
-      phone_number,
-      position,
-      groupActive,
-      groupHistory, 
-      avatar,
-      id, 
-      createAt,
-    });
-    await employeeRef.doc(id).set({
-      id: id
-    })
-    const rateInfo = firestore.collection('rate')
-    const avg_rating = 0
+  
+  const employeeRefGenerateID = employeeRef.doc(id)
+  batch.set(employeeRefGenerateID, {
+    id: id
+  })
+ 
+  const rateInfo = firestore.collection('rate')
+  const avg_rating = 0
 
-    if (idGroup !== undefined) {
-        await rateInfo.doc(id).set({
-          id: id, 
-          avg_rating, 
-          group: {
-            [idGroup]: {
-              avg_rating: 0,
-              infoRating: []
+  batch.set(generateID, {
+    displayName,
+    email,
+    address,
+    gender,
+    phone_number,
+    position,
+    groupActive,
+    currentGroupID, 
+    groupHistory, 
+    avatar,
+    id, 
+    createAt,
+  })
+  
+  const rateInfoGenerateID = rateInfo.doc(id)
+  batch.set(rateInfoGenerateID, {
+      id: id, 
+      avg_rating, 
+      group: {
+      [currentGroupID]: {
+        avg_rating: 0,
+        infoRating: []
             }
           },
         }
         )
-        const groupIDRef = firestore.doc(
-          `users/${userAuth.id}/group/${idGroup}`
+  const groupIDRef = firestore.doc(
+          `users/${userAuth.id}/group/${currentGroupID}`
         );
       
           let IDObject = {};
           IDObject["id"] = id;
-          await groupIDRef.update({
+          batch.update(groupIDRef, {
             employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
           });
-    }
-    else {
-      await rateInfo.doc(id).set({
-        id: id, 
-        avg_rating, 
-        group: {
-          }
-        },
-      )
-    }
-    
-  } catch {
-    console.error();
-  }
-};
+  await batch.commit();
 
+};
 
 /**
  *
@@ -346,7 +336,8 @@ export const deleteEmployeeInGroup = (userAuth, groupID, employeeID) => {
 
     const employeeUpdateActiveGroupStt = employeeInfo.doc(employeeID)
     employeeUpdateActiveGroupStt.update({
-      groupActive: false
+      groupActive: false,
+      currentGroupID: ""
     })
   } catch {
     console.error();
@@ -354,6 +345,50 @@ export const deleteEmployeeInGroup = (userAuth, groupID, employeeID) => {
 
 }
 
+export const deleteGroup = async (userAuth, groupID, employeeList) => {
+  const batch = firestore.batch()
+  const employeeRefInGroup = firestore.doc(`users/${userAuth.id}`).collection('group');
+  const employeeRefInGroupSpecific = employeeRefInGroup.doc(groupID)
+  const employeeInfo = firestore.collection('employee')
+  if (employeeList.length > 0) {
+    employeeList.forEach(({id}) => {
+      const newEmployeeInfo = employeeInfo.doc(id)
+      batch.update(newEmployeeInfo, {
+        currentGroupID: "",
+        groupActive: false
+      })
+    })
+  }
+  batch.delete(employeeRefInGroupSpecific)
+
+
+  await batch.commit();
+
+  
+}
+
+
+export const deleteIndividualEmployee =  (userAuth, groupID, employeeID) => {
+  const employeeRefInGroup = firestore.doc(`users/${userAuth.id}`).collection('group');
+  const employeeRefInTheListOfManager = firestore.doc(`users/${userAuth.id}`).collection('employee');
+  const employeeInfo = firestore.collection('employee')
+  const rateInfo = firestore.collection('rate')
+  
+  // remove employee in group 
+  if (groupID)
+  {
+    const setToDel = { id: employeeID }
+    const idEmployeeInGroupRef = employeeRefInGroup.doc(groupID);
+    idEmployeeInGroupRef.update({
+      employee_list: firebase.firestore.FieldValue.arrayRemove(setToDel)
+    })
+  }
+
+  employeeRefInTheListOfManager.doc(employeeID).delete()
+  rateInfo.doc(employeeID).delete()
+  employeeInfo.doc(employeeID).delete()
+
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////// FUNCTION FOR RATING /////////////////////////////////////

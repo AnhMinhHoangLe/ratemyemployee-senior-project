@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { createStructuredSelector } from "reselect";
 import SignInAndSignUpPage from "./Components/Signin-Signup-Manager/signin-signup.page";
 import SignInPage from "./Components/Signin-Signup-Manager/SignIn/SignIn.page";
@@ -9,7 +9,7 @@ import { auth, createUserProfileDocument } from "./Firebase/firebase.utils";
 import { connect } from "react-redux";
 import { selectCurrentUser } from "./Redux/User/user.selectors";
 import { setCurrentUser } from "./Redux/User/user.action";
-import { selectTriggerSearch } from "./Redux/Option/option.selectors"
+import { fetchEmployeeGroupStartAsync } from "./Redux/Individuals/Individuals.actions";
 
 import HomePage from "./Components/HomePage/HomePage";
 import ChatUI from "./Components/Chat/ChatUI.components";
@@ -20,22 +20,25 @@ import GroupPage from "./Components/Employee/Individuals/EmployeePage.Components
 import EmployeePage from "./Components/Employee/Individual/IndividualPage.Components";
 class App extends Component {
   unsubscribeFromAuth = null;
-  // clone and get the data from current user
   componentDidMount() {
+    // const { setCurrentUser, collectionsArray } = this.props;
     const { setCurrentUser } = this.props;
+
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
-      //  which allows you to subscribe to the users current authentication state, and receive an event whenever that state changes
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
-        //.get realtime updates, You can listen to a document
+
         userRef.onSnapshot((snapShot) => {
           setCurrentUser({
-            id: snapShot.id, // get the id of account
+            id: snapShot.id,
             ...snapShot.data(),
           });
         });
       }
+
       setCurrentUser(userAuth);
+
+      // addCollectionsAndDocument('collections', collectionsArray.map(({ title, items }) => ({ title, items })))
     });
   }
 
@@ -43,8 +46,33 @@ class App extends Component {
     this.unsubscribeFromAuth();
   }
 
+  
   render() {
-    const { currentUser } = this.props;
+    const  {currentUser, setCurrentUser, fetchEmployeeGroupStartAsync } = this.props
+
+    // clone and get the data from current user
+
+    // useEffect(()=>{
+    //   auth.onAuthStateChanged(async (userAuth) => {
+    //     //  which allows you to subscribe to the users current authentication state, and receive an event whenever that state changes
+      
+    //     if (userAuth) {
+    //       const userRef = await createUserProfileDocument(userAuth);
+    //       //.get realtime updates, You can listen to a document
+    //       userRef.onSnapshot((snapShot) => {
+    //         fetchEmployeeGroupStartAsync(snapShot.id)
+    //         setCurrentUser({
+    //           id: snapShot.id, // get the id of account
+    //           ...snapShot.data(),
+    //         });
+    //       });
+    //     }
+    //     fetchEmployeeGroupStartAsync(userAuth.uid)
+    //     setCurrentUser(userAuth);
+    //   });
+    // }, [])
+
+
     return (
       <div>
         <Switch>
@@ -76,6 +104,7 @@ class App extends Component {
       </div>
     );
   }
+
 }
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
@@ -83,6 +112,8 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  fetchEmployeeGroupStartAsync: (currentUserID) =>
+    dispatch(fetchEmployeeGroupStartAsync(currentUserID)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

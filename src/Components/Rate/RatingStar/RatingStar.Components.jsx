@@ -39,16 +39,7 @@ const RatingStar = ({
         />
       ) : (
           
-        <ReactStars
-          count={5}
-          value={selectInfoRateInGroup['group'][idGroup]['avg_rating']}
-          // onChange={(newRating) => ratingChanged(newRating, idEmployee, idGroup)}
-          size={24}
-          emptyIcon={<i className="far fa-star"></i>}
-          fullIcon={<i className="fa fa-star"></i>}
-          activeColor="#FFDB5D"
-          edit={false}
-        />
+        <h1>{selectInfoRateInGroup['group'][idGroup]['avg_rating'] }</h1>
       )}
     </div>
   );
