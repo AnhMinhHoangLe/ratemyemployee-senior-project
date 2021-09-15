@@ -142,20 +142,24 @@ export const createEmployeeProfileDocument = async (
  */
 export const createGroup = async (userAuth, userKey, id, description) => {
   const groupRef = firestore.doc(`users/${userAuth.id}`).collection(userKey);
+  const taskRef = firestore.collection('task')
   const createAt = new Date();
+  const batch = firestore.batch()
   try {
     const idGroup = groupRef.doc();
-    await idGroup.set({
-      id,
-      employee_list: [],
-      idGroup: idGroup.id,
-      createAt,
-      description: description, 
-    });
+    batch.set(idGroup,{
+        id,
+        employee_list: [],
+        idGroup: idGroup.id,
+        createAt,
+        description: description, 
+      })
+    
+    batch.set(taskRef.doc(idGroup.id),{})
   } catch {
     console.error();
   }
-  return groupRef;
+  return  await batch.commit();
 };
 //////////////////////////////////////////////////////////////////////////////
 /////////////////// FUNCTION FOR GROUP //////////////////////////////////////
@@ -415,6 +419,9 @@ export const deleteGroup = async (userAuth, groupID, employeeList) => {
   const employeeRefInGroup = firestore.doc(`users/${userAuth.id}`).collection('group');
   const employeeRefInGroupSpecific = employeeRefInGroup.doc(groupID)
   const employeeInfo = firestore.collection('employee')
+
+  const taskRef = firestore.collection('task')
+  const taskRefDoc = taskRef.doc(groupID)
   if (employeeList.length > 0) {
     employeeList.forEach(({id}) => {
       const newEmployeeInfo = employeeInfo.doc(id)
@@ -425,6 +432,7 @@ export const deleteGroup = async (userAuth, groupID, employeeList) => {
     })
   }
   batch.delete(employeeRefInGroupSpecific)
+  batch.delete(taskRefDoc)
 
 
   await batch.commit();

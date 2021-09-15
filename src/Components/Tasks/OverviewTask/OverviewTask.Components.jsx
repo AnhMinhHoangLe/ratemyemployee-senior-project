@@ -19,7 +19,9 @@ const OverviewTask = ({
         ) : (
           overviewTask.filter(({ statusDone }) => {
                 return statusDone === false
-            }).map(({createAt,deadline, note, priority, statusDone, title, id}) => (
+          })
+              .sort((first, second) => { return Date.parse(first.deadline) > Date.parse(second.deadline) ? 1 : -1 })
+              .map(({ createAt, deadline, note, priority, statusDone, title, id }) => (
             <div key={id}>
               <PreviewTask createAt={createAt} deadline={deadline} note={note} priority={priority} statusDone={statusDone} title={title} id={id} idGroup={idGroup} />
             </div>
