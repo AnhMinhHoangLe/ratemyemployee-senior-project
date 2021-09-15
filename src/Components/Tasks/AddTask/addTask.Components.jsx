@@ -2,14 +2,14 @@ import React from "react";
 import "./addTask.styles.scss";
 import FormInput from "../../FormInput/FormInput.Component";
 import CustomButton from "../../CustomButton/CustomButton.component";
-import { addTask } from "../../../Redux/Task/Task.actions";
-// import {
-// 	storage,
-// 	createEmployee,
-// 	UploadImageIntoStorage,
-// } from "../../../Firebase/firebase.utils";
+// import { addTask } from "../../../Redux/Task/Task.actions";
+import {
+	createTask,
+} from "../../../Firebase/firebase.utils";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
+import { selectKeyOfGroup } from "../../../Redux/Task/Task.selectors"
+import {convertTheID, checkDateInput} from "../Task_Utils/tasks.utils"
 class AddTask extends React.Component {
   constructor(props) {
     super(props);
@@ -31,6 +31,7 @@ class AddTask extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const { deadline, note, priority, title } = this.state;
+    const {idGroup, selectKeyOfGroup} = this.props; 
     try {
       const task = {
         deadline,
@@ -38,13 +39,19 @@ class AddTask extends React.Component {
         priority,
         title,
       };
-      // createEmployee(currentUser, "employee", employee);
-      this.setState({
-        deadline: "",
-        note: null,
-        priority: "",
-        title: "",
-      });
+
+      const checkValidDateInput = checkDateInput(deadline)
+      const idForTask = convertTheID(selectKeyOfGroup)
+      if (checkValidDateInput === true) {
+        createTask(idGroup, task, idForTask);
+        this.setState({
+          deadline: "",
+          note: null,
+          priority: "",
+          title: "",
+        });
+      }
+
     } catch (error) {
       console.error(error);
     }
@@ -81,6 +88,7 @@ class AddTask extends React.Component {
             required
             handleChange={this.handleChange}
             value={deadline}
+            
           />
           <textarea
             className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
@@ -128,8 +136,9 @@ class AddTask extends React.Component {
     );
   }
 }
-const mapStateToProps = createStructuredSelector({});
+const mapStateToProps = createStructuredSelector({
+  selectKeyOfGroup:selectKeyOfGroup
+});
 const mapDispatchToProps = (dispatch) => ({
-  addTask: (task) => dispatch(addTask(task)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(AddTask);

@@ -213,6 +213,8 @@ export const addEmployeeToGroup = async (
   return  await batch.commit();
 };
 
+
+
 /**
  *
  * 
@@ -283,9 +285,72 @@ export const createEmployee = async (userAuth, userKey, info) => {
             employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
           });
   await batch.commit();
-
 };
 
+
+export const createEmployeeInGroup = async (userAuth, userKey, info) => {
+  const employeeRef = firestore.doc(`users/${userAuth.id}`).collection(userKey);
+  const employeeInfo = firestore.collection('employee')
+  // const { displayName, email, address, gender, phone_number, position } = info;
+  // const { displayName, email, position, avatar, groupActive } = info;
+    const { displayName, email, position, groupActive, currentGroupID } = info;
+  // console.log("image in firebase", avatar);
+
+  try {
+    const generateID = employeeInfo.doc();
+    const id = generateID.id
+    const createAt = new Date();
+    const address = "";
+    const gender = "";
+    const avatar = "https://firebasestorage.googleapis.com/v0/b/rate-my-employee-d7636.appspot.com/o/images%2Ftree-736885__340.jpg?alt=media&token=4aea820d-9eba-4c4f-b9fd-e85915dd0463"
+    const phone_number = Number();
+    const groupHistory = []
+    // Image: https://stackoverflow.com/questions/61215555/how-to-upload-image-to-firebase-storage-and-upload-url-to-firestore-simultaneous
+    await generateID.set({
+      displayName,
+      email,
+      address,
+      gender,
+      phone_number,
+      position,
+      groupActive,
+      currentGroupID,
+      groupHistory, 
+      avatar,
+      id, 
+      createAt,
+    });
+    await employeeRef.doc(id).set({
+      id: id
+    })
+    const rateInfo = firestore.collection('rate')
+    const avg_rating = 0
+
+        await rateInfo.doc(id).set({
+          id: id, 
+          avg_rating, 
+          group: {
+            [currentGroupID]: {
+              avg_rating: 0,
+              infoRating: []
+            }
+          },
+        }
+        )
+        const groupIDRef = firestore.doc(
+          `users/${userAuth.id}/group/${currentGroupID}`
+        );
+      
+          let IDObject = {};
+          IDObject["id"] = id;
+          await groupIDRef.update({
+            employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
+          });
+    
+  } catch {
+    console.error();
+  }
+};
 /**
  *
  * @param {*} image : actual file of image wants to upload, it comes from the File API ( you can print the console log to see the result when you import the image into INPUT HTML FORM)
@@ -364,7 +429,6 @@ export const deleteGroup = async (userAuth, groupID, employeeList) => {
 
   await batch.commit();
 
-  
 }
 
 
@@ -454,34 +518,60 @@ export const updateOverallAvgOfEmployeeRatingStar =  (
         }
       );
 }
-
-  // return statusRated;
-
-// export const updateRating = async (employeeID, groupKey, ratingData) => {
-// 	const employeeRef = firestore
-// 		.doc(`rate/${employeeID}/group`)
-// 		.collection(groupKey);
-// const data_rating = employeeRef.docs.map((doc) => {});
-// try {
-// 	await employeeRef.doc().set({
-// 		avg_group_rating,
-// 		employee_list: [],
-// 	});
-// } catch {
-// 	console.error();
-// }
-// 	return employeeRef;
-// };
 ///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-export const createTask = async (groupID) => {
+///////////////////// TASK SECTION ///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+/**
+ * 
+ * @param {*} idGroup 
+ * @param {*} task 
+ * @param {*} idForTask 
+ * CREATE TASK
+ */
+export const createTask = async (idGroup, task, idForTask) => {
   const taskRef = firestore
-    .doc(`task/${groupID}`)
-    .onSnapshot(async (snapshot) => {
-      // console.log("add task", snapshot.data());
-    });
+    .doc(`task/${idGroup}`)
+  const {
+    deadline,
+    note,
+    priority,
+    title
+  } = task
+  const statusDone = false; 
+  const createAt = new Date();
+  const id = idForTask
+  try {
+      taskRef.update({
+        [idForTask]: {
+          deadline,
+          note,
+          priority,
+          statusDone,
+          title,
+          createAt,
+          id
+          }
+        })
+    } catch (error) {
+      console.error("Failed to write in database", error);
+    }
 };
+/**
+ * 
+ */
+export const removeTask = async (idGroup, idForTask) => {
+  const taskRef = firestore.doc(`task/${idGroup}`)
+  taskRef.update({
+    [idForTask] : firebase.firestore.FieldValue.delete()
+  })
+}
+export const taskFinished = (idGroup, idForTask) => {
+  const taskRef = firestore.doc(`task/${idGroup}`)
+  taskRef.update({
+    [`${idForTask}.statusDone`] : true
+  })
+  
+}
 export const auth = firebase.auth(); // to short the command
 export const firestore = firebase.firestore(); // Create a new client
 export const storage = firebase.storage(); // create a storage

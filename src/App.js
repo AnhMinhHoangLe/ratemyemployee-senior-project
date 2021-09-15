@@ -18,60 +18,60 @@ import GroupPage from "./Components/Employee/Individuals/EmployeePage.Components
 // import SearchPage from "./Components/Search/SearchPage.Components";
 // import InfoSearch from "./Components/Search/InfoSearch/InfoSearch.Components";
 import EmployeePage from "./Components/Employee/Individual/IndividualPage.Components";
-class App extends Component {
-  unsubscribeFromAuth = null;
-  componentDidMount() {
-    // const { setCurrentUser, collectionsArray } = this.props;
-    const { setCurrentUser } = this.props;
+const App = ({currentUser, setCurrentUser, fetchEmployeeGroupStartAsync }) => {
+  // unsubscribeFromAuth = null;
+  // componentDidMount() {
+  //   // const { setCurrentUser, collectionsArray } = this.props;
+  //   const { setCurrentUser } = this.props;
 
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
+  //   this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
+  //     if (userAuth) {
+  //       const userRef = await createUserProfileDocument(userAuth);
 
-        userRef.onSnapshot((snapShot) => {
-          setCurrentUser({
-            id: snapShot.id,
-            ...snapShot.data(),
-          });
-        });
-      }
+  //       userRef.onSnapshot((snapShot) => {
+  //         setCurrentUser({
+  //           id: snapShot.id,
+  //           ...snapShot.data(),
+  //         });
+  //       });
+  //     }
 
-      setCurrentUser(userAuth);
+  //     setCurrentUser(userAuth);
 
-      // addCollectionsAndDocument('collections', collectionsArray.map(({ title, items }) => ({ title, items })))
-    });
-  }
+  //     // addCollectionsAndDocument('collections', collectionsArray.map(({ title, items }) => ({ title, items })))
+  //   });
+  // }
 
-  componentWillUnmount() {
-    this.unsubscribeFromAuth();
-  }
+  // componentWillUnmount() {
+  //   this.unsubscribeFromAuth();
+  // }
 
   
-  render() {
-    const  {currentUser, setCurrentUser, fetchEmployeeGroupStartAsync } = this.props
+  // render() {
+  //   const  {currentUser, setCurrentUser, fetchEmployeeGroupStartAsync } = this.props
 
     // clone and get the data from current user
 
-    // useEffect(()=>{
-    //   auth.onAuthStateChanged(async (userAuth) => {
-    //     //  which allows you to subscribe to the users current authentication state, and receive an event whenever that state changes
-      
-    //     if (userAuth) {
-    //       const userRef = await createUserProfileDocument(userAuth);
-    //       //.get realtime updates, You can listen to a document
-    //       userRef.onSnapshot((snapShot) => {
-    //         fetchEmployeeGroupStartAsync(snapShot.id)
-    //         setCurrentUser({
-    //           id: snapShot.id, // get the id of account
-    //           ...snapShot.data(),
-    //         });
-    //       });
-    //     }
-    //     fetchEmployeeGroupStartAsync(userAuth.uid)
-    //     setCurrentUser(userAuth);
-    //   });
-    // }, [])
+  useEffect(() => {
 
+      auth.onAuthStateChanged(async (userAuth) => {
+        //  which allows you to subscribe to the users current authentication state, and receive an event whenever that state changes
+      
+        if (userAuth) {
+          const userRef = await createUserProfileDocument(userAuth);
+          //.get realtime updates, You can listen to a document
+          userRef.onSnapshot((snapShot) => {
+            fetchEmployeeGroupStartAsync(snapShot.id)
+            setCurrentUser({
+              id: snapShot.id, // get the id of account
+              ...snapShot.data(),
+            });
+          });
+        }
+        fetchEmployeeGroupStartAsync(userAuth.uid)
+        setCurrentUser(userAuth);
+      });
+    }, [])
 
     return (
       <div>
@@ -105,7 +105,6 @@ class App extends Component {
     );
   }
 
-}
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
 });

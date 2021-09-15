@@ -91,6 +91,10 @@ export const convertDataRateSnapShot = (snapshot) => {
 
   return res;
 };
+export const convertDataTaskSnapshot = (snapshot) => {
+  const dataTask = snapshot.data()
+  return dataTask
+}
 
 // export const convertTaskData = (groupID) => {
 //   try {

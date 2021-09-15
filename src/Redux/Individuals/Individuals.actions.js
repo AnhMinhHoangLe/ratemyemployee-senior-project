@@ -77,10 +77,9 @@ export const fetchEmployeeGroupStartAsync =  (currentUserID) => {
             await getRateFromEmployeeID.onSnapshot(async (snapshot) => {
               const dataRate = convertDataRateSnapShot(snapshot);
               dispatch(fetchingRateSuccess(dataRate));
-            }, (err) => {
-              dispatch(fetchEmployeeFailure(err.message));
             });
       
+          
           
         //   /**
       //    * Group
@@ -94,11 +93,11 @@ export const fetchEmployeeGroupStartAsync =  (currentUserID) => {
           async (snapshot) => {
             const groupMap = convertDataGroupSnapShot(snapshot);
             dispatch(fetchGroupSuccess(groupMap));
-          },
-          (error) => {
-            dispatch(fetchGroupFailure(error.message));
           }
-        );
+          );
+        
+          
+
         }
       )
 

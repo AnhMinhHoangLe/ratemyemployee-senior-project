@@ -3,32 +3,35 @@ import { connect } from "react-redux";
 import "./OverviewTask.styles.scss";
 import {
   overviewTask,
-  indicateSpecificGroup,
-  selectTask,
 } from "../../../Redux/Task/Task.selectors";
 import { withRouter } from "react-router";
 import PreviewTask from "../PreviewTask/PreviewTask.Components";
 
 const OverviewTask = ({
-  selectTask,
   overviewTask,
-  idGroup,
-  showTask,
-  match,
+  idGroup
 }) => {
-  console.log(selectTask);
   return (
     <div>
-      {overviewTask.map((key, id) => (
-        <div key={id}>{console.log("key", key)}</div>
-      ))}
+      {
+        overviewTask.length === 0 ? (
+          <h1>Please add your task</h1>
+        ) : (
+          overviewTask.filter(({ statusDone }) => {
+                return statusDone === false
+            }).map(({createAt,deadline, note, priority, statusDone, title, id}) => (
+            <div key={id}>
+              <PreviewTask createAt={createAt} deadline={deadline} note={note} priority={priority} statusDone={statusDone} title={title} id={id} idGroup={idGroup} />
+            </div>
+          ))
+        )
+      }
+    
     </div>
   );
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  // showTask: indicateSpecificGroup(ownProps.idGroup)(state),
-  selectTask: selectTask(state),
+const mapStateToProps = (state) => ({
   overviewTask: overviewTask(state),
 });
 

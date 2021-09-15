@@ -121,7 +121,7 @@ class AddNewIndividualEmployee extends React.Component {
 											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
 										/>
 										
-					<select onChange={this.handleSelect} value={currentGroupID}>
+										<select onChange={this.handleSelect} value={currentGroupID}>
 										<option>Select option</option>
 										{
 											employee.length > 0 ? 

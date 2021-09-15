@@ -7,7 +7,7 @@ import FormInput from "../../../FormInput/FormInput.Component";
 import CustomButton from "../../../CustomButton/CustomButton.component";
 import {
 	storage,
-	createEmployee,
+	createEmployeeInGroup,
 	UploadImageIntoStorage,
 } from "../../../../Firebase/firebase.utils";
 import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
@@ -20,16 +20,15 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			// address: "",
+			// gender: "",	
+			// phone_number: "",
 			displayName: "",
 			email: "",
-			// address: "",
-			// gender: "",
 			avatar: "",
 			uploadImage: null,
-			// phone_number: "",
 			position: "",
-			groupActive: true, 
-			searchField: ""
+			groupActive: true,
 		};
 	}
 	handleChange = (event) => {
@@ -63,16 +62,16 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 		event.preventDefault();
 		const { currentUser } = this.props;
 		const {
-			displayName,
-			email,
 			// avatar,
 			// address,
 			// gender,
 			// phone_numb
+			displayName,
+			email,
 			groupActive, 
 			position,
 		} = this.state;
-		const idGroup = this.props.idGroup
+		const currentGroupID = this.props.idGroup
 		try {
 			const employee = await {
 				displayName,
@@ -82,9 +81,9 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 				// gender,
 				groupActive, 
 				position,
-				idGroup
+				currentGroupID
 			};
-			await createEmployee(currentUser, "employee", employee);
+			await createEmployeeInGroup(currentUser, "employee", employee);
 			// await fetchEmployeeStartAsync(currentUser)
 			this.setState({
 				displayName: "",
@@ -173,23 +172,7 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 									onSubmit={this.handleSubmit}
 									className=" flex flex-col justify-center  items-center gap-4"
 								>
-										<FormInput
-											placeholder="Display Name"
-											name="displayName"
-											required
-											handleChange={this.handleChange}
-											value={displayName}
-											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
-										/>
-										<FormInput
-											placeholder="Email"
-											name="email"
-											type="email"
-											required
-											handleChange={this.handleChange}
-											value={email}
-											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
-										/>
+								
 										{/* <FormInput
 											placeholder="Address"
 											name="address"
@@ -247,6 +230,24 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
 										/>
 										*/}
+										<FormInput
+											placeholder="Display Name"
+											name="displayName"
+											required
+											handleChange={this.handleChange}
+											value={displayName}
+											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
+										/>
+										<FormInput
+											placeholder="Email"
+											name="email"
+											type="email"
+											required
+											handleChange={this.handleChange}
+											value={email}
+											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
+										/>
+										
 										<FormInput
 											placeholder="Employee Position"
 											type="text"

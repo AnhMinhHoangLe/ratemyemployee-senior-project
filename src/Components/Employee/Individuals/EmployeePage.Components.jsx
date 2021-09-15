@@ -8,9 +8,9 @@ import EmployeeInfo from "./Employee-info/EmployeeInfo.Components";
 import { selectCurrentUser } from "../../../Redux/User/user.selectors";
 import { fetchEmployeeGroupStartAsync } from "../../../Redux/Individuals/Individuals.actions";
 const GroupPage = ({match, currentUser, fetchEmployeeGroupStartAsync}) => {
-  useEffect(() => {
-    fetchEmployeeGroupStartAsync(currentUser.id);
-  })
+  // useEffect(() => {
+  //   fetchEmployeeGroupStartAsync(currentUser.id);
+  // },[])
     return (
       <div>
         <Route exact component={EmployeeOverview} path={`${match.path}`} />
