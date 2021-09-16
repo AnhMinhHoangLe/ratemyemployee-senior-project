@@ -19,12 +19,17 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
   // const userRef = firestore.collection("users").doc(userAuth.uid) // get the data of the user by UID
   const userRef = firestore.doc(`users/${userAuth.uid}`); // go to the user profile by UID
+  const userRefCreatedEmlployeeCollectioninUserID = userRef.collection('employee')
+  const createEmployeeCollection = firestore.collection('employee')
+  const rateInfo = firestore.collection('rate')
+
   const snapShot = await userRef.get(); // get the snapshot of the user from console
   if (!snapShot.exists) {
     // create user in database if it does not exist
     const { displayName, email } = userAuth;
     const createAt = new Date();
     try {
+
       // get the data set ,  Enter new data into the document.
       await userRef.set({
         displayName,
@@ -32,47 +37,74 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         createAt,
         ...additionalData,
       });
-    } catch (error) {
-      console.log("error creating user", error.message);
-    }
-  }
-  return userRef;
-};
-export const createEmployeeProfileDocument = async (
-  userAuth,
-  additionalData
-) => {
-  if (!userAuth) return;
-  // const userRef = firestore.collection("users").doc(userAuth.uid) // get the data of the user by UID
-  const userRef = firestore.doc(`employee/${userAuth.uid}`); // go to the user profile by UID
-  const snapShot = await userRef.get(); // get the snapshot of the user from console
-  if (!snapShot.exists) {
-    // create user in database if it does not exist
-    const { displayName, email } = userAuth;
-    const { position, avatar } = additionalData;
-    const createAt = new Date();
-    const address = "";
-    const gender = "";
-    const phone_number = "";
-    try {
-      // get the data set ,  Enter new data into the document.
-      await userRef.set({
+      await userRefCreatedEmlployeeCollectioninUserID.doc(userAuth.uid).set({
+        id: userAuth.uid,
+      })
+      await createEmployeeCollection.doc(userAuth.uid).set({
         displayName,
-        position,
-        avatar,
         email,
-        address,
-        gender,
-        phone_number,
+        address: "",
+        gender: "",
+        phone_number: "",
+        position:"Admin",
+        groupActive: true,
+        currentGroupID: "", 
+        groupHistory:"", 
+        avatar:"",
+        id: userAuth.uid, 
         createAt,
-        ...additionalData,
-      });
+        admin: true
+      })
+    const avg_rating = 0
+
+        await rateInfo.doc(userAuth.uid).set({
+          id: userAuth.uid, 
+          avg_rating, 
+          group: {
+            }
+          },
+        )
     } catch (error) {
       console.log("error creating user", error.message);
     }
   }
   return userRef;
 };
+// export const createEmployeeProfileDocument = async (
+//   userAuth,
+//   additionalData
+// ) => {
+//   if (!userAuth) return;
+//   // const userRef = firestore.collection("users").doc(userAuth.uid) // get the data of the user by UID
+//   const userRef = firestore.doc(`employee/${userAuth.uid}`); // go to the user profile by UID
+//   const snapShot = await userRef.get(); // get the snapshot of the user from console
+//   if (!snapShot.exists) {
+//     // create user in database if it does not exist
+//     const { displayName, email } = userAuth;
+//     const { position, avatar } = additionalData;
+//     const createAt = new Date();
+//     const address = "";
+//     const gender = "";
+//     const phone_number = "";
+//     try {
+//       // get the data set ,  Enter new data into the document.
+//       await userRef.set({
+//         displayName,
+//         position,
+//         avatar,
+//         email,
+//         address,
+//         gender,
+//         phone_number,
+//         createAt,
+//         ...additionalData,
+//       });
+//     } catch (error) {
+//       console.log("error creating user", error.message);
+//     }
+//   }
+//   return userRef;
+// };
 
 // //To add the data of group in DATA_GROUP
 // export const addGroupInFile = async (userAuth, userKey, groupToAdd) => {
@@ -265,6 +297,7 @@ export const createEmployee = async (userAuth, userKey, info) => {
     avatar,
     id, 
     createAt,
+    admin: false
   })
   
   const rateInfoGenerateID = rateInfo.doc(id)

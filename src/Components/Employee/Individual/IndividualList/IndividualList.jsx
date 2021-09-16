@@ -25,9 +25,9 @@ const IndividualList = ({individuals, match, history, currentUser}) => {
               <div className="grid grid-cols-4 grid-rows-3 gap-4">
               {
               individuals ? (
-                individuals.map(({ displayName, avatar, position, id, currentGroupID  }, index) => (
+                individuals.map(({ displayName, avatar, position, id, currentGroupID, admin  }, index) => (
                   <div key={index}>
-                      <CustomButton onClick={() => deleteIndividualEmployee(currentUser, currentGroupID, id) }> Delete Employee </CustomButton>
+                      {admin ? ('') : <CustomButton onClick={() => deleteIndividualEmployee(currentUser, currentGroupID, id) }> Delete Employee </CustomButton>}
                       <div
                         onClick={() => {
                           history.push(`${match.url}/${id}`);

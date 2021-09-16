@@ -61,16 +61,18 @@ const App = ({currentUser, setCurrentUser, fetchEmployeeGroupStartAsync }) => {
           const userRef = await createUserProfileDocument(userAuth);
           //.get realtime updates, You can listen to a document
           userRef.onSnapshot((snapShot) => {
-            fetchEmployeeGroupStartAsync(snapShot.id)
             setCurrentUser({
               id: snapShot.id, // get the id of account
               ...snapShot.data(),
             });
+            fetchEmployeeGroupStartAsync(snapShot.id)
+
           });
         }
-        fetchEmployeeGroupStartAsync(userAuth.uid)
-        setCurrentUser(userAuth);
+        await setCurrentUser(userAuth);
+
       });
+    
     }, [])
 
     return (

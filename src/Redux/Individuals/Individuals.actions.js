@@ -59,45 +59,42 @@ export const fetchEmployeeGroupStartAsync =  (currentUserID) => {
         async (snapshot) => {
           const arrayIDEmployee =  convertDataEmployeeArraySnapShot(snapshot);
           dispatch(fetchEmployeeArraySuccess(arrayIDEmployee));
+          if(arrayIDEmployee.length !== 0){
+            
+            const employeeRef = firestore.collection("employee").where("id", "in", arrayIDEmployee);
+              dispatch(fetchEmployeeStart());
+        
+            employeeRef
+              //use onSnapShot will automatically update the new data if the data got update from db
+              .onSnapshot(async (snapshot) => {
+                const dataEmployee = convertDataEmployeeSnapShot(snapshot);
+                dispatch(fetchEmployeeSuccess(dataEmployee));
+              });
+        
+            const getRateFromEmployeeID = firestore
+                  .collection("rate")
+                  .where("id", "in", arrayIDEmployee);
+                dispatch(fetchingRateStart());
+                await getRateFromEmployeeID.onSnapshot(async (snapshot) => {
+                  const dataRate = convertDataRateSnapShot(snapshot);
+                  dispatch(fetchingRateSuccess(dataRate));
+                });
 
-          const employeeRef = firestore.collection("employee").where("id", "in", arrayIDEmployee);
-          dispatch(fetchEmployeeStart());
-        
-          employeeRef
-          //use onSnapShot will automatically update the new data if the data got update from db
-          .onSnapshot(async (snapshot) => {
-            const dataEmployee = convertDataEmployeeSnapShot(snapshot);
-            dispatch(fetchEmployeeSuccess(dataEmployee));
-          });
-        
-        const getRateFromEmployeeID = firestore
-              .collection("rate")
-              .where("id", "in", arrayIDEmployee);
-            dispatch(fetchingRateStart());
-            await getRateFromEmployeeID.onSnapshot(async (snapshot) => {
-              const dataRate = convertDataRateSnapShot(snapshot);
-              dispatch(fetchingRateSuccess(dataRate));
-            });
-      
-          
-          
-        //   /**
-      //    * Group
-      //    */
-        const groupRef = firestore
-          .doc(`users/${currentUserID}`)
-          .collection("group"); // to make the link for lead to the database
-        dispatch(fetchGroupStart());
-        await groupRef.onSnapshot(
-          //listening for any changes in this collection.
-          async (snapshot) => {
-            const groupMap = convertDataGroupSnapShot(snapshot);
-            dispatch(fetchGroupSuccess(groupMap));
-          }
-          );
-        
-          
-
+                //   /**
+                //    * Group
+                //    */
+                  const groupRef = firestore
+                    .doc(`users/${currentUserID}`)
+                    .collection("group"); // to make the link for lead to the database
+                  dispatch(fetchGroupStart());
+                  await groupRef.onSnapshot(
+                    //listening for any changes in this collection.
+                    async (snapshot) => {
+                      const groupMap = convertDataGroupSnapShot(snapshot);
+                      dispatch(fetchGroupSuccess(groupMap));
+                    }
+                    );
+                    }
         }
       )
 
