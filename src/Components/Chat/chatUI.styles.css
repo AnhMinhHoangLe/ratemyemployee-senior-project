@@ -1,9 +1,4 @@
 
-.chatui-container{
-        min-height:100vh; 
-        border : 2px black solid;  
-        display: flex;
-}
 .listChat-component{
         border : 2px black solid;  
         min-width: 30%; 
