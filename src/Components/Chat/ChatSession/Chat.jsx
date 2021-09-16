@@ -20,13 +20,13 @@ export default function Chats ()
             axios.get('https://api.chatengine.io/users/me/',
             { headers: { 
             "project-id": '6c34a123-43fc-41f8-bd5c-fd618ab8b31a',
-            "user-name": 'daile14011997',
-            "user-secret": '12345678' }})
+            "user-name": '.',
+            "user-secret": '.' }})
         .catch(e =>{
         let formdata = new FormData()
-        formdata.append('email', 'daile14011997@gmail.com')
-        formdata.append('username', 'daile14011997@gmail.com')
-        formdata.append('secret', '12345678')
+        formdata.append('email', '.')
+        formdata.append('username', '.')
+        formdata.append('secret', '.')
         axios.post(
         'https://api.chatengine.io/users/',
         formdata,
@@ -39,8 +39,8 @@ export default function Chats ()
              <ChatEngine 
         height='calc(100vh - 66px)'
         projectID='6c34a123-43fc-41f8-bd5c-fd618ab8b31a'
-        userName='daile14011997@gmail.com'
-        userSecret='12345678'
+        userName='.'
+        userSecret='.'
       />
         </div>
     )
