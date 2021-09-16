@@ -14,7 +14,7 @@ const EmployeeInfoForm = ({
 	return (
 		<div className="infoForm-component flex space-y-5 space-x-5">
 			<span className="flex-auto">
-				<img src={avatar} className="w-32 h-32" />
+				<img src={avatar } className="w-32 h-32" />
 			</span>
 			<span className="flex flex-auto flex-col space-y-5">
 				<h1 className="text-5xl">{displayName}</h1>

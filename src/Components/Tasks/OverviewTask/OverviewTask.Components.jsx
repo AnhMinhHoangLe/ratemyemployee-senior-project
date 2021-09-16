@@ -1,13 +1,40 @@
 import React from "react";
 import { connect } from "react-redux";
 import "./OverviewTask.styles.scss";
-import { selectTask } from "../../../Redux/Task/Task.selectors";
+import {
+  overviewTask,
+} from "../../../Redux/Task/Task.selectors";
+import { withRouter } from "react-router";
+import PreviewTask from "../PreviewTask/PreviewTask.Components";
 
-const OverviewTask = ({ showTask }) => {
-	return (<div>{console.log("task", showTask)}</div>);
+const OverviewTask = ({
+  overviewTask,
+  idGroup
+}) => {
+  return (
+    <div>
+      {
+        overviewTask.length === 0 ? (
+          <h1>Please add your task</h1>
+        ) : (
+          overviewTask.filter(({ statusDone }) => {
+                return statusDone === false
+          })
+              .sort((first, second) => { return Date.parse(first.deadline) > Date.parse(second.deadline) ? 1 : -1 })
+              .map(({ createAt, deadline, note, priority, statusDone, title, id }) => (
+            <div key={id}>
+              <PreviewTask createAt={createAt} deadline={deadline} note={note} priority={priority} statusDone={statusDone} title={title} id={id} idGroup={idGroup} />
+            </div>
+          ))
+        )
+      }
+    
+    </div>
+  );
 };
 
-const mapStateToProps = (state, ownProps) => ({
-	showTask: selectTask(state)
+const mapStateToProps = (state) => ({
+  overviewTask: overviewTask(state),
 });
-export default connect(mapStateToProps)(OverviewTask);
+
+export default connect(mapStateToProps)(withRouter(OverviewTask));
