@@ -1,8 +1,16 @@
 import React, {Component} from 'react';
 import FormInput from '../../../FormInput/FormInput.Component'
 import CustomButton from '../../../CustomButton/CustomButton.component';
-import {auth, createUserProfileDocument} from '../../../../Firebase/firebase.utils'
+import CustomGoogleButton from "../../../CustomButton/CustomGoolgeButton.Components";
+import {auth, createUserProfileDocument, signInWithGoogle} from '../../../../Firebase/firebase.utils'
 import "./SignUp.Styles.css"
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import Typography from '@mui/material/Typography';
+
 class SignUp extends Component {
         constructor(props) {
                 super(props);
@@ -53,18 +61,77 @@ class SignUp extends Component {
                 } 
         render(){
                 const {displayName, email, password, confirmPassword} = this.state
-              return(
-                 <div>
-                        <h2 className='title'>I do not have a account</h2>
-                        <span>Sign up with your email and password</span>
-                        <form onSubmit={this.handleSubmit}>
-                                <FormInput  label="Display Name" type="text" name='displayName' handleChange={this.handleChange} value={displayName} required />
-                                <FormInput  label="Email" type="email" name="email" handleChange={this.handleChange}  value={email} required/>
-                                <FormInput  label="Password" type="password" name='password' handleChange={this.handleChange} value={password} required/>
-                                <FormInput  label="Confirm Password" type="password" name='confirmPassword' handleChange={this.handleChange} value={confirmPassword}  required/>
-                                <CustomButton type="submit">Sign Up</CustomButton>
-                        </form>
-                </div> 
+        return(
+                <Grid container direction="column" alignItems="center" rowSpacing={5}>
+                        <Grid item xs={6} md={8}>
+                                <Typography variant="h4" sx={{color:'#1DA492'}}>Create Account</Typography>
+                        </Grid>
+                        <Grid item xs={6} md={8}>
+                                <CustomGoogleButton onClick={signInWithGoogle} />
+                        </Grid>
+                        <Grid item xs={6} md={8}>
+                                <Typography>or use your email for registration:</Typography>
+                        </Grid>
+                        <Grid item xs={6} md={8}>
+                                <form onSubmit={this.handleSubmit}>
+                                        <Box sx={{ display: 'flex', alignItems: 'flex-end', pb: 3 }}>
+                                                <PersonOutlineOutlinedIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                                                <FormInput
+                                                        defaultValue={displayName}
+                                                        id="input-with-sx"
+                                                        label="Display Name"
+                                                        variant="standard"
+                                                        type="email"
+                                                        name="email"
+                                                        handleChange={this.handleChange}
+                                                        required
+                                                />
+                                        </Box>
+                                        <Box sx={{ display: 'flex', alignItems: 'flex-end', pb: 3 }}>
+                                                <MailOutlineIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                                                <FormInput
+                                                        defaultValue={email}
+                                                        id="input-with-sx"
+                                                        label="Email"
+                                                        variant="standard"
+                                                        type="email"
+                                                        name="email"
+                                                        handleChange={this.handleChange}
+                                                        required
+                                                />
+                                        </Box>
+                                        <Box sx={{ display: 'flex', alignItems: 'flex-end', pb: 3 }}>
+                                                <LockOutlinedIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                                                <FormInput
+                                                        defaultValue={password}
+                                                        id="input-with-sx"
+                                                        label="Password"
+                                                        variant="standard"
+                                                        type="password"
+                                                        name="password"
+                                                        handleChange={this.handleChange}
+                                                        required
+                                                />
+                                        </Box>
+                                        <Box sx={{ display: 'flex', alignItems: 'flex-end', pb: 3 }}>
+                                                <LockOutlinedIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                                                <FormInput
+                                                        defaultValue={confirmPassword}
+                                                        id="input-with-sx"
+                                                        label="Confirm Password"
+                                                        variant="standard"
+                                                        name="confirmPassword"
+                                                        handleChange={this.handleChange}
+                                                        required
+                                                />
+                                        </Box>
+                                        <Box sx={{ pt: 3 }}>
+                                                <CustomButton type="submit">Sign Up</CustomButton>
+                                        </Box>
+
+                                </form>
+                        </Grid>
+                </Grid> 
         )
         
         }

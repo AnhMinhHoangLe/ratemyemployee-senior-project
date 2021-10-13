@@ -1,13 +1,51 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { connect } from "react-redux";
 import { selectInfoRateInGroup } from "../../../../Redux/Rate/rate.selectors";
+import {Card, Box, Typography} from '@mui/material';
+import { Doughnut } from 'react-chartjs-2';
+import { Chart } from "react-google-charts";
+
+
 const RatingOverallAvgGroup = ({ state, idEmployee, idGroup }) => {
-  console.log(idEmployee, idGroup);
   const { avg_rating, infoRating } = state.group[idGroup];
+  const [chartData, serChartData] = useState([])
+  const chart = () => {
+    const { avg_rating, infoRating } = state.group[idGroup];
+    let percentRateAverage = (avg_rating * 100) / 5
+    let theRestPercent = 100-percentRateAverage
+    serChartData(
+      [
+        ['Title', 'PercentAverage'],
+        ['Employee Percentage Overall', percentRateAverage],
+        ['', theRestPercent],
+      ]
+      )
+  }
+  useEffect(() => {
+    chart()
+  }, [])
   return (
-    <div>
-      <h1>{avg_rating}</h1>
-    </div>
+    <Box>
+      <Box>
+        <Chart
+          chartType="PieChart"
+          loader={<div>Loading Chart</div>}
+          data={chartData}
+          options={{
+            // Just add this option
+            pieHole: 0.6,
+            legend: 'none',
+            slices: {
+              0: { color: '#11998E' },
+              1: { color: '#FFDB5D' }
+            },
+            'width':500,
+            'height':400
+          }}
+        />
+        <Typography component="div" variant="h5" sx={{ position:"relative", bottom:"220px", left:"235px"}}>{avg_rating}/5</Typography>
+      </Box>
+    </Box>
   );
 };
 const mapStateToProps = (state, ownProps) => ({

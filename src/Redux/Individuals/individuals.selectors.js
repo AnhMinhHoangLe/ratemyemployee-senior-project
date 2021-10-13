@@ -27,3 +27,4 @@ export const selectToSearch = (searchState) =>
 	);
 
 	
+export const selectEmployeeIDForRateCard = createSelector([selectemployeeinfo], (idEmployee) => idEmployee.idEmployeePickToRate)

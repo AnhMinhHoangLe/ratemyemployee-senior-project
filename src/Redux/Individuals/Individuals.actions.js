@@ -25,6 +25,10 @@ import {
   fetchingRateFailure,
 } from "../Rate/rate.actions";
 //For Individual
+export const saveIdEmployeePickToRateCard = (idEmployeePickToRate) => ({
+  type: individualsActionType.PICK_ID_EMPLOYEE_TO_RATE,
+  payload: idEmployeePickToRate
+})
 export const fetchEmployeeArrayStart = (employeeArray) => ({
   type: individualsActionType.FETCH_EMPLOYEE_ARRAY_START,
 });

@@ -7,12 +7,14 @@ import EmployeeInGroup from "./EmployeeInGroup/EmployeeInGroup.Components";
 import EmployeeInfo from "./Employee-info/EmployeeInfo.Components";
 import { selectCurrentUser } from "../../../Redux/User/user.selectors";
 import { fetchEmployeeGroupStartAsync } from "../../../Redux/Individuals/Individuals.actions";
+import {Grid, Box} from '@mui/material';
+
 const GroupPage = ({match, currentUser, fetchEmployeeGroupStartAsync}) => {
   // useEffect(() => {
   //   fetchEmployeeGroupStartAsync(currentUser.id);
   // },[])
     return (
-      <div>
+      <Box>
         <Route exact component={EmployeeOverview} path={`${match.path}`} />
         {/* Find the path in App.js */}
         <Route
@@ -26,7 +28,7 @@ const GroupPage = ({match, currentUser, fetchEmployeeGroupStartAsync}) => {
           path={`${match.path}/:groupID/:employeeInfoID`}
         />
         {/* Find the path in App.js. should print out console.log(match.params.employeeId) to know deeply the result */}
-      </div>
+      </Box>
     );
   
 }

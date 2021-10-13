@@ -5,52 +5,39 @@ import { createStructuredSelector } from "reselect";
 import { withRouter } from "react-router-dom";
 import AddNewIndividualEmployee from "../../../Add/AddEmployee/AddIndividualEmployee/AddIndividualEmployee.Components"
 import EmployeeCard from "../../EmployeeCard/EmployeeCard.Component";
-import CustomButton from "../../../CustomButton/CustomButton.component";
-import { deleteIndividualEmployee } from "../../../../Firebase/firebase.utils"
 import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
-import { fetchEmployeeGroupStartAsync } from "../../../../Redux/Individuals/Individuals.actions"
 import AddNewEmployeeInGroupByInput from "../../../Add/AddEmployee/AddEmployeeIntoGroup/AddNewEmployeeInGroupByInput.Components"
+import { Box, Typography,Card, Grid, Paper} from "@mui/material"
+
 const IndividualList = ({individuals, match, history, currentUser}) => {
   // const deleteEmployee = (currentUser, currentGroupID, id) =>{
   //   deleteIndividualEmployee(currentUser, currentGroupID, id)
   //   console.log("hello")
   // }
     return (
-      <div className="flex justify-evenly gap-4 pt-10">
-          <span className="flex flex-col p-5">
-              <div className="pb-5">
-                <h1>Employee List</h1>
-              </div>
-              
-              <div className="grid grid-cols-4 grid-rows-3 gap-4">
+      <Box sx={{display: 'flex', flexDirection:"row", justifyContent:"space-evenly", flexWrap: 'wrap', p:3}} >
+          <Box sx={{display:"flex", flexDirection:"column",  flexWrap: 'wrap', gap:3}}>
+              <Typography>Employees</Typography>
+              <Box sx={{display:"flex", justifyContent:"space-evenly",  flexWrap: 'wrap', gap:2, mr:2}}>
               {
               individuals ? (
                 individuals.map(({ displayName, avatar, position, id, currentGroupID, admin  }, index) => (
-                  <div key={index}>
-                      {admin ? ('') : <CustomButton onClick={() => deleteIndividualEmployee(currentUser, currentGroupID, id) }> Delete Employee </CustomButton>}
-                      <div
-                        onClick={() => {
-                          history.push(`${match.url}/${id}`);
-                        }}
-                        className="shadow-lg rounded-xl p-8 bg-green-500 h-full w-full"
-                      >
-                        <EmployeeCard avatar={avatar} displayName={displayName} position={position} />
-                      </div>
-
-                  </div>
+                      <Box key={index}>
+                        <EmployeeCard avatar={avatar} displayName={displayName} position={position} admin={admin} currentGroupID={currentGroupID} idx={id}/>
+                      </Box>
                 ))
               ) : (
-                  <div></div>
+                  <Box></Box>
                 )
               }
-            </div>
-          </span>
+            </Box>
+          </Box>
           
-          <span className="pt-10">
-          <AddNewIndividualEmployee />
-          </span>
+          <Box>
+            <AddNewIndividualEmployee />
+          </Box>
 
-      </div>
+      </Box>
     );
   }
 

@@ -8,11 +8,10 @@ import { Link } from "react-router-dom";
 import { ReactComponent as Target } from "../../../../Assests/EmployeeIngroup/Polygon 6.svg";
 import AddNewEmployeeInGroupByInput from "../../../Add/AddEmployee/AddEmployeeIntoGroup/AddNewEmployeeInGroupByInput.Components";
 import { OptionBetweenGroupAndTask } from "../../../../Redux/Option/option.actions";
-import CustomButton from "../../../CustomButton/CustomButton.component";
 import { selectOptionBetweenGroupAndTask } from "../../../../Redux/Option/option.selectors";
 import Task from "../../../Tasks/Task.Components";
 import RatingStar from "../../../Rate/RatingStar/RatingStar.Components";
-import EmployeeCard from "../../EmployeeCard/EmployeeCard.Component";
+import EmployeeCardInGroup from "../../EmployeeCardInGroup/EmployeeCardInGroup.Components";
 import RateCard from "../../../RateCard/RateCard.Component";
 import { triggerOpenAndCloseRateCard } from "../../../../Redux/Option/option.actions";
 import { selectTriggerOpenAndCloseRateCard } from "../../../../Redux/Option/option.selectors";
@@ -20,177 +19,135 @@ import ErrorComponent from "../../../ErrorComponent/ErrorComponent";
 import AddEmployeeListTemp from "../../../Add/AddEmployee/AddEmployeeListTemp/AddEmployeeListTemp.Components"
 import { selectEmployeeTempList } from "../../../../Redux/SearchToAddEmployee/search.selectors"
 import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
-import { deleteEmployeeInGroup } from "../../../../Firebase/firebase.utils"
+import { Box, Typography, ToggleButtonGroup, ToggleButton, Card, Grid, Paper} from "@mui/material"
+import {selectEmployeeIDForRateCard} from "../../../../Redux/Individuals/individuals.selectors"
 const EmployeeInGroup = ({
-  currentUser, 
   employee,
   employeeInfo,
   match,
-  history,
   dispatch,
   optionGroupAndTask,
   triggerButtonOpenAndCloseRateCard,
-  employeeListTemp
+  employeeListTemp,
+  selectEmployeeIDForRateCard
 }) => {
-  const [avatar, setAvatar] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [idEmployee, setIdEmployee] = useState("");
   const [statusError, setStatusError] = useState("Please Add Your Employee in the Group");
+  const [alignment, setAlignment] = React.useState('Employee');
+
   const { id, employee_list, idGroup } = employee; // id group and employee list
-  const onClickRateCardInfo = (displayName, avatar, id) => {
-    dispatch(triggerOpenAndCloseRateCard(true));
-    setDisplayName(displayName);
-    setAvatar(avatar);
-    setIdEmployee(id);
+
+  const handleChange = (event, newAlignment) => {
+    setAlignment(newAlignment);
   };
-  const delEmpInGroup = (idEmployee, idGroup) => {
-    deleteEmployeeInGroup(currentUser, idEmployee, idGroup)
-  }
   return (
-    <div
-      className={`flex flex-col p-10 EmployeeInGroup-container ${
-        triggerButtonOpenAndCloseRateCard
-          ? "overlay-EmployeeInGroup-container"
-          : ""
-      }`}
+    <Box
+      // className={`flex flex-col p-10 EmployeeInGroup-container ${
+      //   triggerButtonOpenAndCloseRateCard
+      //     ? "overlay-EmployeeInGroup-container"
+      //     : ""
+      // }`}
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: 3,
+        gridTemplateRows: 'auto',
+        gridTemplateAreas: `"directory                        directory  switch"
+                            "container-list-addEmp container-list-addEmp container-list-addEmp"`,
+        align:"center",
+        flexGrow: 1,
+        p: 3,
+      }}
+
     >
-      <div
-        className={`grid grid-cols-6 mb-10 ${
-          triggerButtonOpenAndCloseRateCard ? "overlay-container" : ""
-        }`}
-      >
-        <div className="col-start-1 col-span-2">
-          <Link to="/grps" className="flex gap-3">
-            <Target className="w-5 target-employee-in-group" />
-            <h1 className="font-bold text-3xl title-employee-in-group">
-              Group {id}
-            </h1>
-          </Link>
-        </div>
-        <div className="col-start-5 col-span-2 flex justify-evenly">
-          <span>
-            <CustomButton
-              onClick={() => {
-                dispatch(OptionBetweenGroupAndTask(true));
-              }}
+        <Box sx={{ gridArea: 'directory'}}>
+            <Typography><Link to="/grps"> Groups </Link> / Group {id}</Typography>
+        </Box>
+        <Box sx={{ gridArea: 'switch' }}>
+          <ToggleButtonGroup
+            value={alignment}
+            exclusive
+            onChange={handleChange}
+            sx={{border:1, borderRadius:"20px"}}
             >
-              Employee
-            </CustomButton>
-          </span>
-          <span>
-            <CustomButton
-              onClick={() => {
-                dispatch(OptionBetweenGroupAndTask(false));
-              }}
-            >
-              Task
-            </CustomButton>
-          </span>
-        </div>
-      </div>
-
+              <ToggleButton value="Employee" onClick={()=> dispatch(OptionBetweenGroupAndTask(true))} sx={{border:0, borderRadius:"20px"}}>Employee</ToggleButton>
+              <ToggleButton value="Task" onClick={() => dispatch(OptionBetweenGroupAndTask(false))}  sx={{border:0, borderRadius:"20px"}}>Task</ToggleButton>
+          </ToggleButtonGroup>
+        </Box>
       {optionGroupAndTask ? (
-        <div className="optionGroupAndTask-container flex justify-between">
-
-          <div>
+        <Grid container sx={{gridArea: 'container-list-addEmp'}} spacing={3}  columns={{ xs: 3, sm: 3, md: 3 }} >
+          <Grid item xs={2} sm={2} md={2}>
             {employee_list.length === 0 ? (
-              <div className="flex flex-col">
-                <span><ErrorComponent statusError={statusError} /></span>
-                <br/>
-                <span>
-                    <AddEmployeeListTemp employeeListTemp={employeeListTemp} idGroup={idGroup}/>
-                </span>
-              </div>
+                <Grid item>
+                  <Typography><ErrorComponent statusError={statusError} /></Typography>
+                  <br/>
+                  <Box>
+                      <AddEmployeeListTemp employeeListTemp={employeeListTemp} idGroup={idGroup}/>
+                  </Box>
+                </Grid>
               ) : (
-                <div>
-                  <div>
+                <Grid item>
+                  <Box>
                     <AddEmployeeListTemp employeeListTemp={employeeListTemp} idGroup={idGroup}/>
-                  </div>
-                  <div
-                    className={`col-start-1 col-span-3 flex gap-5 ${
-                      triggerButtonOpenAndCloseRateCard ? "overlay-container" : ""
-                    }`}
-                  >
-                  {
-                    employee_list.map(({ id }, index) => (
-                      <div  key={index}>
-                        {!triggerButtonOpenAndCloseRateCard ? (
+                  </Box>
+                  <Box sx={{display:"flex", justifyContent:"space-evenly",  flexWrap: 'wrap', gap:2, mr:2}}>
+                    {
+                        employee_list.map(({ id }, index) => (
+                                          <EmployeeCardInGroup
+                                            avatar={employeeInfo[id].avatar}
+                                            displayName={employeeInfo[id].displayName}
+                                            position={employeeInfo[id].position}
+                                            idGroup={idGroup}
+                                            idEmployee={id}
+                                            key={index}
+                                          />
                          
-                              <div key={id} className="shadow-lg rounded-xl p-8 flex flex-col bg-green-500 gap-3 justify-center card-component">
-                                  <span onClick={() => {history.push(`${match.url}/${id}`);}}>
-                                    <EmployeeCard
-                                      avatar={employeeInfo[id].avatar }
-                                      displayName={employeeInfo[id].displayName}
-                                      position={employeeInfo[id].position}
-                                    />
-                                
-                                    <RatingStar idGroup={idGroup} idEmployee={id} />
-                                  </span>
-                                  <CustomButton
-                                        onClick={() =>
-                                          onClickRateCardInfo(
-                                            employeeInfo[id].displayName,
-                                            employeeInfo[id].avatar,
-                                            id
-                                          )
-                                        }
-                                        // className="button"
-                                        id={id}
-                                        key={id}
-                                      >
-                                        W
-                              </CustomButton>
-                              <CustomButton onClick={() => delEmpInGroup(idGroup,id)}>Del Emp</CustomButton>
-                          </div>
-                        ) : (
-                            
-                          <div className={`absolute rate-card-component ${
-                                  triggerButtonOpenAndCloseRateCard
-                                    ? "rate-card-activate-component"
-                                    : ""
-                                }`}
+                            ))
+                    }
+                  </Box>
+
+                    {!triggerButtonOpenAndCloseRateCard ? (""):(
+                      <Box
+                        sx={{  position:"absolute" }}
+                              // className={`absolute rate-card-component ${
+                              //     triggerButtonOpenAndCloseRateCard
+                              //       ? "rate-card-activate-component"
+                              //       : ""
+                              //   }`}
                           >
                                   <RateCard
-                                      id={id}
-                                      avatar={avatar}
-                                      displayName={displayName}
+                                      avatar={employeeInfo[selectEmployeeIDForRateCard].avatar}
+                                      displayName={employeeInfo[selectEmployeeIDForRateCard].displayName}
                                       idGroup={idGroup}
-                                      idEmployee={idEmployee}
+                                      idEmployee={selectEmployeeIDForRateCard}
+                                      id={selectEmployeeIDForRateCard}
                                     />
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  }
-                  </div>
-            </div>
+                          </Box> )}
+                        
+            </Grid>
             )}
-
-          </div>
+          </Grid>
           
-          <div className={`col-start-1 col-span-3 flex gap-5 ${ !triggerButtonOpenAndCloseRateCard ? "overlay-container" : ""}`}>
+          <Grid item>
             <AddNewEmployeeInGroupByInput idGroup={idGroup}/>
-          </div>
+          </Grid>
 
-        </div>
+        </Grid>
       ) : (
-        <div>
+        <Box sx={{gridArea: 'container-list-addEmp'}}>
           <Task idGroup={idGroup} />
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 //ownProps which is the props of the component that we are wrapping
 const mapStateToProps = (state, ownProps) => ({
-  currentUser: selectCurrentUser(state),
-
   employeeInfo: selectEmployeeInfo(state),
-  // (state ) is to pass in selectEmployee => SelectEmployeeInGroup
   employee: selectEmployeeIngroup(ownProps.match.params.groupID)(state),
   optionGroupAndTask: selectOptionBetweenGroupAndTask(state),
   triggerButtonOpenAndCloseRateCard: selectTriggerOpenAndCloseRateCard(state),
-  employeeListTemp : selectEmployeeTempList(state), 
+  employeeListTemp: selectEmployeeTempList(state),
+  selectEmployeeIDForRateCard: selectEmployeeIDForRateCard(state)
 });
 
 export default connect(mapStateToProps)(withRouter(EmployeeInGroup));

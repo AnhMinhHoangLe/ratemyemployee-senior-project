@@ -12,6 +12,7 @@ import {
 } from "../../../../Firebase/firebase.utils";
 import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
 import { selectEmployeeForPreview } from "../../../../Redux/Employee/employee.selectors";
+import { Card, Box, Typography, Avatar, FormGroup, InputLabel, MenuItem, Select, FormControl } from '@mui/material';
 
 class AddNewIndividualEmployee extends React.Component {
 	constructor(props) {
@@ -87,55 +88,73 @@ class AddNewIndividualEmployee extends React.Component {
 		} = this.props
 		console.log(employee)
 		return (
-			<div className=" bg-white p-5 shadow-lg rounded-xl text-gray-600">
-								<h1 className="title-add-employee text-3xl text-center t mb-5 mb-10">Add New Employee </h1>
+			<Card sx={{display: 'flex', flexDirection:"column", textAlign:"center",alignItems: 'center', justifyContent: 'center',  p:3, gap:2, borderRadius:"10px" }}>
 								<form
 									onSubmit={this.handleSubmit}
-									className=" flex flex-col justify-center  items-center gap-4"
 								>
-										<FormInput
-											placeholder="Display Name"
+					<Box sx={{ display: 'flex', flexDirection: "column", textAlign: "center", alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+									<Typography>Add New Employee </Typography>
+									<FormInput
 											name="displayName"
 											required
 											handleChange={this.handleChange}
 											value={displayName}
-											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
+											id="outlined-basic"
+											label="Name"
+											variant="outlined"
+											size="small"
 										/>
 										<FormInput
-											placeholder="Email"
 											name="email"
 											type="email"
 											required
 											handleChange={this.handleChange}
 											value={email}
-											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
+											id="outlined-basic"
+											label="Email"
+											variant="outlined"
+											size="small"
 										/>
 										
 										<FormInput
-											placeholder="Employee Position"
-											type="text"
 											name="position"
 											required
 											handleChange={this.handleChange}
 											value={position}
-											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
+											id="outlined-basic"
+											label="Position"
+											variant="outlined"
+											size="small"
 										/>
+										<FormControl  sx={{ m: 1, minWidth: "100%"}}>
+											<InputLabel id="demo-simple-select-label">Group Selection</InputLabel>
+											<Select
+												labelId="demo-simple-select-label"
+												id="demo-simple-select"
+												value={currentGroupID}
+												label="Group Selection"
+												onChange={this.handleSelect}
+											>
+											{/* <select id="demo-simple-select-label" onChange={this.handleSelect} value={currentGroupID}>
+											<option>Select option</option> */}
+												{
+													employee.length > 0 ? 
+													(
+														employee.map(({ idGroup, id }) => (
+																		<MenuItem  key={id} value={idGroup}>Group {id}</MenuItem>
+														))
+													): (<MenuItem></MenuItem>)
+													
+												}
+											</Select>
+										</FormControl>
+										{/* </select> */}
+										<CustomButton type="submit" sx={{width:"60%", height:"20%", fontSize:"10px"}}>Add Employee</CustomButton>
+									</Box>
+
 										
-										<select onChange={this.handleSelect} value={currentGroupID}>
-										<option>Select option</option>
-										{
-											employee.length > 0 ? 
-											(
-												employee.map(({ idGroup, id }) => (
-																<option key={id} value={idGroup}>Group {id}</option>
-												))
-											): (<option></option>)
-											
-										}
-										</select>
-										<CustomButton>Submit</CustomButton>
 								</form>
-			</div>
+			</Card>
 		);
 	}
 }

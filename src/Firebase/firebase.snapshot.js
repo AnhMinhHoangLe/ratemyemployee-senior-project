@@ -80,10 +80,11 @@ export const convertDataRateSnapShot = (snapshot) => {
   // const { group } = snapshot.data();
   // set[id] = group;
   const rateRef = snapshot.docs.map((doc) => {
-    const { id, group } = doc.data();
+    const { id, group, avg_rating } = doc.data();
     return {
       id,
       group,
+      avg_rating
     };
   });
   const res = rateRef.reduce((accumulator, collection) => {

@@ -1,11 +1,15 @@
 import { React, Component } from "react";
 import FormInput from "../../../FormInput/FormInput.Component";
 import CustomButton from "../../../CustomButton/CustomButton.component";
+import CustomGoogleButton from "../../../CustomButton/CustomGoolgeButton.Components";
+
 import { auth, signInWithGoogle } from "../../../../Firebase/firebase.utils";
 import "./SignIn.Styles.scss";
-import { ReactComponent as Google } from "../../../../Assests/SignIn_Register/google-button/google.svg";
-import { ReactComponent as Password } from "../../../../Assests/SignIn_Register/Email-Password/password.svg";
-import { ReactComponent as Email } from "../../../../Assests/SignIn_Register/Email-Password/email.svg";
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
 
 class SignIn extends Component {
   constructor(props) {
@@ -35,53 +39,71 @@ class SignIn extends Component {
     const { value, name } = event.target;
     this.setState({
       [name]: value,
+    }, () => {
+      console.log([name], value)
     });
   };
   render() {
     const { email, password } = this.state;
     return (
-      <div className="flex flex-col items-center sign-in-component">
-        <h1 className="pb-10">Sign in to EMA</h1>
-        <CustomButton
-          onClick={signInWithGoogle}
-          className="rounded-full focus:outline-none focus:border-transparent"
-        >
-          <Google className="w-8 h-8 google-svg" />
-        </CustomButton>
-        <form onSubmit={this.handleSubmit}>
-          <div className="relative right-6 p-2 w-60">
-            <p>Email</p>
-            <FormInput
-              type="email"
-              name="email"
-              handleChange={this.handleChange}
-              value={email}
-              required
-              className="border-2 h-10 w-72 pr-3 pl-10 rounded-full outline-none"
-            />
-            <Email className="relative left-3 bottom-7 w-4 h-4" />
-          </div>
-          <div className="relative right-6 p-2 w-60">
-            <p>Password</p>
-            <FormInput
-              type="password"
-              name="password"
-              handleChange={this.handleChange}
-              value={password}
-              required
-              className="border-2 h-10 w-72 pr-3 pl-10 rounded-full outline-none"
-            />
-            <Password className="relative left-3 bottom-7 w-4 h-4" />
-          </div>
+      <Grid
+      container
+      direction="column"
+      alignItems="center"
+      rowSpacing={4}
+      >
+        <Grid item xs={6} md={8}>
+          <Typography  variant="h4" sx={{color:'#1DA492'}}>Sign in to EMA</Typography>
+        </Grid>
 
-          <CustomButton
-            className="rounded-full xl:h-10 w-36 h-8 text-center relative  mt-2 sm:left-12 custom-button "
-            type="submit"
-          >
-            Sign In
-          </CustomButton>
-        </form>
-      </div>
+        <Grid item xs={6} md={8}>
+          <CustomGoogleButton
+                onClick={signInWithGoogle}
+                />
+        </Grid>
+        <Grid item xs={6} md={8}>
+          <Typography>or use email account</Typography>
+        </Grid>
+        <Grid item xs={6} md={8}>
+          <form onSubmit={this.handleSubmit}>
+          <Box sx={{ '& > :not(style)': { m: 1 } }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-end', pb: 5}}>
+                <MailOutlineIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                <FormInput
+                      defaultValue={email}
+                      id="input-with-sx"
+                      label="Email"
+                      variant="standard"
+                      type="email"
+                      name="email"
+                      handleChange={this.handleChange}
+                      required
+                />
+                </Box>
+                
+                <Box sx={{ display: 'flex', alignItems: 'flex-end', pb: 5 }}>
+                      <LockOutlinedIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                <FormInput
+                        defaultValue={password}
+                        id="input-with-sx"
+                        label="Password"
+                        variant="standard"
+                        type="password"
+                        name="password"
+                        handleChange={this.handleChange}
+                        required
+                      />
+                </Box>
+            
+                <Box sx={{pt:3}}>
+                <CustomButton type="submit">
+                      Sign In
+                </CustomButton>
+                </Box>
+              </Box>
+              </form>
+        </Grid>
+      </Grid>
     );
   }
 }

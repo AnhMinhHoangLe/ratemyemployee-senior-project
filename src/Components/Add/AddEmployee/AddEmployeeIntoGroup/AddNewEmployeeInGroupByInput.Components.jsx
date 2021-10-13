@@ -16,6 +16,8 @@ import { selectTriggerSearchAddEmployee } from "../../../../Redux/Option/option.
 import ResultAddEmployeeBySearch from "../ResultOfAddEmployeeBySearch/ResultAddEmployeeBySearch.Component"
 import { triggerSearchAddEmployeeComp } from '../../../../Redux/Option/option.actions'
 // import {fetchEmployeeStartAsync} from "../../../Redux/Individuals/Individuals.actions"
+import { Card, Box, Typography, Avatar, FormGroup  } from '@mui/material';
+
 class AddNewEmployeeInGroupByInput extends React.Component {
 	constructor(props) {
 		super(props);
@@ -142,23 +144,21 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 		const { selectTriggerSearchAddEmployee } = this.props
 
 		return (
-			<div className="xl:w-3/12 h-11/12 xl:fixed xl:top-40 xl:right-40 bg-white p-5 shadow-lg rounded-xl text-gray-600">
-				{/* Searching form */}
-				<div>
-					<h1 className="title-add-employee text-3xl text-center t mb-5 mb-10">Add Existing Employee</h1>
-					
+			<Card sx={{display: 'flex', flexDirection:"column", textAlign:"center",alignItems: 'center', justifyContent: 'center',  p:3, gap:2, borderRadius:"10px" }}>
+			{/* Searching form */}
+				<Typography>Add Existing Employee</Typography>
 					{/* Add Employee By Search */}
 					<FormInput
-						placeholder="Search Name"
 						name="searchName"
-						className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
 						onChange={this.onSearchChange}
+						id="outlined-basic"
+						label="Search Name"
+						variant="outlined"
+						size="small"
+						sx={{borderRadius:"20px"}}
 					/>
-				</div>
 
-				<br /><hr /><br />
-				
-				<div>
+					<Typography sx={{bottomBorder:"1px black solid"}}></Typography>		
 					{selectTriggerSearchAddEmployee ? (
 						// Result from searching existing employee
 						
@@ -166,13 +166,9 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 						
 					) : (
 							//Form to input new employee
-						<div>
-								<h1 className="title-add-employee text-3xl text-center t mb-5 mb-10">Add New Employee </h1>
-								<form
-									onSubmit={this.handleSubmit}
-									className=" flex flex-col justify-center  items-center gap-4"
-								>
-								
+								<form onSubmit={this.handleSubmit}>
+									<Box sx={{ display: 'flex', flexDirection: "column", textAlign: "center", alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+										<Typography>Add New Employee </Typography>
 										{/* <FormInput
 											placeholder="Address"
 											name="address"
@@ -208,8 +204,6 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 												handleChange={this.handleChange}
 											/>
 										</span> */}
-										
-
 										{/* <FormInput
 											type="file"
 											name="uploadImage"
@@ -231,39 +225,43 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 										/>
 										*/}
 										<FormInput
-											placeholder="Display Name"
 											name="displayName"
 											required
 											handleChange={this.handleChange}
 											value={displayName}
-											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
+											id="outlined-basic"
+											label="Name"
+											variant="outlined"
+											size="small"
 										/>
 										<FormInput
-											placeholder="Email"
 											name="email"
 											type="email"
 											required
 											handleChange={this.handleChange}
 											value={email}
-											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
+											id="outlined-basic"
+											label="Email"
+											variant="outlined"
+											size="small"
 										/>
 										
 										<FormInput
-											placeholder="Employee Position"
-											type="text"
-											name="position"
-											required
-											handleChange={this.handleChange}
-											value={position}
-											className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
-										/>
-										<CustomButton>Submit</CustomButton>
+												name="position"
+												required
+												handleChange={this.handleChange}
+												value={position}
+												id="outlined-basic"
+												label="Position"
+												variant="outlined"
+												size="small"
+											/>
+										<CustomButton type="submit" sx={{width:"60%", height:"20%", fontSize:"10px"}}>Add Employee</CustomButton>
+										</Box>
 									</form>
-							</div>
 					)}
 					
-					</div>
-			</div>
+			</Card>
 		);
 	}
 }

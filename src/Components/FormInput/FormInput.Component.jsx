@@ -1,10 +1,11 @@
 import React from "react";
 import "./FormInput.Styles.scss";
-const FormInput = ({ label, handleChange, ...otherProps }) => {
+import TextField from '@mui/material/TextField';
+
+const FormInput = ({handleChange, ...otherProps }) => {
   return (
     <div>
-      <label>{label}</label>
-      <input onChange={handleChange} {...otherProps} />
+      <TextField onChange={handleChange} {...otherProps} />
     </div>
   );
 };

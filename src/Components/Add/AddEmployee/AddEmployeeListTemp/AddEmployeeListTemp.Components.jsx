@@ -4,10 +4,11 @@ import { connect } from "react-redux";
 import { selectEmployeeTempList } from "../../../../Redux/SearchToAddEmployee/search.selectors"
 import {addEmployeeToList, removeEmployeeToList, clearAllEmployeeInList} from "../../../../Redux/SearchToAddEmployee/search.actions"
 import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
-
 import EmployeeCard from "../../../Employee/EmployeeCard/EmployeeCard.Component"
 import CustomButton from '../../../CustomButton/CustomButton.component';
 import { addEmployeeToGroup } from "../../../../Firebase/firebase.utils";
+import EmployeeCardTemp from "./EmployeeCardTemp/EmployeeCardTemp.Components"
+import { Card, Box, Typography, Avatar } from '@mui/material';
 
 const AddEmployeeListTemp = ({ idGroup, currentUser, employeeListTemp, removeEmployee, clearAllEmployeeInList }) => {
     const handleSubmit = async (event) => {
@@ -23,40 +24,40 @@ const AddEmployeeListTemp = ({ idGroup, currentUser, employeeListTemp, removeEmp
     // console.log("employeeListTemp", employeeListTemp, idGroup)
 
     return (
-        <div >
+        <Box >
+            
             {
                 employeeListTemp.length !== 0 ? 
                     (
-                        <div className="flex flex-col justify-center gap-8">
-                            
-                                <span className="flex gap-8 justify-center">
-                                    {employeeListTemp.map(({ id, displayName, avatar, position }, index) => (
-                                            <div className="shadow-lg rounded-xl p-8 flex flex-col bg-green-500 gap-3 " key={index}>
-                                                    <EmployeeCard displayName={displayName} avatar={avatar} position={position} />
-                                                    <CustomButton onClick={() => (removeEmployee(employeeListTemp[index]))}>x</CustomButton>
-                                            </div>
-                                        ))
-                                    }
-                                </span>
+                        <Box sx={{pb:5}}>
+                            <Typography component="div" sx={{ borderBottom: 1, lineHeight: 0.1, textAlign:"center"}}>
+                                <Typography sx={{position:"absolute", top:"165px", left:"30%", backgroundColor:"#fff", width:"10%"}}>New Employee(s)</Typography>
+                            </Typography>
+                            <Typography component="div" sx={{ pb:5 }}></Typography>
+                            <Box sx={{ display:"flex", flexDirection:"column", gap:2, width:"100%", textAlign:"center"}}>
+                                    <Box sx={{display:"flex", justifyContent:"space-evenly", gap:2,  width:"100%", flexWrap: 'wrap'}}>
+                                        {employeeListTemp.map(({ id, displayName, avatar, position }, index) => (
+                                                        <EmployeeCardTemp key={index} displayName={displayName} avatar={avatar} position={position} index={index} />
+                                            ))
+                                        }
+                                    </Box>
 
-                                <span className="flex gap-2">
-                                    <CustomButton onClick={(event) => handleSubmit(event)}>Submit</CustomButton>
-                                    <CustomButton onClick={() => clearAllEmployeeInList(employeeListTemp)}>Clear</CustomButton>
-                                </span>
-
-
-                            <span>
-                                <br/>
-                                <hr />
-                                <br/>
-                            </span>
-                        </div>
+                                <Box sx={{ display: "flex", flexDirection: "row", gap: 2, width: "100%", justifyContent: "center", pb: 4 }}>
+                                        <CustomButton onClick={() => clearAllEmployeeInList(employeeListTemp)} sx={{backgroundColor:"#E0E0E0", color:"#313836"}}>Cancel</CustomButton>
+                                        <CustomButton onClick={(event) => handleSubmit(event)}>Add Employee</CustomButton>
+                                </Box>
+                                
+                            </Box>
+                            <Typography component="div" sx={{borderBottom: 1, lineHeight: 0.1, textAlign:"center" }}>
+                                <Typography sx={{position:"relative", bottom:"-10px", left:"45%", backgroundColor:"#fff", width:"20%"}}>Current Employee(s)</Typography>
+                            </Typography>
+                        </Box>
                     ) : (
                         <div></div>
-                )
+                    )
             }
-              
-        </div>
+            
+        </Box>
     )
 }
 // //ownProps which is the props of the component that we are wrapping

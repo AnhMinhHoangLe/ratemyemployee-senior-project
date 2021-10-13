@@ -1,10 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-
 import RatingStar from "../Rate/RatingStar/RatingStar.Components";
 import CustomButton from "../CustomButton/CustomButton.component";
-import "./RateCard.styles.scss";
 import { triggerOpenAndCloseRateCard } from "../../Redux/Option/option.actions";
 import { selectTriggerOpenAndCloseRateCard } from "../../Redux/Option/option.selectors";
 import { triggerSaveRateCard } from "../../Redux/Option/option.actions";
@@ -17,6 +15,8 @@ import {
   // selectInfoRatingOfEmployeeInGroup,
   selectInfoRateInGroup
 } from "../../Redux/Rate/rate.selectors";
+import { Card, Box, Typography, Avatar, CardActions  } from '@mui/material';
+
 const RateCard = ({
   avatar,
   displayName,
@@ -53,24 +53,34 @@ const RateCard = ({
         } else {
       alert("Rate Star needs to bigger than 0");
     }
-
-
   };
 
   return (
-    <div className="shadow-lg rounded-xl  flex flex-col bg-white gap-3 text-center align-center">
-      <div className="self-center	p-3">
-        <h1 className="font-bold">{displayName}</h1>
-        <img width="100" height="100" src={avatar }
- />
-      </div>
+    <Card sx={{display: 'flex', flexDirection:"column", textAlign:"center",alignItems: 'center', justifyContent: 'center',  p:3, gap:2, borderRadius:"10px" }}>
+        <Typography variant="h6">
+          Rate Me
+        </Typography>
+        <Box sx={{ border: 3, borderColor: "#2AC28C", borderRadius:"100%", p:"1px" }}>
+          <Avatar sx={{ width: "90px", height: "90px" }} src={avatar} alt={displayName} />
+        </Box>
+        
+      <h1 className="font-bold">{displayName}</h1>
+
       <div className="self-center	">
         <RatingStar idGroup={idGroup} idEmployee={idEmployee} />
       </div>
-      <div className="self-center p-3 flex gap-5">
+      <CardActions sx={{display:"flex", direction:"rows"}}>
         <CustomButton
           className="bg-gray-400 text-black py-2 px-4 rounded-full	outline-none"
           onClick={() => dispatch(triggerOpenAndCloseRateCard(false))}
+          sx={{
+            backgroundColor: "#E0E0E0",
+            color: "#313836",
+            width: "162px",
+            "&:hover": {
+              backgroundColor:"#E0E0E1"
+            }
+          }}
         >
           Cancel
         </CustomButton>
@@ -78,13 +88,12 @@ const RateCard = ({
           onClick={() => {
             saveTrigger();
           }}
-          className="text-black py-2 px-4 rounded-full custom-button"
+          sx={{width:"162px"}}
         >
-          Save
+          Rate
         </CustomButton>
-
-      </div>
-    </div>
+      </CardActions>
+    </Card>
   );
 };
 // check value bigger than 0, after that click save to convert the status true and false,

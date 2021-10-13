@@ -6,6 +6,7 @@ import {
 import { connect } from "react-redux";
 import { useHistory, withRouter } from "react-router-dom";
 import {  triggerSearchComp } from "../../../../Redux/Option/option.actions"
+import {List, ListItem, ListItemAvatar, ListItemText,  Avatar, Box, Typography} from '@mui/material';
 
 const SearchResult = ({ search, individuals, match, history, dispatch }) => {
 	// let history = useHistory();
@@ -14,32 +15,37 @@ const SearchResult = ({ search, individuals, match, history, dispatch }) => {
 	// 	history.push(`/search?find_emp=${urlEncodedID}`);
 	// }
 	return (
-		<div className="from-black">
-			{!search ? (
-				<div></div>
-			) : (
+		<List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', zIndex:5, position:"absolute", top: "50px", borderRadius:"15px", boxShadow: "0px 4px 10px rgba(48, 46, 46, 0.15)" }}>
+			{search ? (
 				individuals
-					.filter((key) =>
-						key.displayName.toUpperCase().includes(search.toUpperCase())
-					)
-					.map(({ id, displayName, avatar }) => (
-						<div
-							key={id}
-							onClick={() => {
-								history.push(`/emps/${id}`);
-								dispatch(triggerSearchComp(false))
-							}}
-						>
-							<img
-								width="100"
-								height="100"
-								src={avatar }
+				.filter((key) =>
+					key.displayName.toUpperCase().includes(search.toUpperCase())
+				)
+				.map(({ id, displayName, avatar, position }) => (
+					<ListItem
+						key={id}
+						onClick={() => {
+							history.push(`/emps/${id}`);
+							dispatch(triggerSearchComp(false))
+						}}
+					>
+						<ListItemAvatar>
+							<Avatar
+								alt={displayName}
+								src={avatar}
+								sx={{border:"3px solid #2AC28C"}}
 							/>
-							<p>{displayName}</p>
-						</div>
-					))
+						</ListItemAvatar>
+						<ListItemText primary={displayName} secondary={position} />
+					</ListItem>
+				))
+			): (
+				<ListItem>
+					<ListItemText primary="Not Found" />
+				</ListItem>
+				
 			)}
-		</div>
+		</List>
 	);
 };
 const mapStateToProps = (state) => ({

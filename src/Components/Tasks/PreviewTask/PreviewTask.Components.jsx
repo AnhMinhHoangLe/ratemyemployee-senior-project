@@ -1,7 +1,12 @@
 import "./PreviewTask.Styles.scss"
-import React from 'react';
+import React, { useState, useEffect }from 'react';
 import CustomButton from "../../CustomButton/CustomButton.component"
 import {removeTask, taskFinished} from "../../../Firebase/firebase.utils.js"
+import {  Typography,Card, Box } from "@mui/material"
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CheckIcon from '@mui/icons-material/Check';
+import CardContent from '@mui/material/CardContent';
+
 const PreviewTask = ({ note, title, deadline, priority, idGroup, id, ...otherSectionProps }) => {
     const removeTaskOnclick = () => {
         removeTask(idGroup,id)
@@ -9,20 +14,24 @@ const PreviewTask = ({ note, title, deadline, priority, idGroup, id, ...otherSec
     const finishTaskUpdateStatus = () => {
         taskFinished(idGroup,id)
     }
+    
     return (
-        <div className="rounded-lg p-4 w-96 text-gray-700 border-r-8 shadow-lg m-11 bg-white" style={{ borderColor: priority, }} >
-            <div className="flex justify-between" >
-                <h1 style={{ color: priority }} className="text-2xl">{title}</h1>
-                <span>{deadline}</span>
-            </div>
-            <div style={{ borderColor: priority, }} className="border-b-2"></div>
-            <div>
-                {note}
-            </div>
-            <CustomButton onClick={() => removeTaskOnclick()}> Delete Task </CustomButton>
-            <CustomButton onClick={() => finishTaskUpdateStatus() }>Finished Task</CustomButton>
-
-        </div >
+        <Card sx={{width: "100%", p:3, borderRadius:"10px", borderRight: 10, borderColor:priority }}>
+            {/* <div style={{ borderColor: priority, }} className="border-b-2"></div> */}
+            <CardContent>
+                <Typography component="div" sx={{display:"flex", justifyContent:"space-between"}}>
+                    <Typography variant="h5" style={{ color: priority }}>{title}</Typography>
+                    <Typography>
+                        <DeleteOutlineIcon onClick={() => removeTaskOnclick()} />
+                        <CheckIcon onClick={() => finishTaskUpdateStatus() } />
+                    </Typography>
+                    
+                </Typography>
+                <Typography variant="subtitle1">Due date: {deadline}</Typography>
+                <Typography variant="subtitle1">Description: {note}</Typography>
+            </CardContent>
+            
+        </Card >
     )
 }
 export default PreviewTask

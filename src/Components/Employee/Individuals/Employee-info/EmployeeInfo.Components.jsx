@@ -6,45 +6,45 @@ import { selectEmployeeIngroup } from "../../../../Redux/Employee/employee.selec
 import { connect } from "react-redux";
 import RatingOverallAvgGroup from "../../../Rate/Group/RatingOverallAvgGroup/RatingOverallAvgGroup.Components";
 import RatingOverallDataEmployeeInGroup from "../../../Rate/Group/RatingOverallDataEmployeeInGroup/RatingOverallDataEmployeeInGroup.Component"
+import { Box, Typography, Grid} from "@mui/material"
+
 const EmployeeInfo = ({ individuals, employee, match }) => {
-  const { displayName, email, gender, address, avatar, phone_number } =
+  const { displayName, email, gender, address, avatar, phone_number, currentGroupID, position, id } =
     individuals;
   const { employee_list, idGroup } = employee;
-  const { rate, position } = employee_list.find(
+  const { rate } = employee_list.find(
     (key) => key.id === match.params.employeeInfoID
   );
   return (
-    <div>
-      {
-        <div>
-          <div className="grid grid-rows-2 grid-col-2 gap-4 individualInfo-component">
-            <span className="col-span-1 border-8">
-              <EmployeeInfoForm
-                displayName={displayName}
-                email={email}
-                // gender={gender}
-                // address={address}
-                avatar={avatar}
-                phone_number={phone_number}
-                position={position}
-              />
-            </span>
-            <span className="col-span-1 border-8">
-              <RatingOverallAvgGroup
-                idEmployee={match.params.employeeInfoID}
-                idGroup={idGroup}
-              />
-            </span>
-            <span className="col-span-2 border-8">
-            <RatingOverallDataEmployeeInGroup
-                idEmployee={match.params.employeeInfoID}
-                idGroup={idGroup}
-              />
-            </span>
-          </div>
-        </div>
-      }
-    </div>
+        <Grid container spacing={2} sx={{ p:3 }}>
+              <Grid item xs={8} md={8}  sx={{ p:3 }}>
+                <EmployeeInfoForm
+                  displayName={displayName}
+                  email={email}
+                  // gender={gender}
+                  // address={address}
+                  idEmployee ={id}
+                  avatar={avatar}
+                  phone_number={phone_number}
+                  position={position}
+                  currentGroupID={currentGroupID}
+                />
+                <Box sx={{ display: "flex", flexDirection:"column", width: "100%", justifyContent: "center", alignItems:"center", p:3, gap: 3}}>
+                        <Typography variant="h5">Rating History</Typography>
+                        <RatingOverallDataEmployeeInGroup
+                            idEmployee={match.params.employeeInfoID}
+                            idGroup={idGroup}
+                          />
+                </Box>
+            </Grid>
+              <Grid item xs={4} md={4}>
+                <RatingOverallAvgGroup
+                  idEmployee={match.params.employeeInfoID}
+                  idGroup={idGroup}
+                />
+              </Grid>
+          </Grid>
+     
   );
 };
 

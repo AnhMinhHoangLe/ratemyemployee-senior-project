@@ -10,12 +10,14 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectKeyOfGroup } from "../../../Redux/Task/Task.selectors"
 import {convertTheID, checkDateInput} from "../Task_Utils/tasks.utils"
+import { Card, Box, Typography, FormGroup, TextField} from '@mui/material';
+
 class AddTask extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       deadline: "",
-      note: null,
+      note: "",
       priority: "",
       title: "",
       statusDone: false,
@@ -46,7 +48,7 @@ class AddTask extends React.Component {
         createTask(idGroup, task, idForTask);
         this.setState({
           deadline: "",
-          note: null,
+          note: "",
           priority: "",
           title: "",
         });
@@ -57,7 +59,7 @@ class AddTask extends React.Component {
     }
     this.setState({
       deadline: "",
-      note: null,
+      note: "",
       priority: "",
       title: "",
     });
@@ -65,74 +67,79 @@ class AddTask extends React.Component {
   render() {
     const { deadline, note, priority, title } = this.state;
     return (
-      <div className="xl:w-3/12 h-11/12 xl:fixed xl:top-40 xl:right-40 bg-white p-5 shadow-lg rounded-xl text-gray-600">
-        <h1 className="title-add-employee text-3xl text-center t mb-5 mb-10">
-          Add New Task
-        </h1>
+      <Card sx={{ display: 'flex', flexDirection:"column",  p:3, gap:2, borderRadius:"10px"}}>
+        <Typography sx={{ textAlign: 'center'}}>Create New Task</Typography>
         <form
-          onSubmit={(e) => this.handleSubmit(e)}
-          className=" flex flex-col justify-center  items-center gap-4"
-        >
-          <FormInput
-            placeholder="Title"
-            name="title"
-            required
-            handleChange={this.handleChange}
-            value={title}
-            className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
-          />
-          <FormInput
-            className="input-add-employee xl:w-80  h-11 rounded-lg text-gray-800 p-3"
-            type="date"
-            name="deadline"
-            required
-            handleChange={this.handleChange}
-            value={deadline}
-            
-          />
-          <textarea
-            className="input-add-employee xl:w-80 h-11 rounded-lg text-gray-800 p-3"
-            required
-            value={note}
-            onChange={(e) => this.handleChange(e)}
-            name="note"
-            placeholder="Note"
-          ></textarea>
-          <h1>Priority</h1>
+          onSubmit={(e) => this.handleSubmit(e)}>
+          <Box sx={{ display: 'flex', flexDirection:"column", gap:2, justifyContent: 'center'}}>
+            <Typography variant="h7">Title</Typography>
+            <FormInput
+              name="title"
+              required
+              onChange={(e)=>this.handleChange(e)}
+              value={title}
+              id="outlined-basic"
+              variant="outlined"
+              size="small"
 
-          <div className="flex space-x-9">
-            <FormInput
-              type="radio"
-              name="priority"
-              value="red"
-              required
-              handleChange={this.handleChange}
-              className="priority"
-              style={{ border: "3px red solid" }}
             />
+            <Typography variant="h7">Due Date</Typography>
             <FormInput
-              type="radio"
-              name="priority"
-              value="yellow"
+              type="date"
+              name="deadline"
               required
-              handleChange={this.handleChange}
-              className="priority"
-              style={{ border: "3px yellow solid" }}
+              onChange={(e)=>this.handleChange(e)}
+              value={deadline}
+              id="outlined-basic"
+              variant="outlined"
+              size="small"
+              sx={{width:"100%"}}
             />
+            <Typography variant="h7">Priority</Typography>
+            <Box sx={{ display: 'flex', flexDirection: "row", textAlign: "center", alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+              <input
+                type="radio"
+                name="priority"
+                value="red"
+                required
+                onChange={(e)=>this.handleChange(e)}
+                className="priority"
+                style={{ border: "3px red solid" }}
+              />
+              <input
+                type="radio"
+                name="priority"
+                value="yellow"
+                required
+                onChange={(e)=>this.handleChange(e)}
+                className="priority"
+                style={{ border: "3px yellow solid" }}
+              />
+              <input
+                type="radio"
+                name="priority"
+                value="green"
+                required
+                onChange={(e)=>this.handleChange(e)}
+                className="priority"
+                style={{ border: "3px green solid" }}
+              />
+            </Box>
+            <Typography variant="h7">Descriptions</Typography>
             <FormInput
-              type="radio"
-              name="priority"
-              value="green"
               required
-              handleChange={this.handleChange}
-              className="priority"
-              style={{ border: "3px green solid" }}
+              value={note}
+              onChange={(e) => this.handleChange(e)}
+              name="note"
+              placeholder="eg: Working on the ..."
+              multiline={true}
+              variant="outlined"
+              sx={{width:"100%"}}
             />
-          </div>
-
-          <CustomButton>Submit</CustomButton>
+            <CustomButton type="submit">Create Task</CustomButton>
+          </Box>
         </form>
-      </div>
+      </Card>
     );
   }
 }

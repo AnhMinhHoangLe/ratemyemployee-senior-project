@@ -4,7 +4,7 @@ import {updateRateFunc} from "./rate.utils"
 const INITIAL_STATE = {
   rateInfo: null,
   isFetching: false,
-  newRateInput: 0,
+  // newRateInput: 0,
 
 };
 

@@ -6,6 +6,8 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "../../../Redux/User/user.selectors";
 import "./AddGroup.Styles.scss";
+import {Grid, Box, Typography, Card, CardContent, AvatarGroup, Avatar, CardActions } from '@mui/material';
+
 class AddGroup extends React.Component {
 	constructor(props) {
 		super(props);
@@ -41,44 +43,46 @@ class AddGroup extends React.Component {
 	};
 	render() {
 		const { groupName, description } = this.state;
-
 		return (
-			<div className="xl:w-3/12  xl:fixed xl:top-40 xl:right-40 bg-white p-5 shadow-lg rounded-xl">
-				<h1 className="text-3xl text-center title-add-group mb-5 mb-10">
-					Add Group
-				</h1>
-				<div>
-					<form onSubmit={(e) => this.handleSubmit(e)}>
-						<div className=" flex flex-col justify-center  items-center gap-4">
-							<span>
-								<p className="mb-2">Group Name</p>
+			<Card sx={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', boxShadow: 3, borderRadius:'15px', width:'70%'}}>
+				<CardContent>
+					<Typography variant='h5' >
+						Create New Group
+					</Typography>
+					<form onSubmit={this.handleSubmit}>
+						<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+							<Box sx={{ py: 3 }}>
+								<Typography>Group Name</Typography>
 								<FormInput
 								handleChange={this.handleChange}
-								placeholder=" Group Name"
 								name="groupName"
 								required
-								value={groupName}
-								className="input-add-group xl:w-80 h-11 w-80 rounded-lg text-gray-800 p-3"
+								id="outlined-size-small"
+								defaultValue={groupName}
+								size="small"
 								/>
-							</span>
-							<span>
-								<p className="mb-2">Group Description</p>
-								<textarea
+							</Box>
+								
+							<Box sx={{ pb: 3 }}>
+								<Typography>Group Description</Typography>
+								<FormInput
 									onChange={(e) => this.handleChange(e) }
 									required
-								placeholder="eg: This group is"
-								name="description"
-								value={description}
-								className="input-add-group xl:w-80 w-80 rounded-lg text-gray-800 p-3"
+									placeholder="eg: This group is"
+									name="description"
+									defaultValue={description}
+									multiline={true}
+									sx={{ width: '100%' }}
 								/>
-							</span>
-							<span className="button-add-group   ">
-								<CustomButton>Submit</CustomButton>
-							</span>
-						</div>
+							</Box>
+							<Box sx={{ pl: '20%' }}>
+								<CustomButton type="submit" sx={{ width:'80%', fontSize:12 }}>Create Group</CustomButton>
+							</Box>
+							
+						</Box>
 					</form>
-				</div>
-			</div>
+				</CardContent>
+			</Card>
 		);
 	}
 }

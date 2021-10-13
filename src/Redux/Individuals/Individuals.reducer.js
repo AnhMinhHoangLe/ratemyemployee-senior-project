@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   employeeInfo: null,
   isFetching: false,
   error_message: undefined,
+  idEmployeePickToRate: ""
 };
 
 const employeeInfoReducer = (state = INITIAL_STATE, action) => {
@@ -39,6 +40,11 @@ const employeeInfoReducer = (state = INITIAL_STATE, action) => {
         isFetching: false,
         employeeInfo: action.payload,
       };
+    case individualsActionType.PICK_ID_EMPLOYEE_TO_RATE:
+      return {
+        ...state,
+        idEmployeePickToRate: action.payload
+      }
     default:
       return state;
   }

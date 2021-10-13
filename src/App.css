@@ -5,3 +5,12 @@
 a {
   text-decoration: none;
 }
+.signin-signup-page{
+  background-image: url(./Assests/SignIn_Register/business-communication.png); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: 100vh;
+  overflow: hidden;
+  
+}
