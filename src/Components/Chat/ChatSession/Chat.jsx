@@ -1,16 +1,14 @@
-import React, { useRef, useState, useEffect, Children } from "react";
+import React, { useRef, useEffect} from "react";
 import axios from 'axios';
 import {ChatEngine} from 'react-chat-engine';
-import {createUserProfileDocument, createEmployee} from '../../../Firebase/firebase.utils';
 import "firebase/firestore";
 import "firebase/auth";
-import { AuthProvider,user } from "../../../contexts/AuthContext"; 
-
+import firebase from "firebase/app";
 
 
 export default function Chats () 
 {
-    const {user} = AuthProvider(Children);
+    let user = firebase.auth().currentUser;
     const didMountRef = useRef(false);
     useEffect(()=>
     {
@@ -20,13 +18,13 @@ export default function Chats ()
             axios.get('https://api.chatengine.io/users/me/',
             { headers: { 
             "project-id": '6c34a123-43fc-41f8-bd5c-fd618ab8b31a',
-            "user-name": '.',
-            "user-secret": '.' }})
+            "user-name": user.email,
+            "user-secret": user.uid }})
         .catch(e =>{
         let formdata = new FormData()
-        formdata.append('email', '.')
-        formdata.append('username', '.')
-        formdata.append('secret', '.')
+        formdata.append('email', user.email)
+        formdata.append('username', user.email)
+        formdata.append('secret', user.uid)
         axios.post(
         'https://api.chatengine.io/users/',
         formdata,
@@ -39,8 +37,8 @@ export default function Chats ()
              <ChatEngine 
         height='calc(100vh - 66px)'
         projectID='6c34a123-43fc-41f8-bd5c-fd618ab8b31a'
-        userName='.'
-        userSecret='.'
+        userName={user.email}
+        userSecret={user.uid}
       />
         </div>
     )

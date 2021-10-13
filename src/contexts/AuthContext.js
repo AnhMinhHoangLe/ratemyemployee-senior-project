@@ -1,7 +1,5 @@
 import React, {useContext, useState, useEffect} from "react";
-import {useHistory} from "react-router-dom";
 import "firebase/auth";
-import auth from "../Firebase/firebase.utils";
 
 const AuthContext= React.createContext();
 export function useAuth() {
