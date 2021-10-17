@@ -58,7 +58,7 @@ class AddGroup extends React.Component {
 								name="groupName"
 								required
 								id="outlined-size-small"
-								defaultValue={groupName}
+								value={groupName}
 								size="small"
 								/>
 							</Box>
@@ -70,7 +70,7 @@ class AddGroup extends React.Component {
 									required
 									placeholder="eg: This group is"
 									name="description"
-									defaultValue={description}
+									value={description}
 									multiline={true}
 									sx={{ width: '100%' }}
 								/>
