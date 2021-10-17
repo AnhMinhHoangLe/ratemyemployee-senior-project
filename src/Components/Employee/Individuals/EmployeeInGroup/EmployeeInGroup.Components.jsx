@@ -46,6 +46,7 @@ const EmployeeInGroup = ({
       //     ? "overlay-EmployeeInGroup-container"
       //     : ""
       // }`}
+
       sx={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
@@ -56,6 +57,9 @@ const EmployeeInGroup = ({
         align:"center",
         flexGrow: 1,
         p: 3,
+        ...triggerButtonOpenAndCloseRateCard && {
+          minHeight: "100vh",
+        }
       }}
 
     >
@@ -107,7 +111,7 @@ const EmployeeInGroup = ({
 
                     {!triggerButtonOpenAndCloseRateCard ? (""):(
                       <Box
-                        sx={{  position:"absolute" }}
+                        sx={{  position:"sticky", width:"40%", bottom:"200px", left:"500px", zIndex:2}}
                               // className={`absolute rate-card-component ${
                               //     triggerButtonOpenAndCloseRateCard
                               //       ? "rate-card-activate-component"

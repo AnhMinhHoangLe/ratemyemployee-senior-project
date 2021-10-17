@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import { connect } from "react-redux";
 import { selectInfoRateInGroup } from "../../../../Redux/Rate/rate.selectors";
 import {Card, Box, Typography} from '@mui/material';
-import { Doughnut } from 'react-chartjs-2';
 import { Chart } from "react-google-charts";
 
 

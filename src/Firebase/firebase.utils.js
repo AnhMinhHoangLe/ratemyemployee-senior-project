@@ -445,7 +445,6 @@ export const deleteEmployeeInGroup = (userAuth, groupID, employeeID) => {
   } catch {
     console.error();
   }
-
 }
 
 export const deleteGroup = async (userAuth, groupID, employeeList) => {
@@ -474,25 +473,26 @@ export const deleteGroup = async (userAuth, groupID, employeeList) => {
 }
 
 
-export const deleteIndividualEmployee =  (userAuth, groupID, employeeID) => {
+export const deleteIndividualEmployee =  async (userAuth, groupID, employeeID) => {
+  const batch = firestore.batch()
   const employeeRefInGroup = firestore.doc(`users/${userAuth.id}`).collection('group');
   const employeeRefInTheListOfManager = firestore.doc(`users/${userAuth.id}`).collection('employee');
   const employeeInfo = firestore.collection('employee')
   const rateInfo = firestore.collection('rate')
-  
+
   // remove employee in group 
   if (groupID)
   {
     const setToDel = { id: employeeID }
     const idEmployeeInGroupRef = employeeRefInGroup.doc(groupID);
-    idEmployeeInGroupRef.update({
+    batch.update(idEmployeeInGroupRef, {
       employee_list: firebase.firestore.FieldValue.arrayRemove(setToDel)
     })
   }
-
-  employeeRefInTheListOfManager.doc(employeeID).delete()
-  rateInfo.doc(employeeID).delete()
-  employeeInfo.doc(employeeID).delete()
+  batch.delete(employeeRefInTheListOfManager.doc(employeeID))
+  batch.delete(rateInfo.doc(employeeID))
+  batch.delete(employeeInfo.doc(employeeID))
+  await batch.commit();
 
 }
 

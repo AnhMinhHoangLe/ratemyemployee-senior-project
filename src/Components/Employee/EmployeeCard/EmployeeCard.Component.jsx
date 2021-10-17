@@ -21,7 +21,7 @@ const EmployeeCard = ({ history, match, avatar, displayName, position, admin, in
               <Box
                 sx={{ display: 'flex', border: 1, borderColor: "#E0E0E0", width: 80, height: 80, borderRadius: "10px", alignItems: 'center', justifyContent: "center" }}
               >
-                <Typography sx={{ fontSize: "30px" }}>{selectInfoRateInGroup['avg_rating']}</Typography>
+                <Typography sx={{ fontSize: "30px" }}> {selectInfoRateInGroup['avg_rating']}</Typography>
                 <StarIcon sx={{ color: "#FFBB56", fontSize: "20px", position: "relative", bottom:"2px" }}/>
               </Box>
           </Box>

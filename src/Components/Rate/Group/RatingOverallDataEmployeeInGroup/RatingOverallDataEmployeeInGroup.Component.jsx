@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Typography, Box } from '@mui/material'
 import CollapsedInfo from "./CollapsibleTable.Components"
-const RatingOverallDataEmployeeInGroup = ({ selectWholeDataRate, idEmployee, idGroup }) => {
+const RatingOverallDataEmployeeInGroup = ({ selectWholeDataRate, idEmployee }) => {
   const { group } = selectWholeDataRate
   return (
     <Box sx={{width:"90%"}}>

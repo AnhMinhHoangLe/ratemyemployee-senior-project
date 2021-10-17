@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   employeeArray: [],
   employeeInfo: null,
   isFetching: false,
-  error_message: undefined,
+  error_message: null,
   idEmployeePickToRate: ""
 };
 
@@ -23,6 +23,11 @@ const employeeInfoReducer = (state = INITIAL_STATE, action) => {
         isFetching: false,
         employeeArray: action.payload,
       };
+    case individualsActionType.FETCH_EMPLOYEE_ARRAY_FAILURE:
+      return {
+        ...state,
+        error_message: action.payload,
+      }
     case individualsActionType.FETCH_EMPLOYEE_FAILURE:
       return {
         ...state,

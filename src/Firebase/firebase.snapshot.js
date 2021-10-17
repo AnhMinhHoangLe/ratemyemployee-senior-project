@@ -87,12 +87,12 @@ export const convertDataRateSnapShot = (snapshot) => {
       avg_rating
     };
   });
-  const res = rateRef.reduce((accumulator, collection) => {
+  return rateRef.reduce((accumulator, collection) => {
     accumulator[collection.id] = collection;
     return accumulator;
   }, {});
 
-  return res;
+
 };
 export const convertDataTaskSnapshot = (snapshot) => {
   const dataTask = snapshot.data()

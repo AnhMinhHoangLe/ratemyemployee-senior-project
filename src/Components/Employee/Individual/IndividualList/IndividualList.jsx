@@ -22,9 +22,7 @@ const IndividualList = ({individuals, match, history, currentUser}) => {
               {
               individuals ? (
                 individuals.map(({ displayName, avatar, position, id, currentGroupID, admin  }, index) => (
-                      <Box key={index}>
-                        <EmployeeCard avatar={avatar} displayName={displayName} position={position} admin={admin} currentGroupID={currentGroupID} idx={id}/>
-                      </Box>
+                        <EmployeeCard key={index} avatar={avatar} displayName={displayName} position={position} admin={admin} currentGroupID={currentGroupID} idx={id}/>
                 ))
               ) : (
                   <Box></Box>

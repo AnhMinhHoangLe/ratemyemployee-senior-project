@@ -4,6 +4,7 @@ import {updateRateFunc} from "./rate.utils"
 const INITIAL_STATE = {
   rateInfo: null,
   isFetching: false,
+  error_message: null,
   // newRateInput: 0,
 
 };
@@ -19,11 +20,14 @@ const rateInfoReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         rateInfo: action.payload,
+        isFetching: false,
+
       };
     case rateActionType.FETCH_RATE_FAILURE:
       return {
         ...state,
         error_message: action.payload,
+        isFetching: false,
       };
     case rateActionType.UPDATE_RATE_AFTER_RATING:
       return {

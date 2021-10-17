@@ -32,6 +32,8 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 			position: "",
 			groupActive: true,
 		};
+		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this)
 	}
 	handleChange = (event) => {
 		const { value, name } = event.target;

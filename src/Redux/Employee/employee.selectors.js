@@ -1,10 +1,14 @@
 import { createSelector } from "reselect";
 const selectemployee = (state) => state.employee;
-
 export const selectEmployee = createSelector(
     [selectemployee],
     (employee) => employee.employee // if not .employee, it will print out variable = object, and array (map) bug
 );
+export const selectIsEmployeeFetching = createSelector(
+    [selectemployee], (employee) => {
+        employee.isFetching = true;
+    }
+)
 
 //Show members in all group for overview
 export const selectEmployeeForPreview = createSelector(

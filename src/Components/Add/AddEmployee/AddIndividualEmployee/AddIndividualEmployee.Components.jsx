@@ -26,6 +26,8 @@ class AddNewIndividualEmployee extends React.Component {
 			groupActive: true,
 			currentGroupID: null
 		};
+		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this)
 	}
 	handleChange = (event) => {
 		const { value, name } = event.target;
@@ -68,7 +70,6 @@ class AddNewIndividualEmployee extends React.Component {
 			email: "",
 			position: "",
 			currentGroupID: null
-
 		});
 	};
 	handleSelect = (event) => {

@@ -36,6 +36,10 @@ export const fetchEmployeeArraySuccess = (employeeArray) => ({
   type: individualsActionType.FETCH_EMPLOYEE_ARRAY_SUCCESS,
   payload: employeeArray,
 });
+export const fetchEmployeeArrayFailure = (errorMessage) => ({
+  type: individualsActionType.FETCH_EMPLOYEE_ARRAY_FAILURE,
+  payload: errorMessage,
+});
 export const fetchEmployeeFailure = (errorMessage) => ({
   type: individualsActionType.FETCH_EMPLOYEE_FAILURE,
   payload: errorMessage,
@@ -65,24 +69,31 @@ export const fetchEmployeeGroupStartAsync =  (currentUserID) => {
           dispatch(fetchEmployeeArraySuccess(arrayIDEmployee));
           if(arrayIDEmployee.length !== 0){
             
+            const getRateFromEmployeeID = firestore
+                  .collection("rate")
+                  .where("id", "in", arrayIDEmployee);
+                dispatch(fetchingRateStart());
+                getRateFromEmployeeID.onSnapshot(async (snapshot) => {
+                  const dataRate = convertDataRateSnapShot(snapshot);
+                  dispatch(fetchingRateSuccess(dataRate));
+                }, (error) => {
+                  dispatch(fetchingRateFailure(error.message))
+                });
+            
             const employeeRef = firestore.collection("employee").where("id", "in", arrayIDEmployee);
-              dispatch(fetchEmployeeStart());
+            dispatch(fetchEmployeeStart());
         
             employeeRef
               //use onSnapShot will automatically update the new data if the data got update from db
               .onSnapshot(async (snapshot) => {
                 const dataEmployee = convertDataEmployeeSnapShot(snapshot);
                 dispatch(fetchEmployeeSuccess(dataEmployee));
+              },
+                (error) => {
+                dispatch(fetchEmployeeFailure(error.message));
               });
         
-            const getRateFromEmployeeID = firestore
-                  .collection("rate")
-                  .where("id", "in", arrayIDEmployee);
-                dispatch(fetchingRateStart());
-                await getRateFromEmployeeID.onSnapshot(async (snapshot) => {
-                  const dataRate = convertDataRateSnapShot(snapshot);
-                  dispatch(fetchingRateSuccess(dataRate));
-                });
+            
 
                 //   /**
                 //    * Group
@@ -96,9 +107,14 @@ export const fetchEmployeeGroupStartAsync =  (currentUserID) => {
                     async (snapshot) => {
                       const groupMap = convertDataGroupSnapShot(snapshot);
                       dispatch(fetchGroupSuccess(groupMap));
+                    }, (error) => {
+                      dispatch(fetchGroupFailure(error.message))
                     }
                     );
                     }
+        }, 
+        (error) => {
+          dispatch(fetchEmployeeArrayFailure(error.message))
         }
       )
 

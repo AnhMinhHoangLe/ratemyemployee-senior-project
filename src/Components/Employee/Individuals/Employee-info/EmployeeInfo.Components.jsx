@@ -33,7 +33,6 @@ const EmployeeInfo = ({ individuals, employee, match }) => {
                         <Typography variant="h5">Rating History</Typography>
                         <RatingOverallDataEmployeeInGroup
                             idEmployee={match.params.employeeInfoID}
-                            idGroup={idGroup}
                           />
                 </Box>
             </Grid>

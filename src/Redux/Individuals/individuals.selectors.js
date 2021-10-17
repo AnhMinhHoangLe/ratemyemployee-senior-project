@@ -5,10 +5,15 @@ export const arrayIDEmployee = createSelector(
 	[selectemployeeinfo],
 	(individual) => individual.employeeArray // if not .employee, it will print out variable = object, and array (map) bug
 );
+
 //!NOTE: line need to have the same name of state
 export const selectEmployeeInfo = createSelector(
 	[selectemployeeinfo],
 	(individual) => individual.employeeInfo // if not .employee, it will print out variable = object, and array (map) bug
+);
+export const selectIsFetchingEmployeeInfo = createSelector(
+	[selectemployeeinfo],
+	(individual) => individual.isFetching // if not .employee, it will print out variable = object, and array (map) bug
 );
 
 export const selectListEmployee = createSelector([selectEmployeeInfo], (emp) =>

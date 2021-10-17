@@ -3,46 +3,49 @@ import { selectToShowEmployeeInfo } from "../../../../Redux/Individuals/individu
 import { connect } from "react-redux";
 import EmployeeInfoForm from "../../../EmployeeInfoForm/EmployeeInfoForm.Components";
 import "./IndividualInfoPage.styles.scss";
-import RatingHistoryIndividual from "../../../Rate/Individual/RatingHistoryIndividual/RatingHistoryIndividual.Components";
+// import RatingHistoryIndividual from "../../../Rate/Individual/RatingHistoryIndividual/RatingHistoryIndividual.Components";
 import { selectWholeDataRate } from "../../../../Redux/Rate/rate.selectors";
 import { TotAvg } from "../../../Rate/Rating.Utils";
 import RatingOverallHistoryIndividual from "../../../Rate/Individual/RatingOverallHistoryIndividual/RatingOverallHistoryIndividual.Component";
-const IndividualInfoPage = ({ individuals, match, rateHistory }) => {
-  const {
-    displayName,
-    email,
+import { Box, Typography, Grid} from "@mui/material"
+import RatingOverallDataEmployeeInGroup from "../../../Rate/Group/RatingOverallDataEmployeeInGroup/RatingOverallDataEmployeeInGroup.Component"
 
-    // gender,
-    avatar,
-    position,
-    phone_number,
-    // address,
-  } = individuals;
+const IndividualInfoPage = ({ individuals, match, rateHistory }) => {
+  const { displayName, email, gender, address, avatar, phone_number, currentGroupID, position, id } =
+    individuals;
   const [overallAvgRate, setOverallAvgRate] = useState(null);
   useEffect(() => {
     const avgRate = TotAvg(rateHistory);
     setOverallAvgRate(avgRate);
   });
   return (
-    <div className="grid grid-rows-2 grid-col-2 gap-4 individualInfo-component">
-      <span className="col-span-1 border-8">
+    <Grid container spacing={2} sx={{ p:3 }}>
+      <Grid item xs={8} md={8}  sx={{ p:3 }}>
         <EmployeeInfoForm
           displayName={displayName}
           email={email}
           // gender={gender}
           // address={address}
+          idEmployee ={id}
           avatar={avatar}
-          position={position}
           phone_number={phone_number}
+          position={position}
+          currentGroupID={currentGroupID}
         />
-      </span>
-      <span className="col-span-1 border-8">
-        <RatingOverallHistoryIndividual overallAvgRate={overallAvgRate} />
-      </span>
-      <span className="col-span-2 border-8">
-        <RatingHistoryIndividual employeeInfoID={match.params.employeeInfoID} />
-      </span>
-    </div>
+        <Box sx={{ display: "flex", flexDirection: "column", width: "100%", justifyContent: "center", alignItems: "center", p: 3, gap: 3 }}>
+          <Typography variant="h5">Rating History</Typography>
+
+          <RatingOverallDataEmployeeInGroup
+                            idEmployee={match.params.employeeInfoID}
+          />
+        </Box>
+      </Grid>
+
+      <Grid item xs={4} md={4}>
+      <RatingOverallHistoryIndividual overallAvgRate={overallAvgRate} />
+
+      </Grid>
+    </Grid>
   );
 };
 
