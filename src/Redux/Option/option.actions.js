@@ -23,3 +23,7 @@ export const triggerSearchAddEmployeeComp = (trigger_search_add_employee) => ({
   type: EditOption.TRIGGER_SEARCH_ADD_EMPLOYEE,
   payload: trigger_search_add_employee
 })
+export const triggerSelectDropDownHeader = (trigger_select_drop_down_header) => ({
+  type: EditOption.TRIGGER_SELECT_DROPDOWN_HEADER,
+  payload: trigger_select_drop_down_header
+})

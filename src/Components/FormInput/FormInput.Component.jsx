@@ -1,5 +1,4 @@
 import React from "react";
-import "./FormInput.Styles.scss";
 import TextField from '@mui/material/TextField';
 
 const FormInput = ({handleChange, ...otherProps }) => {

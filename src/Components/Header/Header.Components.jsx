@@ -1,12 +1,14 @@
 import React from "react";
 import { ReactComponent as Logo } from "../../Assests/logo/logo.svg";
 import { Link} from "react-router-dom";
-import { auth } from "../../Firebase/firebase.utils";
 import SearchBox from "../Search/SearchBox/Search.Components";
 import { AppBar, Box, Toolbar, Typography } from '@mui/material';
 import { makeStyles } from '@material-ui/styles';
 import Avatar from '@mui/material/Avatar';
-
+import { connect } from "react-redux";
+import {selectTriggerDropDownMenu} from "../../Redux/Option/option.selectors"
+import { triggerSelectDropDownHeader } from "../../Redux/Option/option.actions"
+import DropDownHeader from "../PopUp/dropdown-header/DropDownHeader.Component"
 const useStyles = makeStyles({
 	Container: {
 		position:'relative', 
@@ -44,13 +46,10 @@ const useStyles = makeStyles({
 		alignItems: 'center',
 		backgroundColor: '#E0E0E0',
 		borderRadius: '100px',
-		width:'10%'
 	}
   });
 
-export default function Header({currentUser}) {
-
-
+const Header = ({currentUser, selectTriggerDropDownMenu, dispatch}) => {
 	// let history = useHistory();
 	// function handleClick(id) {
 	// 	const urlEncodedID = encodeURI(id);
@@ -74,20 +73,19 @@ export default function Header({currentUser}) {
 						<SearchBox />
 					</Typography>
 					<Box sx={{ flexGrow: 1 }} />
-					<Typography sx={{ flexGrow: 1, display: 'flex', pl: 5 }} >
-					<Typography component="div" sx={{ flexGrow: 1}} className={classes.userPage}>
-							<Avatar sx={{mr:2}}>N</Avatar>
-							<Typography sx={{color:'black'}}>{ currentUser.displayName}</Typography>
+					<Typography component="div" className={classes.userPage} onClick={()=>{dispatch(triggerSelectDropDownHeader(!selectTriggerDropDownMenu))}}>
+								<Avatar src={currentUser.photoURL} />
+								<Typography sx={{color:'black', flexGrow:1, pr:2, pl:2}}>{currentUser.displayName}</Typography>
 					</Typography>
-					<Typography component="div" sx={{ flexGrow: 1 }} >
-							<Link onClick={() => auth.signOut()} to="/">
-									Log out
-							</Link>
-					</Typography>
-					</Typography>
+					{selectTriggerDropDownMenu ? (<DropDownHeader/>):('')}
+
 				</Toolbar>
 			</AppBar>
 			
 		</Box>
 	);
 };
+const mapStateToProps = (state) => ({
+	selectTriggerDropDownMenu:selectTriggerDropDownMenu(state)
+})
+export default connect(mapStateToProps)(Header);

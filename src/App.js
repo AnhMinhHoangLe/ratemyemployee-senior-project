@@ -10,74 +10,49 @@ import { connect } from "react-redux";
 import { selectCurrentUser } from "./Redux/User/user.selectors";
 import { setCurrentUser } from "./Redux/User/user.action";
 import { fetchEmployeeGroupStartAsync } from "./Redux/Individuals/Individuals.actions";
-import {Grid, Box} from '@mui/material';
-
+import {Box} from '@mui/material';
 import HomePage from "./Components/HomePage/HomePage";
 import ChatUI from "./Components/Chat/ChatUI.components";
 import Header from "./Components/Header/Header.Components";
 import GroupPage from "./Components/Employee/Individuals/EmployeePage.Components";
+import UserProfilePage from "./Components/UserProfile/UserProfilePage.Component" 
 // import SearchPage from "./Components/Search/SearchPage.Components";
 // import InfoSearch from "./Components/Search/InfoSearch/InfoSearch.Components";
 import EmployeePage from "./Components/Employee/Individual/IndividualPage.Components";
-const App = ({currentUser, setCurrentUser, fetchEmployeeGroupStartAsync }) => {
-  // unsubscribeFromAuth = null;
-  // componentDidMount() {
-  //   // const { setCurrentUser, collectionsArray } = this.props;
-  //   const { setCurrentUser } = this.props;
+class App extends Component {
+  unsubscribeFromAuth = null;
+  unsubscribeFromData = null; 
+  componentDidMount() {
+    const { setCurrentUser, fetchEmployeeGroupStartAsync} = this.props;
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
+      //  which allows you to subscribe to the users current authentication state, and receive an event whenever that state changes
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+        //.get realtime updates, You can listen to a document
+        userRef.onSnapshot((snapShot) => {
+          setCurrentUser({
+            id: snapShot.id, // get the id of account
+            ...snapShot.data(),
+          });
+          if (this.unsubscribeFromAuth) {
+            fetchEmployeeGroupStartAsync(snapShot.id)
+          }
 
-  //   this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
-  //     if (userAuth) {
-  //       const userRef = await createUserProfileDocument(userAuth);
+        });
+      }
+      setCurrentUser(userAuth);
+    });
+  }
 
-  //       userRef.onSnapshot((snapShot) => {
-  //         setCurrentUser({
-  //           id: snapShot.id,
-  //           ...snapShot.data(),
-  //         });
-  //       });
-  //     }
+  componentWillUnmount() {
+    this.unsubscribeFromAuth();
+  }
+  // currentUser, setCurrentUser, fetchEmployeeGroupStartAsync 
 
-  //     setCurrentUser(userAuth);
-
-  //     // addCollectionsAndDocument('collections', collectionsArray.map(({ title, items }) => ({ title, items })))
-  //   });
-  // }
-
-  // componentWillUnmount() {
-  //   this.unsubscribeFromAuth();
-  // }
 
   
-  // render() {
-  //   const  {currentUser, setCurrentUser, fetchEmployeeGroupStartAsync } = this.props
-
-    // clone and get the data from current user
-
-  //Solution for unmount https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component
-  useEffect(() => {
-      let isMounted = true;               // note mutable flag
-      auth.onAuthStateChanged(async (userAuth) => {
-        //  which allows you to subscribe to the users current authentication state, and receive an event whenever that state changes
-      
-        if (userAuth) {
-          if (isMounted) {
-            const userRef = await createUserProfileDocument(userAuth);
-            //.get realtime updates, You can listen to a document
-            userRef.onSnapshot((snapShot) => {
-              setCurrentUser({
-                id: snapShot.id, // get the id of account
-                ...snapShot.data(),
-              });
-              fetchEmployeeGroupStartAsync(snapShot.id)
-
-            });
-            await setCurrentUser(userAuth);
-
-          }
-        }      });
-      return () => { isMounted = false };
-    }, [])
-
+  render() {
+    const { currentUser } = this.props;
     return (
       <Box >
         <Switch>
@@ -89,8 +64,8 @@ const App = ({currentUser, setCurrentUser, fetchEmployeeGroupStartAsync }) => {
               <Route path="/grps" component={GroupPage} />
               <Route path="/emps" component={EmployeePage} />
               <Route exact path="/msg" component={ChatUI} />
-              {/* if you want to make nested route, dont add exact to the route 
-							<Route exact path="/plan" component={AddPage} />*/}
+              <Route exact path="/user-profile" component={UserProfilePage} />
+
             </div>
           ) : (
             <div className="signin-signup-page">
@@ -109,6 +84,8 @@ const App = ({currentUser, setCurrentUser, fetchEmployeeGroupStartAsync }) => {
       </Box>
     );
   }
+}
+
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,

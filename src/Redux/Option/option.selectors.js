@@ -24,4 +24,8 @@ export const selectTriggerSearch = createSelector(
 export const selectTriggerSearchAddEmployee = createSelector(
   [selectOption],
   (selectOption) => selectOption.trigger_search_add_employee
+) 
+
+export const selectTriggerDropDownMenu = createSelector(
+  [selectOption], (selectOption) => selectOption.trigger_select_dropdown_header
 )

@@ -4,7 +4,8 @@ const INITIAL_STATE = {
   triggerRateCard: false, // this option is to open and close rate card
   triggerSave: 0,
   avg_rate_updated: 0,
-  trigger_search_comp: false, 
+  trigger_search_comp: false,
+  trigger_select_dropdown_header: false, 
 };
 
 const optionReducer = (state = INITIAL_STATE, action) => {
@@ -41,6 +42,11 @@ const optionReducer = (state = INITIAL_STATE, action) => {
         ...state,
         trigger_search_add_employee: action.payload
       }
+    case EditOption.TRIGGER_SELECT_DROPDOWN_HEADER:
+      return {
+      ...state,
+      trigger_select_dropdown_header: action.payload,
+    }
     default:
       return state;
   }

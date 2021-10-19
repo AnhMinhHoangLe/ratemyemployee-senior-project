@@ -27,7 +27,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   const snapShot = await userRef.get(); // get the snapshot of the user from console
   if (!snapShot.exists) {
     // create user in database if it does not exist
-    const { displayName, email } = userAuth;
+    const { displayName, email, photoURL} = userAuth;
     const createAt = new Date();
     try {
 
@@ -36,6 +36,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         displayName,
         email,
         createAt,
+        photoURL, 
         ...additionalData,
       });
       await userRefCreatedEmlployeeCollectioninUserID.doc(userAuth.uid).set({
@@ -51,7 +52,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         groupActive: true,
         currentGroupID: "", 
         groupHistory:"", 
-        avatar:"",
+        avatar: userAuth.photoURL,
         id: userAuth.uid, 
         createAt,
         admin: true

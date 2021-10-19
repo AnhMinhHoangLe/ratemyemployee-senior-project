@@ -27,8 +27,12 @@ const EmployeeCard = ({ history, match, avatar, displayName, position, admin, in
           </Box>
           <Typography variant="h5" fontSize="20px">{displayName}</Typography>
           <Typography fontSize="16px">{position}</Typography>
+      {admin ? ('') : (
+        <Typography>
+          <DeleteOutlineIcon sx={{ color: "#869892", fontSize: "20px", position: 'relative', bottom: "35px", left: "257px" }} onClick={() => deleteIndividualEmployee(currentUser, currentGroupID, idx)} />
           <Typography sx={{ color: "#2AC28C" }} onClick={() => { history.push(`${match.url}/${idx}`); }}>More detail ></Typography>
-          {admin ? ('') : <DeleteOutlineIcon sx={{ color: "#869892", fontSize: "20px", position: 'relative', bottom: "35px", left: "257px" }} onClick={() => deleteIndividualEmployee(currentUser, currentGroupID, idx)} />}
+        </Typography>
+        )}
       </Card>
   );
 };
