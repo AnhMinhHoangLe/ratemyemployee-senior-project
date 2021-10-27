@@ -1,13 +1,13 @@
-import React, { useRef, useEffect} from "react";
+import React, { useRef,useEffect} from "react";
 import axios from 'axios';
-import {ChatEngine, ChatEngineWrapper, ChatSocket, ChatFeed, ChatList} from 'react-chat-engine';
+import { ChatEngineWrapper, ChatSocket,  Socket, ChatList} from 'react-chat-engine';
 import "firebase/firestore";
 import "firebase/auth";
 import firebase from "firebase/app";
 
 
 
-export default function Chats () 
+export default function ChatLists () 
 {
     let user = firebase.auth().currentUser;
     const didMountRef = useRef(false);
@@ -35,15 +35,18 @@ export default function Chats ()
     }})
 
     return(
-        <div style={{ fontFamily: 'Avenir' }} >
-             <ChatEngine 
-        height='calc(100vh - 66px)'
-        projectID='6c34a123-43fc-41f8-bd5c-fd618ab8b31a'
-        userName={user.email}
-        userSecret={user.uid}
+            <ChatEngineWrapper>
+             <Socket
+                 height='calc(100vh - 66px)'
+                 projectID='6c34a123-43fc-41f8-bd5c-fd618ab8b31a'
+                 userName={user.email}
+                 userSecret={user.uid}
         
       />
-        </div>
+      <ChatList
+
+      />
+      </ChatEngineWrapper>
     )
 
 }
