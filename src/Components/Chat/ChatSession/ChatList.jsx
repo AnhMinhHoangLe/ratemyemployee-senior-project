@@ -6,9 +6,16 @@ import "firebase/auth";
 import firebase from "firebase/app";
 
 
-
 export default function ChatLists () 
-{
+{   const divStyle = {
+    
+position: "absolute",
+width: "407px",
+height: "444px",
+left: "1500px",
+top: "-10px",
+    
+}
     let user = firebase.auth().currentUser;
     const didMountRef = useRef(false);
     useEffect(()=>
@@ -35,7 +42,7 @@ export default function ChatLists ()
     }})
 
     return(
-            <ChatEngineWrapper>
+            <div style = {divStyle}> <ChatEngineWrapper>
              <Socket
                  height='calc(100vh - 66px)'
                  projectID='6c34a123-43fc-41f8-bd5c-fd618ab8b31a'
@@ -43,10 +50,11 @@ export default function ChatLists ()
                  userSecret={user.uid}
         
       />
-      <ChatList
+      <ChatList style = {divStyle}
 
       />
       </ChatEngineWrapper>
+      </div>
     )
 
 }
