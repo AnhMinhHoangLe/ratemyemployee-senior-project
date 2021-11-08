@@ -9,6 +9,8 @@ import {
 	storage,
 	createEmployee,
 	UploadImageIntoStorage,
+	createEmployeeInGroup
+	
 } from "../../../../Firebase/firebase.utils";
 import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
 import { selectEmployeeForPreview } from "../../../../Redux/Employee/employee.selectors";
@@ -26,8 +28,7 @@ class AddNewIndividualEmployee extends React.Component {
 			groupActive: true,
 			currentGroupID: null
 		};
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this)
+
 	}
 	handleChange = (event) => {
 		const { value, name } = event.target;
@@ -54,7 +55,7 @@ class AddNewIndividualEmployee extends React.Component {
 				position,
 				currentGroupID
 			};
-			await createEmployee(currentUser, "employee", employee);
+			await createEmployeeInGroup(currentUser, "employee", employee);
 			this.setState({
 				displayName: "",
 				email: "",
@@ -87,7 +88,6 @@ class AddNewIndividualEmployee extends React.Component {
 		} = this.state;
 		const {employee
 		} = this.props
-		console.log(employee)
 		return (
 			<Card sx={{display: 'flex', flexDirection:"column", textAlign:"center",alignItems: 'center', justifyContent: 'center',  p:3, gap:2, borderRadius:"10px" }}>
 								<form
@@ -127,7 +127,12 @@ class AddNewIndividualEmployee extends React.Component {
 											variant="outlined"
 											size="small"
 										/>
-										<FormControl  sx={{ m: 1, minWidth: "100%"}}>
+								
+									{
+												employee.length > 0 ?
+									(
+									<>
+									<FormControl  sx={{ m: 1, minWidth: "100%"}}>
 											<InputLabel id="demo-simple-select-label">Group Selection</InputLabel>
 											<Select
 												labelId="demo-simple-select-label"
@@ -136,21 +141,19 @@ class AddNewIndividualEmployee extends React.Component {
 												label="Group Selection"
 												onChange={this.handleSelect}
 											>
-											{/* <select id="demo-simple-select-label" onChange={this.handleSelect} value={currentGroupID}>
-											<option>Select option</option> */}
 												{
-													employee.length > 0 ? 
-													(
+													
 														employee.map(({ idGroup, id }) => (
 																		<MenuItem  key={id} value={idGroup}>Group {id}</MenuItem>
 														))
-													): (<MenuItem></MenuItem>)
+													
 													
 												}
 											</Select>
 										</FormControl>
-										{/* </select> */}
 										<CustomButton type="submit" sx={{width:"60%", height:"20%", fontSize:"10px"}}>Add Employee</CustomButton>
+										</>
+													): (<Typography>Please Add Group Before Add Employee</Typography>)}
 									</Box>
 
 										

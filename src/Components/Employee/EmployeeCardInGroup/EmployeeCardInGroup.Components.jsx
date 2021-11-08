@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Card, Box, Typography, Avatar } from '@mui/material';
 import {
-  selectRateInfo,
   selectInfoRateInGroup,
 } from "../../../Redux/Rate/rate.selectors";
 import StarIcon from '@mui/icons-material/Star';
@@ -13,8 +12,8 @@ import { deleteEmployeeInGroup } from "../../../Firebase/firebase.utils"
 import { selectCurrentUser } from "../../../Redux/User/user.selectors";
 import {saveIdEmployeePickToRateCard} from "../../../Redux/Individuals/Individuals.actions"
 const EmployeeCardInGroup = ({ dispatch, avatar, displayName, position, idGroup, idEmployee, selectInfoRateInGroup, match, history,currentUser, saveIdEmployeePickToRateCard, triggerOpenAndCloseRateCard}) => {
-    const delEmpInGroup = (idEmployee, idGroup) => {
-        deleteEmployeeInGroup(currentUser, idEmployee, idGroup)
+    const delEmpInGroup = (event) => {
+        deleteEmployeeInGroup(currentUser, idGroup, idEmployee)
       }
     const onClickRateCardInfo = (e) => {
         saveIdEmployeePickToRateCard(idEmployee)
@@ -37,7 +36,7 @@ const EmployeeCardInGroup = ({ dispatch, avatar, displayName, position, idGroup,
       <Typography variant="h5" fontSize="20px">{displayName}</Typography>
       <Typography fontSize="16px">{position}</Typography>
           <Typography sx={{ color: "#2AC28C" }} onClick={() => { history.push(`${match.url}/${idEmployee}`); }}>More detail ></Typography>
-          <DeleteOutlineIcon sx={{ color: "#869892", fontSize: "20px", position:'relative', bottom:"35px", left:"257px"}} onClick={() => delEmpInGroup(idGroup,idEmployee)} />
+          <DeleteOutlineIcon sx={{ color: "#869892", fontSize: "20px", position:'relative', bottom:"35px", left:"257px"}} onClick={(event) => delEmpInGroup(event)} />
     </Card>
   );
 };

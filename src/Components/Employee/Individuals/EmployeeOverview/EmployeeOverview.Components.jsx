@@ -8,7 +8,9 @@ import { selectEmployeeInfo } from "../../../../Redux/Individuals/individuals.se
 import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
 import {Grid, Typography} from '@mui/material';
 import AddGroup from "../../../Add/AddGroup/AddGroup.Components";
+import { ReactComponent as NoGroup } from "../../../../Assests/NoContent/NoGroup/noGroup.svg";
 const EmployeeOverview = ({ employee, employeeInfo, currentUser }) => {
+  console.log(employee.length)
   return (
     <Grid
       container
@@ -20,10 +22,11 @@ const EmployeeOverview = ({ employee, employeeInfo, currentUser }) => {
       sx={{p:3}}
     >
       <Grid item xs={2} container direction="column">
-        <Typography variant='h5' sx={{ml:"10%", color:"#313836"}}>Groups</Typography>
+        <Typography variant='h5' sx={{ ml: "10%", color: "#313836" }}>Groups</Typography>
         <Grid item>
-
-          {employee.map(({ id, employee_list, idGroup, ...otherProps }) => (
+          {
+            employee.length > 0 ? (
+              employee.map(({ id, employee_list, idGroup, ...otherProps }) => (
                         <Grid item container direction="column" sx={{mt: 3, ml:'10%'}}  >
                             <EmployeePreview
                                 key={id}
@@ -35,9 +38,16 @@ const EmployeeOverview = ({ employee, employeeInfo, currentUser }) => {
                                 {...otherProps}
                               />
                         </Grid>
-                        ))}  
+              ))
+            ) : (
+              <Grid item container justifyContent="center" sx={{mt: 5}}>
+                <NoGroup/> 
+              </Grid>
+             )
+            
+          }
         </Grid>
-      </Grid >
+      </Grid>
       <Grid item xs={1} sx={{position:'relative', top:'3.5em'}}>
         <AddGroup />
       </Grid>

@@ -5,7 +5,8 @@ const INITIAL_STATE = {
   triggerSave: 0,
   avg_rate_updated: 0,
   trigger_search_comp: false,
-  trigger_select_dropdown_header: false, 
+  trigger_select_dropdown_header: false,
+  trigger_open_edit_user_profile:false
 };
 
 const optionReducer = (state = INITIAL_STATE, action) => {
@@ -46,6 +47,12 @@ const optionReducer = (state = INITIAL_STATE, action) => {
       return {
       ...state,
       trigger_select_dropdown_header: action.payload,
+      }
+    case EditOption.TRIGGER_OPEN_EDIT_USER_PROFILE: {
+      return {
+        ...state,
+        trigger_open_edit_user_profile:action.payload
+      }
     }
     default:
       return state;

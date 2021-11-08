@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Card, Box, Typography, Avatar } from '@mui/material';
+import { Card, Box, Typography, Avatar, Grid } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { deleteIndividualEmployee } from "../../../Firebase/firebase.utils"
@@ -28,10 +28,10 @@ const EmployeeCard = ({ history, match, avatar, displayName, position, admin, in
           <Typography variant="h5" fontSize="20px">{displayName}</Typography>
           <Typography fontSize="16px">{position}</Typography>
       {admin ? ('') : (
-        <Typography>
-          <DeleteOutlineIcon sx={{ color: "#869892", fontSize: "20px", position: 'relative', bottom: "35px", left: "257px" }} onClick={() => deleteIndividualEmployee(currentUser, currentGroupID, idx)} />
-          <Typography sx={{ color: "#2AC28C" }} onClick={() => { history.push(`${match.url}/${idx}`); }}>More detail ></Typography>
-        </Typography>
+        <Grid container>
+          <Grid item xs={9} sx={{display:"flex", justifyContent:"flex-end"}}><Typography sx={{ color: "#2AC28C" }} onClick={() => { history.push(`${match.url}/${idx}`); }}>More detail ></Typography></Grid>
+          <Grid item xs={3} sx={{display:"flex", justifyContent:"flex-end"}}><DeleteOutlineIcon sx={{ color: "#869892", fontSize: "20px", }} onClick={() => deleteIndividualEmployee(currentUser, currentGroupID, idx)} /></Grid>
+        </Grid>
         )}
       </Card>
   );

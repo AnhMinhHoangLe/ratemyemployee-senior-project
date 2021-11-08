@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 * {
   font-family: "Open Sans Condensed";
   /* background-color: #f1f8f6; */
@@ -12,5 +13,6 @@ a {
   background-position: center center;
   height: 100vh;
   overflow: hidden;
-  
 }
+
+

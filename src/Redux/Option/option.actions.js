@@ -27,3 +27,7 @@ export const triggerSelectDropDownHeader = (trigger_select_drop_down_header) => 
   type: EditOption.TRIGGER_SELECT_DROPDOWN_HEADER,
   payload: trigger_select_drop_down_header
 })
+export const triggerOpenEditUserProfile = (trigger_open_edit_user_profile) => ({
+  type: EditOption.TRIGGER_OPEN_EDIT_USER_PROFILE,
+  payload: trigger_open_edit_user_profile
+})

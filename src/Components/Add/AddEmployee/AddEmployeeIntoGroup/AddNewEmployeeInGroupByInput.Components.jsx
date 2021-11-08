@@ -22,9 +22,6 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			// address: "",
-			// gender: "",	
-			// phone_number: "",
 			displayName: "",
 			email: "",
 			avatar: "",
@@ -32,8 +29,7 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 			position: "",
 			groupActive: true,
 		};
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this)
+
 	}
 	handleChange = (event) => {
 		const { value, name } = event.target;
@@ -41,35 +37,11 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 			[name]: value,
 		});
 	};
-	// handleImageUpload = (event) => {
-	// 	if (event.target.files[0]) {
-	// 		this.setState(
-	// 			{
-	// 				uploadImage: event.target.files[0],
-	// 			},
-	// 			() => {
-	// 				UploadImageIntoStorage(this.state.uploadImage);
-	// 				storage
-	// 					.ref("images")
-	// 					.child(this.state.uploadImage.name)
-	// 					.getDownloadURL()
-	// 					.then((downloadURL) => {
-	// 						this.setState({
-	// 							avatar: downloadURL,
-	// 						});
-	// 					});
-	// 			}
-	// 		);
-	// 	}
-	// };
+
 	handleSubmit = async (event) => {
 		event.preventDefault();
 		const { currentUser } = this.props;
 		const {
-			// avatar,
-			// address,
-			// gender,
-			// phone_numb
 			displayName,
 			email,
 			groupActive, 
@@ -80,40 +52,23 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 			const employee = await {
 				displayName,
 				email,
-				// avatar,
-				// address,
-				// gender,
 				groupActive, 
 				position,
 				currentGroupID
 			};
 			await createEmployeeInGroup(currentUser, "employee", employee);
-			// await fetchEmployeeStartAsync(currentUser)
 			this.setState({
 				displayName: "",
 				email: "",
-				// avatar: "",
-				// uploadImage: null,
-				// address: "",
-				// gender: "",
-				// image: null,
-				// phone_number: "",
 				position: "",
 			});
-			// document.getElementById("uploadFile").value = "";
 		} catch (error) {
 			console.error(error);
 		}
 
-		// document.getElementById("uploadFile").value = "";
 		this.setState({
 			displayName: "",
 			email: "",
-			// avatar: "",
-			// uploadImage: null,
-			// address: "",
-			// gender: "",
-			// phone_number: "",
 			position: "",
 		});
 	};
@@ -130,16 +85,11 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 		else {
 			dispatch(triggerSearchAddEmployeeComp(false))
 		}
-        
-        
 	};
 	render() {
 		const {
 			displayName,
 			email,
-			// address,
-			// gender,
-			// phone_number,
 			position,
 			searchField
 		} = this.state;

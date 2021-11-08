@@ -428,24 +428,28 @@ export const UploadImageIntoStorage = async (image) => {
 /*
 * Delete Employee In Group
 */
-export const deleteEmployeeInGroup = (userAuth, groupID, employeeID) => {
+export const deleteEmployeeInGroup = async (userAuth, groupID, employeeID) => {
+  const batch = firestore.batch()
+
   const employeeRefInGroup = firestore.doc(`users/${userAuth.id}`).collection('group');
   const employeeInfo = firestore.collection('employee')
-  try {
+  if (groupID) {
     const setToDel = { id: employeeID }
     const idEmployeeInGroupRef = employeeRefInGroup.doc(groupID);
-    idEmployeeInGroupRef.update({
+    batch.update(idEmployeeInGroupRef, {
       employee_list: firebase.firestore.FieldValue.arrayRemove(setToDel)
-    });
-
+    })
+    
     const employeeUpdateActiveGroupStt = employeeInfo.doc(employeeID)
-    employeeUpdateActiveGroupStt.update({
+    batch.update(employeeUpdateActiveGroupStt, {
       groupActive: false,
       currentGroupID: ""
     })
-  } catch {
-    console.error();
   }
+  await batch.commit();
+
+
+ 
 }
 
 export const deleteGroup = async (userAuth, groupID, employeeList) => {
@@ -497,6 +501,13 @@ export const deleteIndividualEmployee =  async (userAuth, groupID, employeeID) =
 
 }
 
+export const updateEmployeeInfo = async (dataUpdate, employeeId) => {
+  const employeeInfo = firestore.collection('employee').doc(employeeId)
+  const { avatar, displayName, email, gender, position, phone_number } = dataUpdate;
+  await employeeInfo.update({
+    avatar, displayName, email, gender, position, phone_number
+  })
+}
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////// FUNCTION FOR RATING /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////

@@ -19,8 +19,10 @@ import ErrorComponent from "../../../ErrorComponent/ErrorComponent";
 import AddEmployeeListTemp from "../../../Add/AddEmployee/AddEmployeeListTemp/AddEmployeeListTemp.Components"
 import { selectEmployeeTempList } from "../../../../Redux/SearchToAddEmployee/search.selectors"
 import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
-import { Box, Typography, ToggleButtonGroup, ToggleButton, Card, Grid, Paper} from "@mui/material"
+import { Box, Typography, ToggleButtonGroup, ToggleButton, Grid, Backdrop} from "@mui/material"
 import {selectEmployeeIDForRateCard} from "../../../../Redux/Individuals/individuals.selectors"
+import { ReactComponent as NoEmployee } from "../../../../Assests/NoContent/NoEmployee/noEmployee.svg";
+
 const EmployeeInGroup = ({
   employee,
   employeeInfo,
@@ -41,12 +43,11 @@ const EmployeeInGroup = ({
   };
   return (
     <Box
-      // className={`flex flex-col p-10 EmployeeInGroup-container ${
+      // className={`${
       //   triggerButtonOpenAndCloseRateCard
       //     ? "overlay-EmployeeInGroup-container"
       //     : ""
       // }`}
-
       sx={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
@@ -61,8 +62,8 @@ const EmployeeInGroup = ({
           minHeight: "100vh",
         }
       }}
-
     >
+     
         <Box sx={{ gridArea: 'directory'}}>
             <Typography><Link to="/grps"> Groups </Link> / Group {id}</Typography>
         </Box>
@@ -81,12 +82,20 @@ const EmployeeInGroup = ({
         <Grid container sx={{gridArea: 'container-list-addEmp'}} spacing={3}  columns={{ xs: 3, sm: 3, md: 3 }} >
           <Grid item xs={2} sm={2} md={2}>
             {employee_list.length === 0 ? (
-                <Grid item>
-                  <Typography><ErrorComponent statusError={statusError} /></Typography>
-                  <br/>
-                  <Box>
+              <Grid item>
+                {
+                  employeeListTemp.length === 0 ? (
+                    <Box sx={{display:"flex", justifyContent: "center", flexDirection:"column", alignItems:"center"}}>
+                      <NoEmployee/>
+                      <Typography><ErrorComponent statusError={statusError} /></Typography>
+                    </Box>
+                  ) : (
+                    <Box>
                       <AddEmployeeListTemp employeeListTemp={employeeListTemp} idGroup={idGroup}/>
-                  </Box>
+                    </Box>
+                  )
+                }
+                  
                 </Grid>
               ) : (
                 <Grid item>
@@ -95,14 +104,14 @@ const EmployeeInGroup = ({
                   </Box>
                   <Box sx={{display:"flex", justifyContent:"space-evenly",  flexWrap: 'wrap', gap:2, mr:2}}>
                     {
-                        employee_list.map(({ id }, index) => (
+                        employee_list.map(({ id }) => (
                                           <EmployeeCardInGroup
                                             avatar={employeeInfo[id].avatar}
                                             displayName={employeeInfo[id].displayName}
                                             position={employeeInfo[id].position}
                                             idGroup={idGroup}
                                             idEmployee={id}
-                                            key={index}
+                                            key={id}
                                           />
                          
                             ))
@@ -112,7 +121,7 @@ const EmployeeInGroup = ({
                     {!triggerButtonOpenAndCloseRateCard ? (""):(
                       <Box
                         sx={{  position:"sticky", width:"40%", bottom:"200px", left:"500px", zIndex:2}}
-                              // className={`absolute rate-card-component ${
+                              // className={`${
                               //     triggerButtonOpenAndCloseRateCard
                               //       ? "rate-card-activate-component"
                               //       : ""

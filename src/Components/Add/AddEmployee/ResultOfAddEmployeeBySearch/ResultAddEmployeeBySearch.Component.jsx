@@ -8,8 +8,8 @@ import { connect } from "react-redux";
 import { useHistory, withRouter } from "react-router-dom";
 import ErrorComponent from "../../../ErrorComponent/ErrorComponent"
 import CustomButton from "../../../CustomButton/CustomButton.component";
-import { addEmployeeToList, removeEmployeeToList, clearAllEmployeeInList } from "../../../../Redux/SearchToAddEmployee/search.actions"
-import { Card, Box, Typography, Avatar, CardActions, Paper, Grid } from '@mui/material';
+import { addEmployeeToList } from "../../../../Redux/SearchToAddEmployee/search.actions"
+import { Box, Typography, Avatar, Grid } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 const ResultAddEmployeeBySearch = ({ search, individuals, addEmployee }) => {
     const [errorStt, setErrorStt] = useState('There is no result')

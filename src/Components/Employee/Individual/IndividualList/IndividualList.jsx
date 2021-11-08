@@ -7,7 +7,7 @@ import AddNewIndividualEmployee from "../../../Add/AddEmployee/AddIndividualEmpl
 import EmployeeCard from "../../EmployeeCard/EmployeeCard.Component";
 import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
 import AddNewEmployeeInGroupByInput from "../../../Add/AddEmployee/AddEmployeeIntoGroup/AddNewEmployeeInGroupByInput.Components"
-import { Box, Typography,Card, Grid, Paper} from "@mui/material"
+import { Box, Typography, Card, Grid, Paper} from "@mui/material"
 
 const IndividualList = ({individuals, match, history, currentUser}) => {
   // const deleteEmployee = (currentUser, currentGroupID, id) =>{
@@ -31,9 +31,9 @@ const IndividualList = ({individuals, match, history, currentUser}) => {
             </Box>
           </Box>
           
-          <Box>
+          {/* <Box>
             <AddNewIndividualEmployee />
-          </Box>
+          </Box> */}
 
       </Box>
     );

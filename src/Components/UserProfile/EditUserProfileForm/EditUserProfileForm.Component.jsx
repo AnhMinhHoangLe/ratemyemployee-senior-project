@@ -1,16 +1,22 @@
 import React from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
+import { styled } from '@mui/material/styles';
+
 import FormInput from "../../FormInput/FormInput.Component";
 import CustomButton from "../../CustomButton/CustomButton.component";
 import {
 	storage,
-	createEmployeeInGroup,
+	updateEmployeeInfo,
 	UploadImageIntoStorage,
 } from "../../../Firebase/firebase.utils";
-import { selectTriggerSearchAddEmployee } from "../../../Redux/Option/option.selectors"
-import { Card, Box, Typography, Avatar, FormGroup  } from '@mui/material';
+import { Card, Box, Typography, Avatar, FormGroup, FormControlLabel, Radio, RadioGroup, FormLabel, FormControl,IconButton, FilledInput  } from '@mui/material';
+import { selectToShowEmployeeInfo } from "../../../Redux/Individuals/individuals.selectors";
+import { triggerOpenEditUserProfile } from "../../../Redux/Option/option.actions";
 
+const Input = styled('input')({
+	display: 'none',
+  });
 class EditUserProfileForm extends React.Component {
 	constructor(props) {
 		super(props);
@@ -20,11 +26,23 @@ class EditUserProfileForm extends React.Component {
 			phone_number: "",
 			displayName: "",
 			email: "",
-			avatar: "",
+			avatar: null, 
 			position: "",
+			uploadImage: null,
 		};
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this)
+	}
+	componentDidMount() {
+		const { individuals } = this.props
+		console.log(individuals)
+		this.setState({
+			address: individuals.address,
+			gender: individuals.gender, 	
+			phone_number: individuals.phone_number,
+			displayName: individuals.displayName,
+			email: individuals.email,
+			avatar: individuals.avatar,
+			position: individuals.position
+		})
 	}
 	handleChange = (event) => {
 		const { value, name } = event.target;
@@ -32,12 +50,14 @@ class EditUserProfileForm extends React.Component {
 			[name]: value,
 		});
 	};
+	cancelEditingProfile = (event) => {
+		this.props.triggerOpenEditUserProfile(false)
+	}
 	handleImageUpload = (event) => {
 		if (event.target.files[0]) {
-			this.setState(
-				{
-					uploadImage: event.target.files[0],
-				},
+			this.setState({
+				uploadImage: event.target.files[0]
+			},
 				() => {
 					UploadImageIntoStorage(this.state.uploadImage);
 					storage
@@ -55,7 +75,7 @@ class EditUserProfileForm extends React.Component {
 	};
 	handleSubmit = async (event) => {
 		event.preventDefault();
-		const { currentUser } = this.props;
+		const { individuals } = this.props
 		const {
 			avatar,
 			address,
@@ -63,8 +83,9 @@ class EditUserProfileForm extends React.Component {
 			phone_number, 
 			displayName,
 			email,
-			position,
+			position
 		} = this.state;
+
 		try {
 			const employee = await {
 				displayName,
@@ -75,39 +96,17 @@ class EditUserProfileForm extends React.Component {
                 phone_number, 
 				position,
 			};
-			// await createEmployeeInGroup(currentUser, "employee", employee);
-			// await fetchEmployeeStartAsync(currentUser)
-			this.setState({
-				displayName: "",
-				email: "",
-				avatar: "",
-				uploadImage: null,
-				address: "",
-				gender: "",
-				image: null,
-				phone_number: "",
-				position: "",
-			});
-			document.getElementById("uploadFile").value = "";
+			await updateEmployeeInfo(employee,individuals.id);
 		} catch (error) {
 			console.error(error);
 		}
+		this.props.triggerOpenEditUserProfile(false)
 
-		document.getElementById("uploadFile").value = "";
-		this.setState({
-			displayName: "",
-			email: "",
-			avatar: "",
-			uploadImage: null,
-			address: "",
-			gender: "",
-			phone_number: "",
-			position: "",
-		});
 	};
-	
+
 	render() {
 		const {
+			avatar, 
 			displayName,
 			email,
 			address,
@@ -115,87 +114,140 @@ class EditUserProfileForm extends React.Component {
 			phone_number,
 			position,
 		} = this.state;
-		const {  } = this.props
-
+		const { individuals } = this.props
 		return (
 			<Card sx={{display: 'flex', flexDirection:"column", textAlign:"center",alignItems: 'center', justifyContent: 'center',  p:3, gap:2, borderRadius:"10px" }}>
 								<form onSubmit={this.handleSubmit}>
                     <Box sx={{ display: 'flex', flexDirection: "column", textAlign: "center", alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-                                        <FormInput
-                                                                type="file"
-                                                                name="uploadImage"
-                                                                accept="image/png, image/jpeg"
-                                                                required
-                                                                handleChange={this.handleImageUpload}
-                                                                id="uploadFile"
-                                            />
-                                        <Typography varian="h4">DIsplay Name</Typography>
-                                        <Typography varian="h6">Position</Typography>
-                                        <Typography varian="h6">Id</Typography>
+											<label htmlFor="uploadFile">
+											<Input 
+												accept="image/*"
+												type="file"
+												name="uploadImage"
+												onChange={(event) => this.handleImageUpload(event)}
+												id="uploadFile"
+											/>
+											<IconButton aria-label="upload picture" component="span" >
+												<Box sx={{border: 3, width: "60px", height: "60px", borderRadius: "50%", borderColor: "#2AC28C"}}>
+
+													<Avatar 
+													src={avatar} 
+													style={{
+														width: "60px",
+														height: "60px",
+													}} 
+													/>
+												</Box>	
+												</IconButton>
+											</label>
+										
+									{
+										individuals.admin === true ?
+								(
+										<>
+											<FormInput
+											name="displayName"
+											type="text"
+											onChange={this.handleChange}
+											id="outlined-basic"
+											label="Display Name"
+											variant="outlined"
+											size="small"
+											value={displayName}
+											disabled={true}
+
+                                        	/>
+											<FormInput
+												name="position"
+												type="text"
+												onChange={this.handleChange}
+												id="outlined-basic"
+												label="Position"
+												variant="outlined"
+												size="small"
+												value={position}
+												disabled={true}
+											/>
+										</>
+										) : (
+											<>
+												<FormInput
+												name="displayName"
+												type="text"
+												onChange={this.handleChange}
+												id="outlined-basic"
+												label="Display Name"
+												variant="outlined"
+												size="small"
+												value={displayName}
+												disabled={true}
+												/>
+												<FormInput
+													name="position"
+													type="text"
+													onChange={this.handleChange}
+													id="outlined-basic"
+													label="Position"
+													variant="outlined"
+													size="small"
+													value={position}
+													disabled={true}
+												/>
+											</>
+										)}
+										<FormInput
+												name="id"
+												type="text"
+												id="outlined-basic"
+												label="ID"
+												variant="outlined"
+												size="small"
+												value={individuals.id}
+												disabled={true}
+											/>
 										<FormInput
 											name="email"
 											type="email"
-											required
-											handleChange={this.handleChange}
-											// value={email}
+											onChange={this.handleChange}
 											id="outlined-basic"
 											label="Email"
 											variant="outlined"
 											size="small"
+											value={email}
                                         />
                                         <FormInput
 											type="tel"
 											name="phone_number"
 											placeholder="888 888 8888"
 											pattern="[0-9]{3} [0-9]{3} [0-9]{4}"
-											required
-											handleChange={this.handleChange}
-											// value={phone_number}
+											onChange={this.handleChange}
                                             id="outlined-basic"
 											label="Phone Number"
 											variant="outlined"
 											size="small"
+											value={phone_number}
+
 										/>
-                                        <Box sx={{display: 'flex'}}>
-											<FormInput
-												type="radio"
-												name="gender"
-												value="male"
-												label="male"
-												required
-												handleChange={this.handleChange}
-												className="input-add-employee "
-											/>
-											<FormInput
-												type="radio"
-												name="gender"
-												value="female"
-												label="female"
-												required
-												handleChange={this.handleChange}
-											/>
-											<FormInput
-												type="radio"
-												name="gender"
-												value="binary"
-												label="binary"
-												required
-												handleChange={this.handleChange}
-											/>
-										</Box>
+										<FormControl component="fieldset">
+											<FormLabel component="legend">Gender</FormLabel>
+											<RadioGroup row aria-label="gender" name="gender"  onChange={this.handleChange} value={gender} >
+												<FormControlLabel value="female" control={<Radio />} label="Female" />
+												<FormControlLabel value="male" control={<Radio />} label="Male" />
+												<FormControlLabel value="other" control={<Radio />} label="Other" />
+											</RadioGroup>
+										</FormControl>
                                         <FormInput
 											name="address"
-											handleChange={this.handleChange}
-                                            required
+											onChange={this.handleChange}
                                             id="outlined-basic"
 											label="Address"
 											variant="outlined"
 											size="small"
-											// value={address}
+											value={address}
 										/>
                                         <Box sx={{ display: "flex" }}>
                                             <CustomButton type="submit" sx={{width:"60%", height:"20%", fontSize:"10px"}}>Save</CustomButton>
-                                            <CustomButton  sx={{width:"60%", height:"20%", fontSize:"10px"}}>Cancel</CustomButton>
+                                            <CustomButton  sx={{width:"60%", height:"20%", fontSize:"10px"}} onClick={this.cancelEditingProfile}>Cancel</CustomButton>
                                         </Box>
 										
 										</Box>
@@ -205,6 +257,15 @@ class EditUserProfileForm extends React.Component {
 		);
 	}
 }
-const mapStateToProps = createStructuredSelector({
+const mapStateToProps = (state, ownProps) => ({
+	individuals: selectToShowEmployeeInfo(ownProps.idUser)(
+		state
+	  ),
 });
-export default connect(mapStateToProps)(EditUserProfileForm);
+const mapDispatchToProps = (dispatch) => ({
+	triggerOpenEditUserProfile:(trigger_open_edit_user_profile) => dispatch(triggerOpenEditUserProfile(trigger_open_edit_user_profile))
+  })
+export default connect( mapStateToProps, mapDispatchToProps)(EditUserProfileForm);
+
+
+// https://stackoverflow.com/questions/54914774/how-can-i-make-an-avatar-chooser-with-material-ui

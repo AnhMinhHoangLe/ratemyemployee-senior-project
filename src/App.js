@@ -16,8 +16,6 @@ import ChatUI from "./Components/Chat/ChatUI.components";
 import Header from "./Components/Header/Header.Components";
 import GroupPage from "./Components/Employee/Individuals/EmployeePage.Components";
 import UserProfilePage from "./Components/UserProfile/UserProfilePage.Component" 
-// import SearchPage from "./Components/Search/SearchPage.Components";
-// import InfoSearch from "./Components/Search/InfoSearch/InfoSearch.Components";
 import EmployeePage from "./Components/Employee/Individual/IndividualPage.Components";
 class App extends Component {
   unsubscribeFromAuth = null;
@@ -54,7 +52,7 @@ class App extends Component {
   render() {
     const { currentUser } = this.props;
     return (
-      <Box >
+      <Box sx={{backgroundColor:"#E8EEED", height:"100vh"}}>
         <Switch>
           {currentUser ? (
             <div>

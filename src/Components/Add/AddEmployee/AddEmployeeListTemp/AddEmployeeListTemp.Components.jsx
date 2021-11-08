@@ -31,7 +31,7 @@ const AddEmployeeListTemp = ({ idGroup, currentUser, employeeListTemp, removeEmp
                     (
                         <Box sx={{pb:5}}>
                             <Typography component="div" sx={{ borderBottom: 1, lineHeight: 0.1, textAlign:"center"}}>
-                                <Typography sx={{position:"absolute", top:"165px", left:"30%", backgroundColor:"#fff", width:"10%"}}>New Employee(s)</Typography>
+                                <Typography sx={{position:"absolute", top:"165px", left:"30%", backgroundColor:"#E8EEED", width:"10%"}}>New Employee(s)</Typography>
                             </Typography>
                             <Typography component="div" sx={{ pb:5 }}></Typography>
                             <Box sx={{ display:"flex", flexDirection:"column", gap:2, width:"100%", textAlign:"center"}}>
@@ -49,7 +49,7 @@ const AddEmployeeListTemp = ({ idGroup, currentUser, employeeListTemp, removeEmp
                                 
                             </Box>
                             <Typography component="div" sx={{borderBottom: 1, lineHeight: 0.1, textAlign:"center" }}>
-                                <Typography sx={{position:"relative", bottom:"-10px", left:"45%", backgroundColor:"#fff", width:"20%"}}>Current Employee(s)</Typography>
+                                <Typography sx={{position:"relative", bottom:"-10px", left:"45%", backgroundColor:"#E8EEED", width:"20%"}}>Current Employee(s)</Typography>
                             </Typography>
                         </Box>
                     ) : (

@@ -6,7 +6,8 @@ import {
 } from "../../../Redux/Task/Task.selectors";
 import { withRouter } from "react-router";
 import PreviewTask from "../PreviewTask/PreviewTask.Components";
-import { Box, Typography,Card, Grid, Paper} from "@mui/material"
+import { Box, Typography} from "@mui/material"
+import { ReactComponent as NoTask } from "../../../Assests/NoContent/NoTask/noTask.svg";
 
 const OverviewTask = ({
   overviewTask,
@@ -16,7 +17,10 @@ const OverviewTask = ({
     <Box sx={{width: "40%" }}>
       {
         overviewTask.length === 0 ? (
-          <h1>Please add your task</h1>
+          <Box sx={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center" }}>
+            <NoTask/>
+            <Typography>No tasks are found. Create a new task to keep track your work process!</Typography>
+          </Box>
         ) : (
             <Box sx={{display:"flex", flexDirection:"column", gap:2 }}>
               {

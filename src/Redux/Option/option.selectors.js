@@ -29,3 +29,10 @@ export const selectTriggerSearchAddEmployee = createSelector(
 export const selectTriggerDropDownMenu = createSelector(
   [selectOption], (selectOption) => selectOption.trigger_select_dropdown_header
 )
+export const selectOpenUpdateUserProfile = createSelector(
+  [selectOption], (selectOption) => selectOption.trigger_open_edit_user_profile
+)
+
+
+
+

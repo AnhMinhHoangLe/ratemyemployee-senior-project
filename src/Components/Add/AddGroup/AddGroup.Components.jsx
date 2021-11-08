@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "../../../Redux/User/user.selectors";
 import "./AddGroup.Styles.scss";
-import {Grid, Box, Typography, Card, CardContent, AvatarGroup, Avatar, CardActions } from '@mui/material';
+import {Grid, Box, Typography, Card, CardContent, AvatarGroup, Avatar, CardActions, FormControl } from '@mui/material';
 
 class AddGroup extends React.Component {
 	constructor(props) {
@@ -44,22 +44,21 @@ class AddGroup extends React.Component {
 	render() {
 		const { groupName, description } = this.state;
 		return (
-			<Card sx={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', boxShadow: 3, borderRadius:'15px', width:'70%'}}>
-				<CardContent>
-					<Typography variant='h5' >
+			<Card sx={{display:'flex', flexDirection:'column', alignItems:"center",  boxShadow: 3, borderRadius:'15px', width:'80%', pt:5, pb:5}}>
+				<CardContent sx={{width:"80%"}}>
+					<Typography variant='h5' sx={{textAlign:"center"}} >
 						Create New Group
 					</Typography>
 					<form onSubmit={this.handleSubmit}>
-						<Box sx={{ display: 'flex', flexDirection: 'column' }}>
-							<Box sx={{ py: 3 }}>
+						<Box sx={{ display: 'flex', flexDirection: 'column'}}>
+							<Box sx={{ py: 3}}>
 								<Typography>Group Name</Typography>
 								<FormInput
-								handleChange={this.handleChange}
-								name="groupName"
-								required
-								id="outlined-size-small"
-								value={groupName}
-								size="small"
+									handleChange={this.handleChange}
+									name="groupName"
+									required
+									value={groupName}
+									size="small"
 								/>
 							</Box>
 								
@@ -72,11 +71,10 @@ class AddGroup extends React.Component {
 									name="description"
 									value={description}
 									multiline={true}
-									sx={{ width: '100%' }}
 								/>
 							</Box>
 							<Box sx={{ pl: '20%' }}>
-								<CustomButton type="submit" sx={{ width:'80%', fontSize:12 }}>Create Group</CustomButton>
+								<CustomButton type="submit" sx={{ width:'70%', pt:1.5, pb:1.5, fontSize:12 }}>Create Group</CustomButton>
 							</Box>
 							
 						</Box>
