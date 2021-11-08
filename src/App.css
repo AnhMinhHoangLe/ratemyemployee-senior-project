@@ -14,5 +14,12 @@ a {
   height: 100vh;
   overflow: hidden;
 }
+<<<<<<< HEAD
 
+=======
+::-webkit-scrollbar {
+  width: 0; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+>>>>>>> fceac2dd5b77d3bd2e47e50e1b7aa55bede1f9e0
 

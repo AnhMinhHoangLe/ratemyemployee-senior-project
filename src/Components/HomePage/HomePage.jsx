@@ -12,6 +12,10 @@ import { selectCurrentUser } from "../../Redux/User/user.selectors";
 // import { fetchEmployeeGroupStartAsync } from "../../Redux/Individuals/Individuals.actions";
 import {} from "../../Redux/Rate/rate.actions";
 import { selectListEmployee } from "../../Redux/Individuals/individuals.selectors";
+import ChatLists from "./../Chat/ChatSession/ChatList"
+import { style } from "@mui/system";
+import {Col} from 'react-grid-system';
+
 
 class HomePage extends Component {
   componentDidMount() {
@@ -23,6 +27,9 @@ class HomePage extends Component {
     return (
       <div>
         <h1> Home</h1>
+        <Col xs={1000} sm={3}>
+        <ChatLists/>
+        </Col>
       </div>
     );
   }
