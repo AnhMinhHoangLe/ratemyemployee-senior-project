@@ -9,11 +9,11 @@ import employeeListTempReducer from "./SearchToAddEmployee/search.reducers"
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-// const persistConfig = {
-//   key: 'root',
-//   storage,
-//   whitelist: ['employee, individual, rateInfo']
-// };
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['employee, individual, rateInfo', 'option', 'task','employeeListInGroupTemp'  ]
+};
 
 const rootReducer = combineReducers({
   user: userReducer, // user
@@ -25,6 +25,6 @@ const rootReducer = combineReducers({
   employeeListInGroupTemp: employeeListTempReducer, 
 });
 
-// export default persistReducer(persistConfig,rootReducer);
-export default rootReducer;
+export default persistReducer(persistConfig,rootReducer);
+// export default rootReducer;
 
