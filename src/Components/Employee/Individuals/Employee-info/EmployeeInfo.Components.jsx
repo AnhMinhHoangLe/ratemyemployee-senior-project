@@ -36,7 +36,7 @@ const EmployeeInfo = ({ individuals, employee, match }) => {
                           />
                 </Box>
             </Grid>
-              <Grid item xs={4} md={4}>
+            <Grid item xs={4} md={4}>
                 <RatingOverallAvgGroup
                   idEmployee={match.params.employeeInfoID}
                   idGroup={idGroup}
