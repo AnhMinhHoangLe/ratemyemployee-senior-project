@@ -12,8 +12,8 @@ export default function ChatLists ()
 position: "absolute",
 width: "407px",
 height: "444px",
-left: "1500px",
-top: "-10px",
+left: "70%",
+bottom: "44%",
     
 }
     let user = firebase.auth().currentUser;

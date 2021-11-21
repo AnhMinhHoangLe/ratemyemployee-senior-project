@@ -74,7 +74,7 @@ class AddGroup extends React.Component {
 								/>
 							</Box>
 							<Box sx={{ pl: '20%' }}>
-								<CustomButton type="submit" sx={{ width:'70%', pt:1.5, pb:1.5, fontSize:12 }}>Create Group</CustomButton>
+								<CustomButton type="submit" sx={{ mt:2, fontSize:16, position:"relative", left:"5%"}}>Create Group</CustomButton>
 							</Box>
 							
 						</Box>

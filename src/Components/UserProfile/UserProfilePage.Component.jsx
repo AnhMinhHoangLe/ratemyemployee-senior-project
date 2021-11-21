@@ -17,7 +17,7 @@ const UserProfilePage = ({ match, selectCurrentUser, selectOpenUpdateUserProfile
             <UserProfileInfo idUser={selectCurrentUser.id} />
           </Box>
           {!selectOpenUpdateUserProfile ? ("") :(
-        <Box sx={{mt:4,  display: "flex", justifyContent: "center", alignItems: "center", position: "relative", bottom: "590px" }}>
+        <Box sx={{mt:4,  display: "flex", justifyContent: "center", alignItems: "center", position: "relative", bottom: "690px"}}>
           <EditUserProfileForm idUser={selectCurrentUser.id} />
         </Box>
           )

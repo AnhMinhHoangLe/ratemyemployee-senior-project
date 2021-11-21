@@ -9,30 +9,31 @@ import {
 } from "../../../Redux/Rate/rate.selectors";
 const TopEmployee = ({individuals, selectRateInfo}) => {
     return (
-      <Box sx={{display: 'flex', flexDirection:"row", justifyContent:"space-evenly", flexWrap: 'wrap', p:3}} >
-          <Box sx={{display:"flex", flexDirection:"column",  flexWrap: 'wrap', gap:3}}>
-              <Typography>Top Employees</Typography>
-              <Box sx={{display:"flex", justifyContent:"space-evenly",  flexWrap: 'wrap', gap:2, mr:2, p:3}}>
-              {
-                individuals ? (
-                individuals
-                  .sort((first, second) => { return (selectRateInfo[first.id]['avg_rating'] < selectRateInfo[second.id]['avg_rating'] )? 1 : -1 })
-                  .map(({ displayName, avatar, position, id, currentGroupID, admin }, index) => (
-                    !admin ? (
-                      <TopEmployeeCard key={index} avatar={avatar} displayName={displayName} position={position} idx={id} />
-                    ) :
-                      (
-                        <>
-                        </>
-                      )
-                    )
-                    )
-                    ) : (
-                        <Box></Box>
-                    )
-                }
-            </Box>
-          </Box>
+      <Box sx={{flexWrap: 'wrap', p:3, width:"94.5%", position:"relative", right:"10px", width:"100%", color:"#313836"}} >
+          <Card sx={{ display: "flex",  flexDirection:"column", flexWrap: 'wrap', gap: 2, mr: 2, p: 3, width:"100%", borderRadius:"10px"}}>
+              <Typography variant="h5">Employees of The Month</Typography>
+				      <Typography component="div" sx={{borderBottom: 1, borderColor:"#E0E0E0"}}></Typography>
+              <Box sx={{display:"flex", justifyContent:"center",  width:"100%"}}>
+                  {
+                    individuals ? (
+                    individuals
+                      .sort((first, second) => { return (selectRateInfo[first.id]['avg_rating'] < selectRateInfo[second.id]['avg_rating'] )? 1 : -1 })
+                      .map(({ displayName, avatar, position, id, currentGroupID, admin }, index) => (
+                        !admin ? (
+                          <TopEmployeeCard key={index} avatar={avatar} displayName={displayName} position={position} idx={id} />
+                        ) :
+                          (
+                            <>
+                            </>
+                          )
+                        )
+                        )
+                        ) : (
+                            <Box></Box>
+                        )
+                    }
+                  </Box>
+            </Card>
       </Box>
     );
   }

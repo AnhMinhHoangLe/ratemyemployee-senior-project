@@ -63,17 +63,17 @@ const EmployeeInGroup = ({
     >
      
         <Box sx={{ gridArea: 'directory'}}>
-            <Typography><Link to="/grps"> Groups </Link> / Group {id}</Typography>
+            <Typography sx={{display:"flex", ml:5}}><Link to="/grps" > <Typography sx={{color:"black"}}>Groups</Typography> </Link> / Group {id}</Typography>
         </Box>
         <Box sx={{ gridArea: 'switch' }}>
           <ToggleButtonGroup
             value={alignment}
             exclusive
             onChange={handleChange}
-            sx={{border:1, borderRadius:"20px"}}
+            sx={{  borderRadius: "10px" }}
             >
-              <ToggleButton value="Employee" onClick={()=> dispatch(OptionBetweenGroupAndTask(true))} sx={{border:0, borderRadius:"20px"}}>Employee</ToggleButton>
-              <ToggleButton value="Task" onClick={() => dispatch(OptionBetweenGroupAndTask(false))}  sx={{border:0, borderRadius:"20px"}}>Task</ToggleButton>
+              <ToggleButton value="Employee" onClick={()=> dispatch(OptionBetweenGroupAndTask(true))} sx={{border:0}}>Employee</ToggleButton>
+              <ToggleButton value="Task" onClick={() => dispatch(OptionBetweenGroupAndTask(false))}  sx={{border:0}}>Task</ToggleButton>
           </ToggleButtonGroup>
         </Box>
       {optionGroupAndTask ? (
@@ -128,7 +128,7 @@ const EmployeeInGroup = ({
             )}
           </Grid>
           
-          <Grid item>
+          <Grid item sx={{width:"23%", display:"flex", alignItems:"center"}}>
             <AddNewEmployeeInGroupByInput idGroup={idGroup}/>
           </Grid>
 

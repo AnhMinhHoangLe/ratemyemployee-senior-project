@@ -21,7 +21,7 @@ const PreviewCollection = ({
 	idGroup
 }) => {
 	return (
-		<Card sx={{ boxShadow: 3, width: '70%', borderRadius: '20px', p: 2}}>
+		<Card sx={{ boxShadow: 3, width: '70%', borderRadius: '20px', p:2}}>
 			<CardContent>
 				<Box sx={{display:'flex',  justifyContent:'space-between'}}>
 					<Typography variant='h4' sx={{ color: '#1DA492', pb: 1 }}> GROUP {id}</Typography>
@@ -31,8 +31,8 @@ const PreviewCollection = ({
 					</Typography>
 
 				</Box>
-				<Typography variant='h6' sx={{pb:1}}><b>Members: </b>{ employee_list.length}</Typography>
-				<Typography variant='h6' sx={{ pb: 1 }}><b>Description:</b> {description.substr(0, 100)}</Typography>
+				<Typography variant='h6' sx={{pb:2}}><b>Members: </b>{ employee_list.length}</Typography>
+				<Typography variant='h6' sx={{ pb: 2 }}><b>Description:</b> {description.substr(0, 100)}</Typography>
 				<Box sx={{display:'flex', justifyContent:'space-between'}}>
 						<AvatarGroup max={4}>
 								{employee_list

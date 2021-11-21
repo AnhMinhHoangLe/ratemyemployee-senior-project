@@ -11,23 +11,20 @@ const UserSummaryInfoHomeLazy = React.lazy(() => import('./UserSummaryInfo-Home.
 
 const HomePage = ({ currentUser, individuals, fetchEmployeeGroupStartAsync }) => {
     return (
-      <Grid container spacing={2} sx={{ p:3, maxHeight:"100vh",     overflow: "hidden"
-}}>
+      <Grid container spacing={2} sx={{ pl:15, pt:8}}>
         <Grid item xs={8} md={8}>
                <Suspense fallback={<CircularProgress />}>
                 <UserSummaryInfoHomeLazy idUser={currentUser.id} />
               </Suspense>
           
         </Grid>
-        <Box sx={{ display: "flex", flexDirection:"column", width: "100%", justifyContent: "center", alignItems:"center", p:3, gap: 3}}>
-                <Typography variant="h5">Rating History</Typography>
-                <Typography component="div">
-                    <TopEmployee/>
-                </Typography>
-        </Box>
+        
         <Grid item xs={4} md={4}>
           <ChatLists/>
-          </Grid>
+        </Grid>
+        <Grid sx={{width:"63.5%"}}>          
+                    <TopEmployee/>
+        </Grid>
       </Grid>
    
 );

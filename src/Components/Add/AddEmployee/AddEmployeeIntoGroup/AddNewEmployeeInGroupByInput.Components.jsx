@@ -96,9 +96,9 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 		const { selectTriggerSearchAddEmployee } = this.props
 
 		return (
-			<Card sx={{display: 'flex', flexDirection:"column", textAlign:"center",alignItems: 'center', justifyContent: 'center',  p:3, gap:2, borderRadius:"10px" }}>
+			<Card sx={{display: 'flex', flexDirection:"column",  p:3, pb:5, gap:2, borderRadius:"10px", width:"100%"}}>
 			{/* Searching form */}
-				<Typography>Add Existing Employee</Typography>
+				<Typography sx={{ textAlign:"center"}}>Add Existing Employee</Typography>
 					{/* Add Employee By Search */}
 					<FormInput
 						name="searchName"
@@ -119,8 +119,8 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 					) : (
 							//Form to input new employee
 								<form onSubmit={this.handleSubmit}>
-									<Box sx={{ display: 'flex', flexDirection: "column", textAlign: "center", alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-										<Typography>Add New Employee </Typography>
+									<Box sx={{display: 'flex', flexDirection:"column", gap:2, borderRadius:"10px", width:"100%"}}>
+										<Typography sx={{textAlign:"center"}}>Add New Employee </Typography>
 										{/* <FormInput
 											placeholder="Address"
 											name="address"
@@ -208,7 +208,7 @@ class AddNewEmployeeInGroupByInput extends React.Component {
 												variant="outlined"
 												size="small"
 											/>
-										<CustomButton type="submit" sx={{width:"60%", height:"20%", fontSize:"10px"}}>Add Employee</CustomButton>
+										<CustomButton type="submit" sx={{position:"relative", left:"25%", mt:3}}>Add Employee</CustomButton>
 										</Box>
 									</form>
 					)}

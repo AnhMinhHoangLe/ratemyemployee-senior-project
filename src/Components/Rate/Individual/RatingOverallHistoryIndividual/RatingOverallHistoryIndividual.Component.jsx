@@ -20,7 +20,7 @@ const RatingOverallHistoryIndividual = ({ overallAvgRate }) => {
     chart()
   }, [])
   return (
-    <Box>
+    <Box sx={{position:"relative", top:"25px", border:"10px"}}>
       <Box>
         <Chart
           chartType="PieChart"
@@ -35,10 +35,10 @@ const RatingOverallHistoryIndividual = ({ overallAvgRate }) => {
               1: { color: '#FFDB5D' }
             },
             'width':500,
-            'height':400
+            'height':300
           }}
         />
-        <Typography component="div" variant="h5" sx={{ position:"relative", bottom:"220px", left:"235px"}}>{overallAvgRate}/5</Typography>
+        <Typography component="div" variant="h5"  sx={{ position:"relative", bottom:"165px", left:"235px"}}>{overallAvgRate}/5</Typography>
       </Box>
     </Box>
   )

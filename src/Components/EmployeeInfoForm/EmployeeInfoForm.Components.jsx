@@ -28,20 +28,25 @@ const EmployeeInfoForm = ({
 			</Card>
 			
 			<Card sx={{ width: "70%", p:3, display:"flex", flexDirection: "column", gap:3, borderRadius:"10px"}}>
-				<Typography variant="h5">
+				<Typography variant="h4">
 					{displayName}
 				</Typography>
-				<Typography variant="h6" sx={{color:""}}>
-					{position}
+				<Typography component="div" sx={{ display: "flex" , gap:1 , flexWrap: "wrap",  alignItems: "center" }}>
+					<Typography variant="h6">Position: </Typography>
+					<Typography sx={{ fontSize: 20 }}> { position}</Typography>
 				</Typography>
-				<Typography variant="h6"> {currentGroupID}</Typography>
-				<Typography component="div" sx={{ display: "flex" , gap:1 , flexWrap: "wrap" }}>
+				
+				<Typography component="div" sx={{ display: "flex", gap: 1, flexWrap: "wrap", alignItems: "center"}}>
+					<Typography variant="h6">Group ID: </Typography>
+					<Typography sx={{fontSize:20}}>{currentGroupID}</Typography>
+				</Typography>
+				<Typography component="div" sx={{ display: "flex" , gap:1 , flexWrap: "wrap",  alignItems: "center" }}>
 					<Typography variant="h6">Phone #: </Typography>
-					<Typography variant="h6" sx={{color: "#1DA492"}}> {phone_number === 0 ? ("None") : ({ phone_number })}</Typography>
+					<Typography sx={{fontSize:20}}> {phone_number === 0 ? ("None") : ({ phone_number })}</Typography>
 				</Typography>
-				<Typography component="div" sx={{ display: "flex" , gap:1 , flexWrap: "wrap" }}>
+				<Typography component="div" sx={{ display: "flex" , gap:1 , flexWrap: "wrap",  alignItems: "center"  }}>
 					<Typography variant="h6">Email: </Typography>
-					<Typography variant="h6" sx={{color: "#1DA492"}}> {email}</Typography>
+					<Typography sx={{fontSize:20}}> {email}</Typography>
 				</Typography>
 			</Card>
 		</Box>

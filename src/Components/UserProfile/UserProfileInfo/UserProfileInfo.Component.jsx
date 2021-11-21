@@ -12,10 +12,10 @@ const UserProfileInfo = ({ idUser, individuals, dispatch }) => {
     individuals;
     return (
         <Box sx={{width:"50%", display:"flex", flexDirection:"column", justifyContent: "center", flexWrap: 'wrap', p:3}}>
-        <Card sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", flexWrap: 'wrap', border: 1, borderRadius: "10px", p: 4 }}>
+        <Card sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", flexWrap: 'wrap', borderRadius: "10px", p: 4 }}>
                         <Typography sx={{display:"flex", justifyContent: "center"}}><Avatar alt={displayName} src={avatar} sx={{ height: "100px", width: "100px", border:3 , borderColor:"#1DA492"}} /></Typography>
                         <Typography variant="h4" sx={{ textAlign: "center" }}>{displayName}</Typography>
-                        <Typography  variant="h6" sx={{ textAlign: "center" }}>{position}</Typography>
+                        <Typography  variant="p" sx={{ textAlign: "center", color:"#869892", fontSize:25}}>{position}</Typography>
                         <Typography sx={{color:"#1DA492"}}>ID#</Typography>
                         <Typography sx={{borderBottom:1}}>{id}</Typography>
                         <Typography sx={{pt:2, color:"#1DA492"}}>Email</Typography>

@@ -24,7 +24,7 @@ const RatingOverallAvgGroup = ({ state, idEmployee, idGroup }) => {
     chart()
   }, [])
   return (
-    <Box>
+    <Box sx={{position:"relative", top:"25px", border:"10px"}}>
       <Box>
         <Chart
           chartType="PieChart"
@@ -39,10 +39,10 @@ const RatingOverallAvgGroup = ({ state, idEmployee, idGroup }) => {
               1: { color: '#FFDB5D' }
             },
             'width':500,
-            'height':400
+            'height':300
           }}
         />
-        <Typography component="div" variant="h5" sx={{ position:"relative", bottom:"220px", left:"235px"}}>{avg_rating}/5</Typography>
+        <Typography component="div" variant="h5" sx={{ position:"relative", bottom:"165px", left:"235px"}}>{avg_rating}/5</Typography>
       </Box>
     </Box>
   );

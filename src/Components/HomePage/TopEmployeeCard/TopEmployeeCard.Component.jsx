@@ -8,21 +8,17 @@ import {
 } from "../../../Redux/Rate/rate.selectors";
 const TopEmployeeCard = ({avatar, displayName, position,idx,  selectInfoRateInGroup }) => {
   return (
-        <Card sx={{display: 'flex', flexDirection:"column", textAlign:"center", p:3, gap:2, width:"280px", height:"280px"}}>
-          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"space-around"}}>
-              <Typography sx={{border: 3, borderColor: "#2AC28C", borderRadius:"100%", p:"1px"}}>
+    <Box sx={{ display: 'flex', flexDirection: "column", justifyContent:"center",  alignItems: "center", alignContent:"center", p: 3, gap: 2, width: "280px"}}>
+              <Typography sx={{border: 3, borderColor: "#2AC28C", borderRadius:"100%", width: "80px", height: "80px"}}>
                 <Avatar sx={{ width: "80px", height: "80px" }} src={avatar} alt={displayName} />
               </Typography>
-              <Box
-                sx={{ display: 'flex', border: 1, borderColor: "#E0E0E0", width: 80, height: 80, borderRadius: "10px", alignItems: 'center', justifyContent: "center" }}
-              >
-                <Typography sx={{ fontSize: "30px" }}> {selectInfoRateInGroup['avg_rating']}</Typography>
-                <StarIcon sx={{ color: "#FFBB56", fontSize: "20px", position: "relative", bottom:"2px" }}/>
-              </Box>
-          </Box>
-          <Typography variant="h5" fontSize="20px">{displayName}</Typography>
-          <Typography fontSize="16px">{position}</Typography>
-      </Card>
+              <Typography variant="h5" fontSize="20px">{displayName}</Typography>
+              <Typography fontSize="16px" sx={{color:"#969892" }}>{position}</Typography>
+              <Typography sx={{ display:"flex", alignItems:"center"}}>
+                <StarIcon sx={{ color:"#FFBB56"}}/>
+                          <Typography sx={{ fontSize: "30px", color:"#1DA492" }}> {selectInfoRateInGroup['avg_rating']}</Typography>
+              </Typography>
+      </Box>
   );
 };
 const mapStateToProps =  (state, ownProps) =>({

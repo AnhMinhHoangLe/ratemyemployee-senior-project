@@ -15,39 +15,37 @@ const UserSummaryInfoHome = ({ idUser, individuals, arrayIDEmployee, selectArray
 		selectArrayGroup.length > 0 ? setAmountOfGroup(selectArrayGroup.length) : setAmountOfGroup(0)
 	})
     return (
-        <Box sx={{ display: "flex", gap: 3 }}>
-            <Card sx={{ width:"30%",  display :"flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderRadius:"10px", gap:3, p:6}}>
+        <Box sx={{ display: "flex", gap: 3}}>
+            	<Card sx={{ width:"20%",  display :"flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderRadius:"10px", gap:3, p:6}}>
 				<Box sx={{border:4, borderRadius:"50%", borderColor: "#1DA492", p:0.4}}>
-					<Avatar src={avatar} alt={displayName} sx={{width:"100px", height:"100px"}}/>
+					<Avatar src={avatar} alt={displayName} sx={{width:"120px", height:"120px"}}/>
 				</Box>
-                <Typography variant="h5">
-					{displayName}
+				<Typography variant="h5">
+							{displayName}
 				</Typography>
-                <Typography  sx={{color:""}}>
-					{position}
+				<Typography sx={{color:"#969892"}}>
+							{position}
 				</Typography>
 				<Typography component="div" sx={{ display: "flex", gap:1 , flexWrap: "wrap" }}>
-					<Typography sx={{color: "#1DA492"}} sx={{ fontSize:12 }}>{id}</Typography>
+					<Typography sx={{color: "#1DA492"}} sx={{ fontSize:12, color:"#1DA492"}}>{id}</Typography>
 				</Typography>
-		    </Card>
-			
-		    <Card sx={{ width: "70%", p:3, display:"flex", flexDirection: "column", gap:3, borderRadius:"10px"}}>
-				<Typography variant="h5">Groups and Employee</Typography>
-				<Typography component="div" sx={{borderBottom: 1}}></Typography>
+		</Card>
+		<Card sx={{ width: "80%", p:3, display:"flex", flexDirection: "column", gap:3, borderRadius:"10px", color:"#313836"}}>
+				<Typography variant="h4" sx={{fontSize:"21px"}} >Groups and Employees</Typography>
+				<Typography component="div" sx={{borderBottom: 1, borderColor:"#E0E0E0"}}></Typography>
 				<Box sx={{display:"flex", justifyContent:"space-evenly"}}>
-				<Typography component="div" sx={{display:"flex", flexDirection: "column", gap: 3}}>
-					<Typography variant="h1" >{amountOfGroup}</Typography>
-					<Typography component="span" >Groups</Typography>
-					<Typography component="span" ><Link to="/grps"> View Groups ></Link> </Typography>
-
+				<Typography component="div" sx={{display:"flex", flexDirection: "column", gap: 3, textAlign:"center"}}>
+					<Typography variant="h1" sx={{fontSize:"110px"}}>{amountOfGroup}</Typography>
+					<Typography varian="p" >Groups</Typography>
+					<Link to="/grps"><Typography component="span"  sx={{color: "#1DA492"}}> View Groups ></Typography></Link> 
 				</Typography>
-				<Typography component="div" sx={{display:"flex", flexDirection: "column", gap:3}}>
-					<Typography variant="h1" >{amountOfEmployee}</Typography>
-					<Typography component="span" >Employees</Typography>
-					<Typography component="span" ><Link to="/emps"> View Employee ></Link> </Typography>
+				<Typography component="div" sx={{display:"flex", flexDirection: "column", gap:3,  textAlign:"center"}}>
+					<Typography variant="h1" sx={{fontSize:"110px"}}>{amountOfEmployee}</Typography>
+					<Typography varian="p" >Employees</Typography>
+					<Link to="/emps"><Typography component="span"  sx={{color: "#1DA492"}}> View Employees ></Typography></Link> 
 				</Typography>
 				</Box>
-            </Card>
+            	</Card>
         </Box>
     )
 }

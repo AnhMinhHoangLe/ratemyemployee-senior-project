@@ -116,9 +116,9 @@ class EditUserProfileForm extends React.Component {
 		} = this.state;
 		const { individuals } = this.props
 		return (
-			<Card sx={{display: 'flex', flexDirection:"column", textAlign:"center",alignItems: 'center', justifyContent: 'center',  p:3, gap:2, borderRadius:"10px" }}>
+			<Card sx={{display: 'flex', flexDirection:"column", textAlign:"center",alignItems: 'center', justifyContent: 'center',  p:3, gap:2, borderRadius:"10px", width:"500px" }}>
 								<form onSubmit={this.handleSubmit}>
-                    <Box sx={{ display: 'flex', flexDirection: "column", textAlign: "center", alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+                    					<Box sx={{ display: 'flex', flexDirection: "column",  gap: 2, width:"100%", pt:3}}>
 											<label htmlFor="uploadFile">
 											<Input 
 												accept="image/*"
@@ -245,10 +245,10 @@ class EditUserProfileForm extends React.Component {
 											size="small"
 											value={address}
 										/>
-                                        <Box sx={{ display: "flex" }}>
-                                            <CustomButton type="submit" sx={{width:"60%", height:"20%", fontSize:"10px"}}>Save</CustomButton>
-                                            <CustomButton  sx={{width:"60%", height:"20%", fontSize:"10px"}} onClick={this.cancelEditingProfile}>Cancel</CustomButton>
-                                        </Box>
+						<Box sx={{ display: "flex", gap: 3, mt:3, pb:3}}>
+							<CustomButton  sx={{width:"60%", backgroundColor:"#E0E0E0", color:"#313836"}} onClick={this.cancelEditingProfile}>Cancel</CustomButton>
+                                            		<CustomButton type="submit" sx={{width:"60%"}}>Save</CustomButton>
+                                        	</Box>
 										
 										</Box>
 									</form>

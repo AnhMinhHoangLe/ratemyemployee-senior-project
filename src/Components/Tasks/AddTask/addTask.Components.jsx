@@ -66,7 +66,7 @@ class AddTask extends React.Component {
   render() {
     const { deadline, note, priority, title } = this.state;
     return (
-      <Card sx={{ display: 'flex', flexDirection:"column",  p:3, gap:2, borderRadius:"10px"}}>
+      <Card sx={{ display: 'flex', flexDirection:"column",  p:3, pb:5, gap:2, borderRadius:"10px", width:"20%"}}>
         <Typography sx={{ textAlign: 'center'}}>Create New Task</Typography>
         <form
           onSubmit={(e) => this.handleSubmit(e)}>
@@ -99,29 +99,29 @@ class AddTask extends React.Component {
               <input
                 type="radio"
                 name="priority"
-                value="red"
+                value="#DE4141"
                 required
                 onChange={(e)=>this.handleChange(e)}
                 className="priority"
-                style={{ border: "3px red solid" }}
+                style={{ border: "3px #DE4141 solid" }}
               />
               <input
                 type="radio"
                 name="priority"
-                value="yellow"
+                value="#FFBB56"
                 required
                 onChange={(e)=>this.handleChange(e)}
                 className="priority"
-                style={{ border: "3px yellow solid" }}
+                style={{ border: "3px #FFBB56 solid" }}
               />
               <input
                 type="radio"
                 name="priority"
-                value="green"
+                value="#3EA32E"
                 required
                 onChange={(e)=>this.handleChange(e)}
                 className="priority"
-                style={{ border: "3px green solid" }}
+                style={{ border: "3px #3EA32E solid" }}
               />
             </Box>
             <Typography variant="h7">Descriptions</Typography>
@@ -135,7 +135,7 @@ class AddTask extends React.Component {
               variant="outlined"
               sx={{width:"100%"}}
             />
-            <CustomButton type="submit">Create Task</CustomButton>
+            <CustomButton type="submit" sx={{position:"relative", left:"25%", mt:3}}>Create Task</CustomButton>
           </Box>
         </form>
       </Card>

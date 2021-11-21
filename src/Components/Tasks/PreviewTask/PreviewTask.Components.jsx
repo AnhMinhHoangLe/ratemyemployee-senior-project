@@ -20,8 +20,8 @@ const PreviewTask = ({ note, title, deadline, priority, idGroup, id, ...otherSec
                 <Typography component="div" sx={{display:"flex", justifyContent:"space-between"}}>
                     <Typography variant="h5" style={{ color: priority }}>{title}</Typography>
                     <Typography>
-                        <DeleteOutlineIcon onClick={() => removeTaskOnclick()} />
-                        <CheckIcon onClick={() => finishTaskUpdateStatus() } />
+                        <DeleteOutlineIcon sx={{pr:3, color:"#869892"}}onClick={() => removeTaskOnclick()} />
+                        <CheckIcon sx={{ color: "#869892" }}onClick={() => finishTaskUpdateStatus() } />
                     </Typography>
                     
                 </Typography>
