@@ -21,11 +21,8 @@ const AddEmployeeListTemp = ({ idGroup, currentUser, employeeListTemp, removeEmp
         )
         await clearAllEmployeeInList(employeeListTemp)
     }
-    // console.log("employeeListTemp", employeeListTemp, idGroup)
-
     return (
         <Box >
-            
             {
                 employeeListTemp.length !== 0 ? 
                     (
@@ -41,7 +38,6 @@ const AddEmployeeListTemp = ({ idGroup, currentUser, employeeListTemp, removeEmp
                                             ))
                                         }
                                     </Box>
-
                                 <Box sx={{ display: "flex", flexDirection: "row", gap: 2, width: "100%", justifyContent: "center", pb: 4 }}>
                                         <CustomButton onClick={() => clearAllEmployeeInList(employeeListTemp)} sx={{backgroundColor:"#E0E0E0", color:"#313836"}}>Cancel</CustomButton>
                                         <CustomButton onClick={(event) => handleSubmit(event)}>Add Employee</CustomButton>

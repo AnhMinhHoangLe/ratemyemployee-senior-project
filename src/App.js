@@ -35,7 +35,6 @@ class App extends Component {
           if (this.unsubscribeFromAuth) {
             fetchEmployeeGroupStartAsync(snapShot.id)
           }
-
         });
       }
       setCurrentUser(userAuth);

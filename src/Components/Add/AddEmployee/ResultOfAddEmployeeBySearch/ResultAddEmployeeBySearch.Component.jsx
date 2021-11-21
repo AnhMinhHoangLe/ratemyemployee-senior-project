@@ -18,7 +18,6 @@ const ResultAddEmployeeBySearch = ({ search, individuals, addEmployee }) => {
 			{!search ? (
                 <div></div>
             ) : (
-                        
                             individuals.filter((key) => {
                                 return key.displayName.toUpperCase().includes(search.toUpperCase()) && key.groupActive === false
                             }).length !== 0 ? (

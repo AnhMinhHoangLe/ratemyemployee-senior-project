@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Suspense, lazy} from "react";
 import "./EmployeeInGroup.Styles.scss";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
@@ -10,18 +10,16 @@ import AddNewEmployeeInGroupByInput from "../../../Add/AddEmployee/AddEmployeeIn
 import { OptionBetweenGroupAndTask } from "../../../../Redux/Option/option.actions";
 import { selectOptionBetweenGroupAndTask } from "../../../../Redux/Option/option.selectors";
 import Task from "../../../Tasks/Task.Components";
-import RatingStar from "../../../Rate/RatingStar/RatingStar.Components";
-import EmployeeCardInGroup from "../../EmployeeCardInGroup/EmployeeCardInGroup.Components";
 import RateCard from "../../../RateCard/RateCard.Component";
 import { triggerOpenAndCloseRateCard } from "../../../../Redux/Option/option.actions";
 import { selectTriggerOpenAndCloseRateCard } from "../../../../Redux/Option/option.selectors";
 import ErrorComponent from "../../../ErrorComponent/ErrorComponent";
 import AddEmployeeListTemp from "../../../Add/AddEmployee/AddEmployeeListTemp/AddEmployeeListTemp.Components"
 import { selectEmployeeTempList } from "../../../../Redux/SearchToAddEmployee/search.selectors"
-import { selectCurrentUser } from "../../../../Redux/User/user.selectors";
-import { Box, Typography, ToggleButtonGroup, ToggleButton, Grid, Backdrop} from "@mui/material"
+import { Box, Typography, ToggleButtonGroup, ToggleButton, Grid, Backdrop, CircularProgress} from "@mui/material"
 import {selectEmployeeIDForRateCard} from "../../../../Redux/Individuals/individuals.selectors"
 import { ReactComponent as NoEmployee } from "../../../../Assests/NoContent/NoEmployee/noEmployee.svg";
+const EmployeeListLazy = React.lazy(() => import('../EmployeeList/employeeList.Components'));
 
 const EmployeeInGroup = ({
   employee,
@@ -103,19 +101,9 @@ const EmployeeInGroup = ({
                     <AddEmployeeListTemp employeeListTemp={employeeListTemp} idGroup={idGroup}/>
                   </Box>
                   <Box sx={{display:"flex", justifyContent:"space-evenly",  flexWrap: 'wrap', gap:2, mr:2}}>
-                    {
-                        employee_list.map(({ id }) => (
-                                          <EmployeeCardInGroup
-                                            avatar={employeeInfo[id].avatar}
-                                            displayName={employeeInfo[id].displayName}
-                                            position={employeeInfo[id].position}
-                                            idGroup={idGroup}
-                                            idEmployee={id}
-                                            key={id}
-                                          />
-                         
-                            ))
-                    }
+                    <Suspense fallback={<CircularProgress />}>
+                      <EmployeeListLazy  employee_list={employee_list} idGroup={idGroup}/>
+                    </Suspense>
                   </Box>
 
                     {!triggerButtonOpenAndCloseRateCard ? (""):(

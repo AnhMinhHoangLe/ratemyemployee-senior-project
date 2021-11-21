@@ -9,7 +9,13 @@ export const selectIsEmployeeFetching = createSelector(
         employee.isFetching = true;
     }
 )
-
+export const selectArrayGroup =createSelector(
+    [selectEmployee],
+    (collections) =>
+        collections
+            ? Object.keys(collections)
+            : [] //get the keys =>   get the value from the key
+);
 //Show members in all group for overview
 export const selectEmployeeForPreview = createSelector(
     [selectEmployee],

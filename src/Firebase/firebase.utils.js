@@ -213,19 +213,15 @@ export const addEmployeeToGroup = async (
   groupKey,
   arrayID
 ) => {
+  const batch = firestore.batch()
   const groupIDRef = firestore.doc(
-    `users/${userAuth.id}`
-  ).collection(userKey);
+    `users/${userAuth.id}`).collection(userKey);
   const rateInfo = firestore.collection('rate')
   const employeeInfo = firestore.collection('employee')
-
-  const batch = firestore.batch()
-  
-  arrayID.map(({ id }) => {
+  const newGroupIDRef = groupIDRef.doc(groupKey)
+  arrayID.forEach(({ id }) => {
     let IDObject = {};
     IDObject["id"] = id;
-
-    const newGroupIDRef = groupIDRef.doc(groupKey)
     const newRateInfo = rateInfo.doc(id)
     const newEmployeeInfo = employeeInfo.doc(id)
     
@@ -238,15 +234,15 @@ export const addEmployeeToGroup = async (
             }
     }, { merge: true }
     )
-    
-    batch.update(newGroupIDRef, {
-      employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
-    })
-    
     batch.update(newEmployeeInfo, {
       groupActive: true,
       currentGroupID: groupKey,
     })
+    batch.update(newGroupIDRef, {
+      employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
+    })
+    
+    
    });
   return  await batch.commit();
 };
