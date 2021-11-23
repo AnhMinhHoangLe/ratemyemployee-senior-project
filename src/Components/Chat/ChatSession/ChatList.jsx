@@ -13,7 +13,7 @@ position: "absolute",
 width: "407px",
 height: "444px",
 left: "70%",
-bottom: "44%",
+bottom: "19%",
     
 }
     let user = firebase.auth().currentUser;
