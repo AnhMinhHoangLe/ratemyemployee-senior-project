@@ -4,6 +4,7 @@ EMA - Employee Management
 An application used to rate and manage employee, built with React, Redux, JavaScript, Firebase and MaterialUI.
 
 Link: https://ema-employee.herokuapp.com/
+Github: https://github.com/AnhMinhHoangLe/ratemyemployee-senior-project
 ## Project Status
 
 This project is currently in development. Users can create/delete group, create/delete employee, add/detele tasks, search, edit profile and chat with their employee.
