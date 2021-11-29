@@ -10,10 +10,6 @@ import {
   convertDataGroupSnapShot,
   convertDataRateSnapShot,
 } from "../../Firebase/firebase.snapshot";
-// export const updateGroup = (groupMap) => ({
-//   type: employeeActionTypes.UPDATE_GROUP,
-//   payload: groupMap,
-// });
 import {
   fetchGroupStart,
   fetchGroupSuccess,
@@ -27,8 +23,8 @@ import {
 //For Individual
 export const saveIdEmployeePickToRateCard = (idEmployeePickToRate) => ({
   type: individualsActionType.PICK_ID_EMPLOYEE_TO_RATE,
-  payload: idEmployeePickToRate
-})
+  payload: idEmployeePickToRate,
+});
 export const fetchEmployeeArrayStart = (employeeArray) => ({
   type: individualsActionType.FETCH_EMPLOYEE_ARRAY_START,
 });
@@ -53,109 +49,73 @@ export const fetchEmployeeSuccess = (employeeArray) => ({
 });
 
 //For group, employee, and rate
-export const fetchEmployeeGroupStartAsync =  (currentUserID) => {
-  return (dispatch, getState) => {  
-    const listEmployeeRef = firestore
-    .doc(`users/${currentUserID}`)
-    .collection("employee");
-    dispatch(fetchEmployeeArrayStart());
-    
-    // listening for any changes in this collection.
-    listEmployeeRef
-      .onSnapshot(
+export const fetchEmployeeGroupStartAsync = (currentUserID) => {
+  return (dispatch, getState) => {
+    try {
+      const listEmployeeRef = firestore
+        .doc(`users/${currentUserID}`)
+        .collection("employee");
+      dispatch(fetchEmployeeArrayStart());
+      // listening for any changes in this collection.
+      listEmployeeRef.onSnapshot(
         //listening for any changes in this collection.
         async (snapshot) => {
-          const arrayIDEmployee =  convertDataEmployeeArraySnapShot(snapshot);
+          const arrayIDEmployee = convertDataEmployeeArraySnapShot(snapshot);
           dispatch(fetchEmployeeArraySuccess(arrayIDEmployee));
-          if(arrayIDEmployee.length !== 0){
-            
+
+          try {
             const getRateFromEmployeeID = firestore
-                  .collection("rate")
-                  .where("id", "in", arrayIDEmployee);
-                dispatch(fetchingRateStart());
-                getRateFromEmployeeID.onSnapshot(async (snapshot) => {
-                  const dataRate = convertDataRateSnapShot(snapshot);
-                  dispatch(fetchingRateSuccess(dataRate));
-                }, (error) => {
-                  dispatch(fetchingRateFailure(error.message))
-                });
-            
-            const employeeRef = firestore.collection("employee").where("id", "in", arrayIDEmployee);
+              .collection("rate")
+              .where("id", "in", arrayIDEmployee);
+            dispatch(fetchingRateStart());
+            getRateFromEmployeeID.onSnapshot(async (snapshot) => {
+              const dataRate = convertDataRateSnapShot(snapshot);
+              dispatch(fetchingRateSuccess(dataRate));
+            });
+          } catch (error) {
+            dispatch(fetchingRateFailure(error.message));
+          }
+
+          try {
+            const employeeRef = firestore
+              .collection("employee")
+              .where("id", "in", arrayIDEmployee);
             dispatch(fetchEmployeeStart());
-        
             employeeRef
               //use onSnapShot will automatically update the new data if the data got update from db
               .onSnapshot(async (snapshot) => {
                 const dataEmployee = convertDataEmployeeSnapShot(snapshot);
                 dispatch(fetchEmployeeSuccess(dataEmployee));
-              },
-                (error) => {
-                dispatch(fetchEmployeeFailure(error.message));
               });
-        
-            
+          } catch (error) {
+            dispatch(fetchEmployeeFailure(error.message));
+          }
 
-                //   /**
-                //    * Group
-                //    */
-                  const groupRef = firestore
-                    .doc(`users/${currentUserID}`)
-                    .collection("group"); // to make the link for lead to the database
-                  dispatch(fetchGroupStart());
-                  await groupRef.onSnapshot(
-                    //listening for any changes in this collection.
-                    async (snapshot) => {
-                      const groupMap = convertDataGroupSnapShot(snapshot);
-                      dispatch(fetchGroupSuccess(groupMap));
-                    }, (error) => {
-                      dispatch(fetchGroupFailure(error.message))
-                    }
-                    );
-                    }
-        }, 
-        (error) => {
-          dispatch(fetchEmployeeArrayFailure(error.message))
+          //   /**
+          //    * Group
+          //    */
+          try {
+            const groupRef = firestore
+              .doc(`users/${currentUserID}`)
+              .collection("group"); // to make the link for lead to the database
+            dispatch(fetchGroupStart());
+            groupRef.onSnapshot(
+              //listening for any changes in this collection.
+              async (snapshot) => {
+                const groupMap = convertDataGroupSnapShot(snapshot);
+                dispatch(fetchGroupSuccess(groupMap));
+              }
+            );
+          } catch (error) {
+            dispatch(fetchGroupFailure(error.message));
+          }
         }
-      )
-
-
-      //   /**
-      //    * RATE data just need the id list of employee
-      //    * */
-      //   const getRateFromEmployeeID = firestore
-      //     .collection("rate")
-      //     .where("id", "in", arrayIDEmployee);
-      //   dispatch(fetchingRateStart());
-      //   getRateFromEmployeeID.onSnapshot(async (snapshot) => {
-      //     const dataRate = convertDataRateSnapShot(snapshot);
-      //     dispatch(fetchingRateSuccess(dataRate));
-      //   });
-      // })
-      // .catch((error) => {
-      //   dispatch(fetchEmployeeFailure(error.message));
-      // })
-      // .then(() => {
-      //   /**
-      //    * Group
-      //    */
-      //   const groupRef = firestore
-      //     .doc(`users/${currentUserID}`)
-      //     .collection("group"); // to make the link for lead to the database
-      //   dispatch(fetchGroupStart());
-      //   groupRef.onSnapshot(
-      //     //listening for any changes in this collection.
-      //     async (snapshot) => {
-      //       const groupMap = convertDataGroupSnapShot(snapshot);
-      //       dispatch(fetchGroupSuccess(groupMap));
-      //     },
-      //     (error) => {
-      //       dispatch(fetchGroupFailure(error.message));
-      //     }
-      //   );
-      // });
-  }
-}
-  
+      );
+    } catch (error) {
+      dispatch(fetchEmployeeArrayFailure(error.message));
+    }
+  };
+};
 
 //Disptach employee
 // export const fetchEmployeeStartAsync = (currentUserID) => {

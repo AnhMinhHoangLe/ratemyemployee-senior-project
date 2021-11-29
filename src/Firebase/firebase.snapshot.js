@@ -25,31 +25,33 @@ export const convertDataEmployeeSnapShot = (snapshot) => {
   const employeeRef = snapshot.docs.map((doc) => {
     const {
       address,
+      admin,
       avatar,
+      createAt,
+      currentGroupID,
       displayName,
       email,
       gender,
-      phone_number,
-      id,
-      position,
       groupActive,
       groupHistory,
-      currentGroupID,
-      admin
+      id,
+      phone_number,
+      position,
     } = doc.data(); // get the data by data()
     return {
       address,
+      admin,
       avatar,
+      createAt,
+      currentGroupID,
       displayName,
       email,
-      id,
-      position,
       gender,
-      phone_number,
       groupActive,
       groupHistory,
-      currentGroupID,
-      admin, 
+      id,
+      phone_number,
+      position,
     };
   });
   return employeeRef.reduce((accumulator, collection) => {
@@ -61,15 +63,15 @@ export const convertDataEmployeeSnapShot = (snapshot) => {
 // To convert all the data of group collection
 export const convertDataGroupSnapShot = (snapshot) => {
   const groupRef = snapshot.docs.map((doc) => {
-    const { id, employee_list, idGroup, description } = doc.data();
+    const { description, employee_list, id, idGroup } = doc.data();
+
     return {
-      id,
+      description,
       employee_list,
+      id,
       idGroup,
-      description
     };
   });
-
   return groupRef.reduce((accumulator, collection) => {
     accumulator[collection.id] = collection;
     return accumulator;
@@ -82,22 +84,20 @@ export const convertDataRateSnapShot = (snapshot) => {
   const rateRef = snapshot.docs.map((doc) => {
     const { id, group, avg_rating } = doc.data();
     return {
-      id,
+      avg_rating,
       group,
-      avg_rating
+      id,
     };
   });
   return rateRef.reduce((accumulator, collection) => {
     accumulator[collection.id] = collection;
     return accumulator;
   }, {});
-
-
 };
 export const convertDataTaskSnapshot = (snapshot) => {
-  const dataTask = snapshot.data()
-  return dataTask
-}
+  const dataTask = snapshot.data();
+  return dataTask;
+};
 
 // export const convertTaskData = (groupID) => {
 //   try {

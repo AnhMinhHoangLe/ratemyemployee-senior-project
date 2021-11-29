@@ -15,57 +15,54 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
   // const userRef = firestore.collection("users").doc(userAuth.uid) // get the data of the user by UID
   const userRef = firestore.doc(`users/${userAuth.uid}`); // go to the user profile by UID
-  const userRefCreatedEmlployeeCollectioninUserID = userRef.collection('employee')
-  const createEmployeeCollection = firestore.collection('employee')
-  const rateInfo = firestore.collection('rate')
+  const userRefCreatedEmlployeeCollectioninUserID =
+    userRef.collection("employee");
+  const createEmployeeCollection = firestore.collection("employee");
+  const rateInfo = firestore.collection("rate");
 
   const snapShot = await userRef.get(); // get the snapshot of the user from console
   if (!snapShot.exists) {
     // create user in database if it does not exist
-    const { displayName, email, photoURL} = userAuth;
+    const { displayName, email, photoURL } = userAuth;
     const createAt = new Date();
     try {
-
       // get the data set ,  Enter new data into the document.
       await userRef.set({
         displayName,
         email,
         createAt,
-        photoURL, 
+        photoURL,
         ...additionalData,
       });
       await userRefCreatedEmlployeeCollectioninUserID.doc(userAuth.uid).set({
         id: userAuth.uid,
-      })
+      });
       await createEmployeeCollection.doc(userAuth.uid).set({
+        address: "",
+        admin: true,
+        avatar: userAuth.photoURL,
+        createAt,
+        currentGroupID: "",
         displayName,
         email,
-        address: "",
         gender: "",
-        phone_number: "",
-        position:"Admin",
         groupActive: true,
-        currentGroupID: "", 
-        groupHistory:"", 
-        avatar: userAuth.photoURL,
-        id: userAuth.uid, 
-        createAt,
-        admin: true
-      })
-    const avg_rating = 0
+        groupHistory: "",
+        id: userAuth.uid,
+        phone_number: "",
+        position: "Admin",
+      });
+      const avg_rating = 0;
 
-        await rateInfo.doc(userAuth.uid).set({
-          id: userAuth.uid, 
-          avg_rating, 
-          group: {
-            }
-          },
-        )
+      await rateInfo.doc(userAuth.uid).set({
+        avg_rating,
+        group: {},
+        id: userAuth.uid,
+      });
     } catch (error) {
       console.log("error creating user", error.message);
     }
@@ -176,24 +173,24 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
  */
 export const createGroup = async (userAuth, userKey, id, description) => {
   const groupRef = firestore.doc(`users/${userAuth.id}`).collection(userKey);
-  const taskRef = firestore.collection('task')
+  const taskRef = firestore.collection("task");
   const createAt = new Date();
-  const batch = firestore.batch()
+  const batch = firestore.batch();
   try {
     const idGroup = groupRef.doc();
-    batch.set(idGroup,{
-        id,
-        employee_list: [],
-        idGroup: idGroup.id,
-        createAt,
-        description: description, 
-      })
-    
-    batch.set(taskRef.doc(idGroup.id),{})
+    batch.set(idGroup, {
+      id,
+      employee_list: [],
+      idGroup: idGroup.id,
+      createAt,
+      description: description,
+    });
+
+    batch.set(taskRef.doc(idGroup.id), {});
   } catch {
     console.error();
   }
-  return  await batch.commit();
+  return await batch.commit();
 };
 //////////////////////////////////////////////////////////////////////////////
 /////////////////// FUNCTION FOR GROUP //////////////////////////////////////
@@ -213,45 +210,42 @@ export const addEmployeeToGroup = async (
   groupKey,
   arrayID
 ) => {
-  const batch = firestore.batch()
-  const groupIDRef = firestore.doc(
-    `users/${userAuth.id}`).collection(userKey);
-  const rateInfo = firestore.collection('rate')
-  const employeeInfo = firestore.collection('employee')
-  const newGroupIDRef = groupIDRef.doc(groupKey)
+  const batch = firestore.batch();
+  const groupIDRef = firestore.doc(`users/${userAuth.id}`).collection(userKey);
+  const rateInfo = firestore.collection("rate");
+  const employeeInfo = firestore.collection("employee");
+  const newGroupIDRef = groupIDRef.doc(groupKey);
   arrayID.forEach(({ id }) => {
     let IDObject = {};
     IDObject["id"] = id;
-    const newRateInfo = rateInfo.doc(id)
-    const newEmployeeInfo = employeeInfo.doc(id)
-    
-    batch.set(newRateInfo, {
-      group: {
-              [groupKey]: {
-                avg_rating: 0,
-                infoRating: []
-              }
-            }
-    }, { merge: true }
-    )
+    const newRateInfo = rateInfo.doc(id);
+    const newEmployeeInfo = employeeInfo.doc(id);
     batch.update(newEmployeeInfo, {
-      groupActive: true,
       currentGroupID: groupKey,
-    })
+      groupActive: true,
+    });
+    batch.set(
+      newRateInfo,
+      {
+        group: {
+          [groupKey]: {
+            avg_rating: 0,
+            infoRating: [],
+          },
+        },
+      },
+      { merge: true }
+    );
     batch.update(newGroupIDRef, {
       employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
-    })
-    
-    
-   });
-  return  await batch.commit();
+    });
+  });
+  return await batch.commit();
 };
-
-
 
 /**
  *
- * 
+ *
  * @param {*} userAuth: current user logged in
  * @param {*} userKey : name of the current collection
  * @param {*} info: inputted data
@@ -259,133 +253,67 @@ export const addEmployeeToGroup = async (
  * This function is to create new employee in group
  */
 export const createEmployee = async (userAuth, userKey, info) => {
-  const batch = firestore.batch()
+  const batch = firestore.batch();
   const employeeRef = firestore.doc(`users/${userAuth.id}`).collection(userKey);
-  const employeeInfo = firestore.collection(userKey)
+  const employeeInfo = firestore.collection(userKey);
   const { displayName, email, position, groupActive, currentGroupID } = info;
 
   const generateID = employeeInfo.doc();
-  const id = generateID.id
+  const id = generateID.id;
   const createAt = new Date();
   const address = "";
   const gender = "";
-  const avatar = "https://firebasestorage.googleapis.com/v0/b/rate-my-employee-d7636.appspot.com/o/images%2Ftree-736885__340.jpg?alt=media&token=4aea820d-9eba-4c4f-b9fd-e85915dd0463"
+  const avatar =
+    "https://firebasestorage.googleapis.com/v0/b/rate-my-employee-d7636.appspot.com/o/images%2Ftree-736885__340.jpg?alt=media&token=4aea820d-9eba-4c4f-b9fd-e85915dd0463";
   const phone_number = Number();
-  const groupHistory = []
-    // Image: https://stackoverflow.com/questions/61215555/how-to-upload-image-to-firebase-storage-and-upload-url-to-firestore-simultaneous
-  
-  const employeeRefGenerateID = employeeRef.doc(id)
-  batch.set(employeeRefGenerateID, {
-    id: id
-  })
- 
-  const rateInfo = firestore.collection('rate')
-  const avg_rating = 0
+  const groupHistory = [];
+  // Image: https://stackoverflow.com/questions/61215555/how-to-upload-image-to-firebase-storage-and-upload-url-to-firestore-simultaneous
 
+  const employeeRefGenerateID = employeeRef.doc(id);
+  batch.set(employeeRefGenerateID, {
+    id: id,
+  });
+
+  const rateInfo = firestore.collection("rate");
+  const avg_rating = 0;
+  const admin = false;
   batch.set(generateID, {
+    address,
+    admin,
+    avatar,
+    createAt,
+    currentGroupID,
     displayName,
     email,
-    address,
     gender,
+    groupActive,
+    groupHistory,
+    id,
     phone_number,
     position,
-    groupActive,
-    currentGroupID, 
-    groupHistory, 
-    avatar,
-    id, 
-    createAt,
-    admin: false
-  })
-  
-  const rateInfoGenerateID = rateInfo.doc(id)
+  });
+  const groupIDRef = firestore.doc(
+    `users/${userAuth.id}/group/${currentGroupID}`
+  );
+  let IDObject = {};
+  IDObject["id"] = id;
+  batch.update(groupIDRef, {
+    employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
+  });
+  const rateInfoGenerateID = rateInfo.doc(id);
   batch.set(rateInfoGenerateID, {
-      id: id, 
-      avg_rating, 
-      group: {
+    id: id,
+    avg_rating,
+    group: {
       [currentGroupID]: {
         avg_rating: 0,
-        infoRating: []
-            }
-          },
-        }
-        )
-  const groupIDRef = firestore.doc(
-          `users/${userAuth.id}/group/${currentGroupID}`
-        );
-      
-          let IDObject = {};
-          IDObject["id"] = id;
-          batch.update(groupIDRef, {
-            employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
-          });
+        infoRating: [],
+      },
+    },
+  });
   await batch.commit();
 };
 
-
-export const createEmployeeInGroup = async (userAuth, userKey, info) => {
-  const employeeRef = firestore.doc(`users/${userAuth.id}`).collection(userKey);
-  const employeeInfo = firestore.collection('employee')
-  // const { displayName, email, address, gender, phone_number, position } = info;
-  // const { displayName, email, position, avatar, groupActive } = info;
-    const { displayName, email, position, groupActive, currentGroupID } = info;
-  // console.log("image in firebase", avatar);
-
-  try {
-    const generateID = employeeInfo.doc();
-    const id = generateID.id
-    const createAt = new Date();
-    const address = "";
-    const gender = "";
-    const avatar = "https://firebasestorage.googleapis.com/v0/b/rate-my-employee-d7636.appspot.com/o/images%2Ftree-736885__340.jpg?alt=media&token=4aea820d-9eba-4c4f-b9fd-e85915dd0463"
-    const phone_number = Number();
-    const groupHistory = []
-    // Image: https://stackoverflow.com/questions/61215555/how-to-upload-image-to-firebase-storage-and-upload-url-to-firestore-simultaneous
-    await generateID.set({
-      displayName,
-      email,
-      address,
-      gender,
-      phone_number,
-      position,
-      groupActive,
-      currentGroupID,
-      groupHistory, 
-      avatar,
-      id, 
-      createAt,
-    });
-    await employeeRef.doc(id).set({
-      id: id
-    })
-    const rateInfo = firestore.collection('rate')
-    const avg_rating = 0
-
-        await rateInfo.doc(id).set({
-          id: id, 
-          avg_rating, 
-          group: {
-            [currentGroupID]: {
-              avg_rating: 0,
-              infoRating: []
-            }
-          },
-        }
-        )
-        const groupIDRef = firestore.doc(
-          `users/${userAuth.id}/group/${currentGroupID}`
-        );
-      
-          let IDObject = {};
-          IDObject["id"] = id;
-          await groupIDRef.update({
-            employee_list: firebase.firestore.FieldValue.arrayUnion(IDObject),
-          });
-    
-  } catch {
-    console.error();
-  }
-};
 /**
  *
  * @param {*} image : actual file of image wants to upload, it comes from the File API ( you can print the console log to see the result when you import the image into INPUT HTML FORM)
@@ -422,88 +350,97 @@ export const UploadImageIntoStorage = async (image) => {
   return uploadTask;
 };
 /*
-* Delete Employee In Group
-*/
+ * Delete Employee In Group
+ */
 export const deleteEmployeeInGroup = async (userAuth, groupID, employeeID) => {
-  const batch = firestore.batch()
-
-  const employeeRefInGroup = firestore.doc(`users/${userAuth.id}`).collection('group');
-  const employeeInfo = firestore.collection('employee')
+  const batch = firestore.batch();
+  const employeeRefInGroup = firestore
+    .doc(`users/${userAuth.id}`)
+    .collection("group");
+  const employeeInfo = firestore.collection("employee");
   if (groupID) {
-    const setToDel = { id: employeeID }
+    const setToDel = { id: employeeID };
     const idEmployeeInGroupRef = employeeRefInGroup.doc(groupID);
     batch.update(idEmployeeInGroupRef, {
-      employee_list: firebase.firestore.FieldValue.arrayRemove(setToDel)
-    })
-    
-    const employeeUpdateActiveGroupStt = employeeInfo.doc(employeeID)
+      employee_list: firebase.firestore.FieldValue.arrayRemove(setToDel),
+    });
+
+    const employeeUpdateActiveGroupStt = employeeInfo.doc(employeeID);
     batch.update(employeeUpdateActiveGroupStt, {
       groupActive: false,
-      currentGroupID: ""
-    })
+      currentGroupID: "",
+    });
   }
   await batch.commit();
-
-
- 
-}
+};
 
 export const deleteGroup = async (userAuth, groupID, employeeList) => {
-  const batch = firestore.batch()
-  const employeeRefInGroup = firestore.doc(`users/${userAuth.id}`).collection('group');
-  const employeeRefInGroupSpecific = employeeRefInGroup.doc(groupID)
-  const employeeInfo = firestore.collection('employee')
+  const batch = firestore.batch();
+  const employeeRefInGroup = firestore
+    .doc(`users/${userAuth.id}`)
+    .collection("group");
+  const employeeRefInGroupSpecific = employeeRefInGroup.doc(groupID);
+  const employeeInfo = firestore.collection("employee");
 
-  const taskRef = firestore.collection('task')
-  const taskRefDoc = taskRef.doc(groupID)
+  const taskRef = firestore.collection("task");
+  const taskRefDoc = taskRef.doc(groupID);
   if (employeeList.length > 0) {
-    employeeList.forEach(({id}) => {
-      const newEmployeeInfo = employeeInfo.doc(id)
+    employeeList.forEach(({ id }) => {
+      const newEmployeeInfo = employeeInfo.doc(id);
       batch.update(newEmployeeInfo, {
         currentGroupID: "",
-        groupActive: false
-      })
-    })
+        groupActive: false,
+      });
+    });
   }
-  batch.delete(employeeRefInGroupSpecific)
-  batch.delete(taskRefDoc)
-
+  batch.delete(employeeRefInGroupSpecific);
+  batch.delete(taskRefDoc);
 
   await batch.commit();
+};
 
-}
+export const deleteIndividualEmployee = async (
+  userAuth,
+  groupID,
+  employeeID
+) => {
+  const batch = firestore.batch();
+  const employeeRefInGroup = firestore
+    .doc(`users/${userAuth.id}`)
+    .collection("group");
+  const employeeRefInTheListOfManager = firestore
+    .doc(`users/${userAuth.id}`)
+    .collection("employee");
+  const employeeInfo = firestore.collection("employee");
+  const rateInfo = firestore.collection("rate");
 
-
-export const deleteIndividualEmployee =  async (userAuth, groupID, employeeID) => {
-  const batch = firestore.batch()
-  const employeeRefInGroup = firestore.doc(`users/${userAuth.id}`).collection('group');
-  const employeeRefInTheListOfManager = firestore.doc(`users/${userAuth.id}`).collection('employee');
-  const employeeInfo = firestore.collection('employee')
-  const rateInfo = firestore.collection('rate')
-
-  // remove employee in group 
-  if (groupID)
-  {
-    const setToDel = { id: employeeID }
+  // remove employee in group
+  if (groupID) {
+    const setToDel = { id: employeeID };
     const idEmployeeInGroupRef = employeeRefInGroup.doc(groupID);
     batch.update(idEmployeeInGroupRef, {
-      employee_list: firebase.firestore.FieldValue.arrayRemove(setToDel)
-    })
+      employee_list: firebase.firestore.FieldValue.arrayRemove(setToDel),
+    });
   }
-  batch.delete(employeeRefInTheListOfManager.doc(employeeID))
-  batch.delete(rateInfo.doc(employeeID))
-  batch.delete(employeeInfo.doc(employeeID))
+  batch.delete(employeeRefInTheListOfManager.doc(employeeID));
+  batch.delete(rateInfo.doc(employeeID));
+  batch.delete(employeeInfo.doc(employeeID));
   await batch.commit();
-
-}
+};
 
 export const updateEmployeeInfo = async (dataUpdate, employeeId) => {
-  const employeeInfo = firestore.collection('employee').doc(employeeId)
-  const { avatar, displayName, email, gender, position, phone_number } = dataUpdate;
+  const employeeInfo = firestore.collection("employee").doc(employeeId);
+  const { avatar, displayName, email, gender, position, phone_number } =
+    dataUpdate;
   await employeeInfo.update({
-    avatar, displayName, email, gender, position, phone_number
-  })
-}
+    avatar,
+    displayName,
+    email,
+    gender,
+    position,
+    phone_number,
+  });
+};
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////// FUNCTION FOR RATING /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -535,7 +472,6 @@ export const ratingStar = (
       )
     ) {
       statusRated = false;
-
     } else {
       set["date"] = dateCurrent.toLocaleDateString("en-US");
       ratingRef.set(
@@ -547,7 +483,7 @@ export const ratingStar = (
             },
           },
         },
-        {merge: true}
+        { merge: true }
       );
     }
   } catch (error) {
@@ -557,71 +493,62 @@ export const ratingStar = (
   return statusRated;
 };
 
-export const updateOverallAvgOfEmployeeRatingStar =  (
+export const updateOverallAvgOfEmployeeRatingStar = (
   idEmployee,
   overAllAvg
 ) => {
   const ratingRef = firestore.doc(`rate/${idEmployee}/`);
-      ratingRef.update(
-        {
-          avg_rating: overAllAvg
-        }
-      );
-}
+  ratingRef.update({
+    avg_rating: overAllAvg,
+  });
+};
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////// TASK SECTION ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 /**
- * 
- * @param {*} idGroup 
- * @param {*} task 
- * @param {*} idForTask 
+ *
+ * @param {*} idGroup
+ * @param {*} task
+ * @param {*} idForTask
  * CREATE TASK
  */
 export const createTask = async (idGroup, task, idForTask) => {
-  const taskRef = firestore
-    .doc(`task/${idGroup}`)
-  const {
-    deadline,
-    note,
-    priority,
-    title
-  } = task
-  const statusDone = false; 
+  const taskRef = firestore.doc(`task/${idGroup}`);
+  const { deadline, note, priority, title } = task;
+  const statusDone = false;
   const createAt = new Date();
-  const id = idForTask
+  const id = idForTask;
   try {
-      taskRef.update({
-        [idForTask]: {
-          deadline,
-          note,
-          priority,
-          statusDone,
-          title,
-          createAt,
-          id
-          }
-        })
-    } catch (error) {
-      console.error("Failed to write in database", error);
-    }
+    taskRef.update({
+      [idForTask]: {
+        deadline,
+        note,
+        priority,
+        statusDone,
+        title,
+        createAt,
+        id,
+      },
+    });
+  } catch (error) {
+    console.error("Failed to write in database", error);
+  }
 };
 /**
- * 
+ *
  */
 export const removeTask = async (idGroup, idForTask) => {
-  const taskRef = firestore.doc(`task/${idGroup}`)
+  const taskRef = firestore.doc(`task/${idGroup}`);
   taskRef.update({
-    [idForTask] : firebase.firestore.FieldValue.delete()
-  })
-}
+    [idForTask]: firebase.firestore.FieldValue.delete(),
+  });
+};
 export const taskFinished = (idGroup, idForTask) => {
-  const taskRef = firestore.doc(`task/${idGroup}`)
+  const taskRef = firestore.doc(`task/${idGroup}`);
   taskRef.update({
-    [`${idForTask}.statusDone`] : true
-  })
-  
-}
+    [`${idForTask}.statusDone`]: true,
+  });
+};
 export const auth = firebase.auth(); // to short the command
 export const firestore = firebase.firestore(); // Create a new client
 export const storage = firebase.storage(); // create a storage

@@ -1,67 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense, lazy } from "react";
 import { createStructuredSelector } from "reselect";
 import { connect } from "react-redux";
-import { Route } from "react-router-dom";
-import EmployeeOverview from "./EmployeeOverview/EmployeeOverview.Components";
-import EmployeeInGroup from "./EmployeeInGroup/EmployeeInGroup.Components";
-import EmployeeInfo from "./Employee-info/EmployeeInfo.Components";
+import { Route, Switch } from "react-router-dom";
+// import EmployeeOverview from "./EmployeeOverview/EmployeeOverview.Components";
+// import EmployeeInGroup from "./EmployeeInGroup/EmployeeInGroup.Components";
+// import EmployeeInfo from "./Employee-info/EmployeeInfo.Components";
 import { selectCurrentUser } from "../../../Redux/User/user.selectors";
-import { fetchEmployeeGroupStartAsync } from "../../../Redux/Individuals/Individuals.actions";
-import { Grid, Box } from '@mui/material';
-import withSpinner from "../../with-spinner/with-spinner.compoennts";
-import {selectIsEmployeeFetching} from "../../../Redux/Employee/employee.selectors";
-import {selectIsFetchingEmployeeInfo} from "../../../Redux/Individuals/individuals.selectors"
+import { Grid, Box } from "@mui/material";
 
-const EmployeeOverviewWithSpinner = withSpinner(EmployeeOverview)
-const EmployeeInGroupWithSpinner = withSpinner(EmployeeInGroup)
-const EmployeeInfoWithSpinner = withSpinner(EmployeeInfo)
+const EmployeeOverview = lazy(() =>
+  import("./EmployeeOverview/EmployeeOverview.Components")
+);
+const EmployeeInGroup = lazy(() =>
+  import("./EmployeeInGroup/EmployeeInGroup.Components")
+);
+const EmployeeInfo = lazy(() =>
+  import("./Employee-info/EmployeeInfo.Components")
+);
 
-const GroupPage = ({match, currentUser, selectIsFetchingEmployeeInfo, selectIsEmployeeFetching }) => {
-  useEffect(() => {
-    fetchEmployeeGroupStartAsync(currentUser.id);
-  },[])
-    return (
-      <Box>
+const GroupPage = ({ match, selectEmployeeInfo }) => {
+  return (
+    <Box>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Route exact path={`${match.path}`} component={EmployeeOverview} />
         <Route
-					exact
-					path={`${match.path}`}
-					render={(props) => (
-						<EmployeeOverviewWithSpinner
-							isLoading={selectIsEmployeeFetching}
-							{...props} />)}
-				/>
-        {/* Find the path in App.js */}
-        <Route
-					exact
+          exact
           path={`${match.path}/:groupID`}
-					render={(props) => (
-						<EmployeeInGroupWithSpinner
-							isLoading={selectIsFetchingEmployeeInfo}
-							{...props} />)}
-				/>
-       <Route
-					exact
+          component={EmployeeInGroup}
+        />
+        <Route
+          exact
           path={`${match.path}/:groupID/:employeeInfoID`}
-					render={(props) => (
-						<EmployeeInfoWithSpinner
-							isLoading={selectIsFetchingEmployeeInfo}
-							{...props} />)}
-				/>
+          component={EmployeeInfo}
+        />
         {/* Find the path in App.js. should print out console.log(match.params.employeeId) to know deeply the result */}
-        
-        {/* Find the path in App.js. should print out console.log(match.params.employeeId) to know deeply the result */}
-      </Box>
-    );
-  
-}
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchEmployeeGroupStartAsync: (currentUserID) =>
-    dispatch(fetchEmployeeGroupStartAsync(currentUserID)),
-});
+        {/* Find the path in App.js. should print out console.log(match.params.employeeId) to know deeply the result */}
+      </Suspense>
+    </Box>
+  );
+};
+
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
-  selectIsEmployeeFetching: selectIsEmployeeFetching,
-  selectIsFetchingEmployeeInfo:selectIsFetchingEmployeeInfo
 });
-export default connect(mapStateToProps, mapDispatchToProps)(GroupPage);
+export default connect(mapStateToProps)(GroupPage);

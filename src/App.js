@@ -10,18 +10,18 @@ import { connect } from "react-redux";
 import { selectCurrentUser } from "./Redux/User/user.selectors";
 import { setCurrentUser } from "./Redux/User/user.action";
 import { fetchEmployeeGroupStartAsync } from "./Redux/Individuals/Individuals.actions";
-import {Box} from '@mui/material';
+import { Box } from "@mui/material";
 import HomePage from "./Components/HomePage/HomePage";
 import ChatUI from "./Components/Chat/ChatUI.components";
 import Header from "./Components/Header/Header.Components";
 import GroupPage from "./Components/Employee/Individuals/EmployeePage.Components";
-import UserProfilePage from "./Components/UserProfile/UserProfilePage.Component" 
+import UserProfilePage from "./Components/UserProfile/UserProfilePage.Component";
 import EmployeePage from "./Components/Employee/Individual/IndividualPage.Components";
 class App extends Component {
   unsubscribeFromAuth = null;
-  unsubscribeFromData = null; 
+  unsubscribeFromData = null;
   componentDidMount() {
-    const { setCurrentUser, fetchEmployeeGroupStartAsync} = this.props;
+    const { setCurrentUser, fetchEmployeeGroupStartAsync } = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       //  which allows you to subscribe to the users current authentication state, and receive an event whenever that state changes
       if (userAuth) {
@@ -33,7 +33,7 @@ class App extends Component {
             ...snapShot.data(),
           });
           if (this.unsubscribeFromAuth) {
-            fetchEmployeeGroupStartAsync(snapShot.id)
+            fetchEmployeeGroupStartAsync(snapShot.id);
           }
         });
       }
@@ -44,14 +44,12 @@ class App extends Component {
   componentWillUnmount() {
     this.unsubscribeFromAuth();
   }
-  // currentUser, setCurrentUser, fetchEmployeeGroupStartAsync 
+  // currentUser, setCurrentUser, fetchEmployeeGroupStartAsync
 
-
-  
   render() {
     const { currentUser } = this.props;
     return (
-      <Box sx={{backgroundColor:"#E8EEED", height:"100vh"}}>
+      <Box sx={{ backgroundColor: "#E8EEED", height: "100vh" }}>
         <Switch>
           {currentUser ? (
             <div>
@@ -62,7 +60,6 @@ class App extends Component {
               <Route path="/emps" component={EmployeePage} />
               <Route exact path="/msg" component={ChatUI} />
               <Route exact path="/user-profile" component={UserProfilePage} />
-
             </div>
           ) : (
             <div className="signin-signup-page">
@@ -70,10 +67,10 @@ class App extends Component {
                 exact
                 path="/"
                 render={() =>
-                  currentUser ? <Redirect to="/si" /> : <SignInPage />
+                  currentUser ? <Redirect to="/" /> : <SignInPage />
                 }
               />
-              <Route exact path="/si" component={SignInPage} />
+              <Route exact path="/" component={SignInPage} />
               <Route exact path="/su" component={SignUpPage} />
             </div>
           )}
@@ -82,7 +79,6 @@ class App extends Component {
     );
   }
 }
-
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
